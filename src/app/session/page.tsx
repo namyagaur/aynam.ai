@@ -1,150 +1,141 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 
 export default function SessionPage() {
-  const router = useRouter();
+const router = useRouter();
 
-  return (
-    <main className="min-h-screen bg-[#FFFDF8] px-6 py-10">
-      <div className="max-w-5xl mx-auto">
+const [isRecording, setIsRecording] = useState(false);
+const [audioURL, setAudioURL] = useState("");
 
-        {/* Header */}
-        <div className="flex items-center justify-between">
+const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+const audioChunksRef = useRef<Blob[]>([]);
 
-          <div>
-            <p className="uppercase tracking-[0.3em] text-gray-400 text-sm">
-              Recording Session
-            </p>
+async function startRecording() {
+try {
+const stream = await navigator.mediaDevices.getUserMedia({
+audio: true,
+});
 
-            <h1 className="mt-3 text-5xl font-extralight tracking-tight">
-              Speak Naturally.
-            </h1>
-          </div>
 
-          <div className="text-right">
-            <p className="text-gray-400 text-sm">
-              Remaining Time
-            </p>
+  const mediaRecorder = new MediaRecorder(stream);
 
-            <h2 className="text-4xl font-extralight">
-              05:00
-            </h2>
-          </div>
+  mediaRecorderRef.current = mediaRecorder;
+  audioChunksRef.current = [];
 
-        </div>
+  mediaRecorder.ondataavailable = (event) => {
+    audioChunksRef.current.push(event.data);
+  };
 
-        {/* Topic */}
-        <div className="mt-10 bg-white rounded-3xl p-8 shadow-sm">
+  mediaRecorder.onstop = () => {
+    const audioBlob = new Blob(audioChunksRef.current, {
+      type: "audio/webm",
+    });
 
-          <p className="text-sm text-gray-400">
-            Topic
-          </p>
+    const url = URL.createObjectURL(audioBlob);
+    setAudioURL(url);
+  };
 
-          <h2 className="mt-3 text-2xl font-light">
-            Tell a story about a difficult decision.
-          </h2>
+  mediaRecorder.start();
+  setIsRecording(true);
+} catch (error) {
+  console.error(error);
+}
 
-        </div>
+}
 
-        {/* Recording Section */}
-        <div className="mt-8 bg-white rounded-3xl p-10 shadow-sm text-center">
+function stopRecording() {
+if (!mediaRecorderRef.current) return;
 
-          <div className="w-28 h-28 mx-auto rounded-full bg-[#F7F4FF] flex items-center justify-center text-5xl">
-            🎤
-          </div>
 
-          <h3 className="mt-6 text-2xl font-light">
-            Listening...
-          </h3>
+mediaRecorderRef.current.stop();
+setIsRecording(false);
 
-          <p className="mt-2 text-gray-500">
-            Speak naturally. We're analyzing your communication.
-          </p>
 
-        </div>
+}
 
-        {/* Live Stats */}
-        <div className="grid md:grid-cols-4 gap-4 mt-8">
+return ( <main className="min-h-screen bg-[#FFFDF8] px-6 py-10"> <div className="max-w-5xl mx-auto"> <div className="flex items-center justify-between"> <div> <p className="uppercase tracking-[0.3em] text-gray-400 text-sm">
+Recording Session </p>
 
-          <div className="bg-white rounded-3xl p-6">
-            <p className="text-gray-400 text-sm">
-              Fillers
-            </p>
 
-            <h3 className="mt-2 text-4xl font-light">
-              0
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-3xl p-6">
-            <p className="text-gray-400 text-sm">
-              Words
-            </p>
-
-            <h3 className="mt-2 text-4xl font-light">
-              0
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-3xl p-6">
-            <p className="text-gray-400 text-sm">
-              Pace
-            </p>
-
-            <h3 className="mt-2 text-4xl font-light">
-              --
-            </h3>
-          </div>
-
-          <div className="bg-white rounded-3xl p-6">
-            <p className="text-gray-400 text-sm">
-              Confidence
-            </p>
-
-            <h3 className="mt-2 text-4xl font-light">
-              --
-            </h3>
-          </div>
-
-        </div>
-
-        {/* Transcript */}
-        <div className="mt-8 bg-white rounded-3xl p-8 shadow-sm">
-
-          <p className="text-sm text-gray-400">
-            Live Transcript
-          </p>
-
-          <div className="mt-5 min-h-[180px] rounded-2xl bg-[#FAFAFA] p-6">
-
-            <p className="text-gray-500">
-              Waiting for speech...
-            </p>
-
-          </div>
-
-        </div>
-
-        {/* Footer Buttons */}
-        <div className="flex justify-between mt-10">
-
-          <button
-            className="px-6 py-3 rounded-2xl border border-gray-200"
-          >
-            Pause Session
-          </button>
-
-          <button
-            onClick={() => router.push("/analysis")}
-            className="px-8 py-4 rounded-2xl bg-[#A78BFA] text-white font-medium"
-          >
-            End Session →
-          </button>
-
-        </div>
-
+        <h1 className="mt-3 text-5xl font-extralight">
+          Speak Naturally.
+        </h1>
       </div>
-    </main>
-  );
+
+      <div className="text-right">
+        <p className="text-gray-400 text-sm">Status</p>
+
+        <h2 className="text-2xl font-light">
+          {isRecording ? "Recording" : "Idle"}
+        </h2>
+      </div>
+    </div>
+
+    <div className="mt-10 bg-white rounded-3xl p-8 shadow-sm">
+      <p className="text-sm text-gray-400">Topic</p>
+
+      <h2 className="mt-3 text-2xl font-light">
+        Tell a story about a difficult decision.
+      </h2>
+    </div>
+
+    <div className="mt-8 bg-white rounded-3xl p-10 shadow-sm text-center">
+      <div className="w-28 h-28 mx-auto rounded-full bg-[#F7F4FF] flex items-center justify-center text-5xl">
+        🎤
+      </div>
+
+      <h3 className="mt-6 text-2xl font-light">
+        {isRecording ? "Recording..." : "Ready to Record"}
+      </h3>
+
+      <div className="flex justify-center gap-4 mt-8">
+        <button
+          disabled={isRecording}
+          onClick={startRecording}
+          className="px-6 py-3 rounded-2xl bg-green-500 text-white"
+        >
+          Start Recording
+        </button>
+
+        <button
+          onClick={stopRecording}
+          className="px-6 py-3 rounded-2xl bg-red-500 text-white"
+        >
+          Stop Recording
+        </button>
+      </div>
+    </div>
+
+    <div className="mt-8 bg-white rounded-3xl p-8 shadow-sm">
+      <p className="text-sm text-gray-400">
+        Recording Preview
+      </p>
+
+      <div className="mt-5">
+        {audioURL ? (
+          <audio controls className="w-full">
+            <source src={audioURL} type="audio/webm" />
+          </audio>
+        ) : (
+          <p className="text-gray-500">
+            No recording yet.
+          </p>
+        )}
+      </div>
+    </div>
+
+    <div className="flex justify-end mt-10">
+      <button
+        onClick={() => router.push("/analysis")}
+        className="px-8 py-4 rounded-2xl bg-[#A78BFA] text-white font-medium"
+      >
+        End Session →
+      </button>
+    </div>
+  </div>
+</main>
+
+);
 }
