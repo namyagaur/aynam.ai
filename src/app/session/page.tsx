@@ -4,74 +4,74 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function SessionPage() {
-const router = useRouter();
+  const router = useRouter();
 
-const [isRecording, setIsRecording] = useState(false);
-const [audioURL, setAudioURL] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioURL, setAudioURL] = useState("");
 
-const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-const audioChunksRef = useRef<Blob[]>([]);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
-async function startRecording() {
-try {
-const stream = await navigator.mediaDevices.getUserMedia({
-audio: true,
-});
-
-
-  const mediaRecorder = new MediaRecorder(stream);
-
-  mediaRecorderRef.current = mediaRecorder;
-  audioChunksRef.current = [];
-
-  mediaRecorder.ondataavailable = (event) => {
-    audioChunksRef.current.push(event.data);
-  };
-
-  mediaRecorder.onstop = () => {
-    const audioBlob = new Blob(audioChunksRef.current, {
-      type: "audio/webm",
-    });
-
-    const url = URL.createObjectURL(audioBlob);
-    setAudioURL(url);
-  };
-
-  mediaRecorder.start();
-  setIsRecording(true);
-} catch (error) {
-  console.error(error);
-}
-
-}
-
-function stopRecording() {
-if (!mediaRecorderRef.current) return;
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
 
 
-mediaRecorderRef.current.stop();
-setIsRecording(false);
+      const mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/webm",
+        });
+
+        const url = URL.createObjectURL(audioBlob);
+        setAudioURL(url);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+  function stopRecording() {
+    if (!mediaRecorderRef.current) return;
 
 
-}
-
-return ( <main className="min-h-screen bg-[#FFFDF8] px-6 py-10"> <div className="max-w-5xl mx-auto"> <div className="flex items-center justify-between"> <div> <p className="uppercase tracking-[0.3em] text-gray-400 text-sm">
-Recording Session </p>
+    mediaRecorderRef.current.stop();
+    setIsRecording(false);
 
 
-        <h1 className="mt-3 text-5xl font-extralight">
-          Speak Naturally.
-        </h1>
-      </div>
+  }
 
-      <div className="text-right">
-        <p className="text-gray-400 text-sm">Status</p>
+  return (<main className="min-h-screen bg-[#FFFDF8] px-6 py-10"> <div className="max-w-5xl mx-auto"> <div className="flex items-center justify-between"> <div> <p className="uppercase tracking-[0.3em] text-gray-400 text-sm">
+    Recording Session </p>
 
-        <h2 className="text-2xl font-light">
-          {isRecording ? "Recording" : "Idle"}
-        </h2>
-      </div>
+
+    <h1 className="mt-3 text-5xl font-extralight">
+      Speak Naturally.
+    </h1>
+  </div>
+
+    <div className="text-right">
+      <p className="text-gray-400 text-sm">Status</p>
+
+      <h2 className="text-2xl font-light">
+        {isRecording ? "Recording" : "Idle"}
+      </h2>
     </div>
+  </div>
 
     <div className="mt-10 bg-white rounded-3xl p-8 shadow-sm">
       <p className="text-sm text-gray-400">Topic</p>
@@ -128,14 +128,34 @@ Recording Session </p>
 
     <div className="flex justify-end mt-10">
       <button
-        onClick={() => router.push("/analysis")}
+        onClick={() => {
+          const sessions =
+            JSON.parse(localStorage.getItem("sessions") || "[]");
+
+          const newSession = {
+            id: Date.now(),
+            topic: "Tell a story about a difficult decision",
+            duration: 5,
+            date: new Date().toLocaleDateString(),
+            audioURL,
+          };
+
+          sessions.push(newSession);
+
+          localStorage.setItem(
+            "sessions",
+            JSON.stringify(sessions)
+          );
+
+          router.push("/history");
+        }}
         className="px-8 py-4 rounded-2xl bg-[#A78BFA] text-white font-medium"
       >
         End Session →
       </button>
     </div>
   </div>
-</main>
+  </main>
 
-);
+  );
 }
