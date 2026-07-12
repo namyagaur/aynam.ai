@@ -34,12 +34,9 @@ export default function SignInPage() {
 
         </div>
 
-        <Link
-          href="/onboarding"
-          className="block text-center text-sm text-sky-300 hover:text-sky-200"
-        >
-          Skip authentication →
-        </Link>
+        <Link href="/dashboard">
+    Continue →
+</Link>
 
       </div>
 
