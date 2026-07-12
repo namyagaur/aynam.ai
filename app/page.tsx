@@ -1,7 +1,5 @@
-export default function HomePage() {
-  return (
-    <main>
-      Aynam
-    </main>
-  );
+import Intro from "@/components/landing/Intro";
+
+export default function Home() {
+  return <Intro />;
 }
