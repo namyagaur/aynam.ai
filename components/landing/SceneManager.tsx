@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
@@ -150,11 +150,18 @@ export default function SceneManager() {
                   },
                 }}
               >
-                <ChevronDown
-                  size={28}
-                  strokeWidth={1.5}
-                  color="#F4F6FB"
-                />
+                <Link href="/sign-in">
+  <motion.div
+    whileHover={{ y: 3 }}
+    className="cursor-pointer"
+  >
+    <ChevronDown
+      size={28}
+      strokeWidth={1.5}
+      color="#F4F6FB"
+    />
+  </motion.div>
+</Link>
               </motion.div>
             )}
           </motion.div>
