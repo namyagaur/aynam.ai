@@ -31,7 +31,9 @@ export default function SessionPage() {
   }
 
   function handleEndSession() {
-    router.push("/feedback");
+    router.push(
+  `/feedback?topic=${encodeURIComponent(topic)}&duration=${duration}&difficulty=${difficulty}&time=${seconds}`
+);
   }
 
   return (
