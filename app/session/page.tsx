@@ -49,8 +49,20 @@ useEffect(() => {
   const remainingSeconds = seconds % 60;
 
   function handleRecording() {
-    setIsRecording(!isRecording);
+  if (!recognitionRef.current) return;
+
+  if (!isRecording) {
+    setTranscript("");
+
+    recognitionRef.current.start();
+
+    setIsRecording(true);
+  } else {
+    recognitionRef.current.stop();
+
+    setIsRecording(false);
   }
+}
 
   function handleEndSession() {
     router.push(
