@@ -1,8 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 export default function SessionPage() {
   const searchParams = useSearchParams();
   const router = useRouter();  
