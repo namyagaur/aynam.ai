@@ -117,12 +117,11 @@ useEffect(() => {
       {/* Recording */}
 
       <button
-        onClick={handleRecording}
-        className="mt-10 rounded-lg bg-sky-400 px-8 py-4 font-semibold text-black"
-      >
-<p className="mt-4 whitespace-pre-wrap text-white/70">
-  {transcript || "Press Start Recording to begin speaking."}
-</p>      </button>
+  onClick={handleRecording}
+  className="mt-10 rounded-lg bg-sky-400 px-8 py-4 font-semibold text-black"
+>
+  {isRecording ? "Stop Recording" : "Start Recording"}
+</button>
 
       {/* Transcript */}
 
@@ -132,13 +131,9 @@ useEffect(() => {
           Transcript
         </h2>
 
-        <p className="mt-4 text-white/60">
-
-          {isRecording
-            ? "Listening..."
-            : "Press Start Recording to begin speaking."}
-
-        </p>
+        <p className="mt-4 whitespace-pre-wrap text-white/70">
+  {transcript || "Press Start Recording to begin speaking."}
+</p>
 
       </div>
 
