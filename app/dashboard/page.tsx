@@ -22,11 +22,11 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="flex h-screen bg-[#101726]">
+    <div className="flex min-h-screen bg-[#101726]">
 
       <Sidebar />
 
-      <main className="flex-1 overflow-y-auto p-10">
+      <main className="flex-1 p-10">
 
         <h1 className="text-5xl font-semibold text-white">
           Good Evening, {user.name} 👋

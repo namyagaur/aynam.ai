@@ -5,11 +5,11 @@ import SceneManager from "./SceneManager";
 
 export default function Intro() {
   return (
-    <main className="relative h-screen w-screen overflow-hidden">
+    <main className="relative min-h-screen w-full">
 
       <Background />
 
-      <div className="relative z-10 flex h-full items-center justify-center px-8">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-8">
         <SceneManager />
       </div>
 
