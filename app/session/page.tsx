@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function SessionPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useRouter();  
 
   // Read values passed from Practice page
   const topic = searchParams.get("topic") || "Unknown Topic";
@@ -15,13 +15,15 @@ export default function SessionPage() {
   const [seconds, setSeconds] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((prev) => prev + 1);
-    }, 1000);
+ useEffect(() => {
+  if (!isRecording) return;
 
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    setSeconds((prev) => prev + 1);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [isRecording]);
 
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
