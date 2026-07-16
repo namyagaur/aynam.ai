@@ -12,19 +12,21 @@ export default function SessionPage() {
   const difficulty = searchParams.get("difficulty") || "Medium";
 
   const [seconds, setSeconds] = useState(0);
-  const [isRecording, setIsRecording] = useState(false);
+  const [recordingStatus, setRecordingStatus] = useState<
+  "idle" | "recording" | "paused"
+>("idle");
   const [transcript, setTranscript] = useState("");
 
 const recognitionRef = useRef<any>(null);
  useEffect(() => {
-  if (!isRecording) return;
+  if (recordingStatus !== "recording") return;
 
   const interval = setInterval(() => {
     setSeconds((prev) => prev + 1);
   }, 1000);
 
   return () => clearInterval(interval);
-}, [isRecording]);
+}, [recordingStatus]);
 
 useEffect(() => {
   const SpeechRecognition =
@@ -41,14 +43,23 @@ useEffect(() => {
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = "en-US";
-  recognition.onresult = (event: any) => {
-  let finalTranscript = "";
+  
+recognition.onresult = (event: any) => {
+  let text = "";
 
   for (let i = 0; i < event.results.length; i++) {
-    finalTranscript += event.results[i][0].transcript;
+    text += event.results[i][0].transcript;
   }
 
-  setTranscript(finalTranscript);
+  setTranscript(text);
+};
+
+recognition.onerror = (event: any) => {
+  console.error(event.error);
+};
+
+recognition.onend = () => {
+  console.log("Recognition stopped");
 };
   recognitionRef.current = recognition;
 }, []);
@@ -56,27 +67,46 @@ useEffect(() => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
 
-  function handleRecording() {
+
+function handleStartRecording() {
   if (!recognitionRef.current) return;
 
-  if (!isRecording) {
-    setTranscript("");
+  setTranscript("");
+  setSeconds(0);
 
-    recognitionRef.current.start();
+  setRecordingStatus("recording");
 
-    setIsRecording(true);
-  } else {
-    recognitionRef.current.stop();
-
-    setIsRecording(false);
-  }
+  recognitionRef.current.start();
 }
 
-  function handleEndSession() {
-    router.push(
-  `/feedback?topic=${encodeURIComponent(topic)}&duration=${duration}&difficulty=${difficulty}&time=${seconds}`
-);
-  }
+function handlePauseRecording() {
+  if (!recognitionRef.current) return;
+
+  setRecordingStatus("paused");
+
+  recognitionRef.current.stop();
+}
+
+function handleResumeRecording() {
+  if (!recognitionRef.current) return;
+
+  setRecordingStatus("recording");
+
+  recognitionRef.current.start();
+}
+ 
+ function handleEndSession() {
+  recognitionRef.current?.stop();
+
+  setRecordingStatus("idle");
+
+  router.push(
+    `/feedback?topic=${encodeURIComponent(topic)}
+    &duration=${duration}
+    &difficulty=${difficulty}
+    &time=${seconds}`
+  );
+}
 
   return (
     <main className="min-h-screen bg-[#101726] p-10 text-white">
@@ -116,12 +146,46 @@ useEffect(() => {
 
       {/* Recording */}
 
-      <button
-  onClick={handleRecording}
-  className="mt-10 rounded-lg bg-sky-400 px-8 py-4 font-semibold text-black"
->
-  {isRecording ? "Stop Recording" : "Start Recording"}
-</button>
+      <div className="mt-10 flex gap-4">
+
+  {recordingStatus === "idle" && (
+    <button
+      onClick={handleStartRecording}
+      className="rounded-lg bg-green-500 px-6 py-3 font-semibold text-white"
+    >
+      🎤 Start
+    </button>
+  )}
+
+  {recordingStatus === "recording" && (
+    <button
+      onClick={handlePauseRecording}
+      className="rounded-lg bg-yellow-500 px-6 py-3 font-semibold text-black"
+    >
+      ⏸ Pause
+    </button>
+  )}
+
+  {recordingStatus === "paused" && (
+    <button
+      onClick={handleResumeRecording}
+      className="rounded-lg bg-green-500 px-6 py-3 font-semibold text-white"
+    >
+      ▶ Resume
+    </button>
+  )}
+
+  {(recordingStatus === "recording" ||
+    recordingStatus === "paused") && (
+    <button
+      onClick={handleEndSession}
+      className="rounded-lg bg-red-500 px-6 py-3 font-semibold text-white"
+    >
+      🛑 Stop Session
+    </button>
+  )}
+
+</div>
 
       {/* Transcript */}
 
@@ -137,12 +201,12 @@ useEffect(() => {
 
       </div>
 
-      <button
+      {/* <button
         onClick={handleEndSession}
         className="mt-10 rounded-lg bg-red-500 px-8 py-4 font-semibold"
       >
         End Session
-      </button>
+      </button> */}
 
     </main>
   );
