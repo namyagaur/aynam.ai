@@ -41,7 +41,15 @@ useEffect(() => {
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = "en-US";
+  recognition.onresult = (event: any) => {
+  let finalTranscript = "";
 
+  for (let i = 0; i < event.results.length; i++) {
+    finalTranscript += event.results[i][0].transcript;
+  }
+
+  setTranscript(finalTranscript);
+};
   recognitionRef.current = recognition;
 }, []);
 
@@ -112,8 +120,9 @@ useEffect(() => {
         onClick={handleRecording}
         className="mt-10 rounded-lg bg-sky-400 px-8 py-4 font-semibold text-black"
       >
-        {isRecording ? "Stop Recording" : "Start Recording"}
-      </button>
+<p className="mt-4 whitespace-pre-wrap text-white/70">
+  {transcript || "Press Start Recording to begin speaking."}
+</p>      </button>
 
       {/* Transcript */}
 
