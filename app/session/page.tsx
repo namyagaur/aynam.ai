@@ -13,7 +13,9 @@ export default function SessionPage() {
 
   const [seconds, setSeconds] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState("");
 
+const recognitionRef = useRef<any>(null);
  useEffect(() => {
   if (!isRecording) return;
 
@@ -23,6 +25,25 @@ export default function SessionPage() {
 
   return () => clearInterval(interval);
 }, [isRecording]);
+
+useEffect(() => {
+  const SpeechRecognition =
+    (window as any).SpeechRecognition ||
+    (window as any).webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Speech Recognition is not supported in this browser.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "en-US";
+
+  recognitionRef.current = recognition;
+}, []);
 
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
