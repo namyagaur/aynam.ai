@@ -119,18 +119,27 @@ function handleResumeRecording() {
   recognitionRef.current.start();
 }
  
-function handleEndSession() {
+async function handleEndSession() {
   recognitionRef.current?.stop();
 
   setRecordingStatus("idle");
 
-  router.push(
-    `/feedback?topic=${encodeURIComponent(topic)}
-    &duration=${duration}
-    &difficulty=${difficulty}
-    &time=${seconds}
-    &transcript=${encodeURIComponent(finalTranscript)}`
-  );
+  const response = await fetch("/api/feedback", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      transcript: finalTranscript,
+      topic,
+      duration,
+      difficulty,
+    }),
+  });
+
+  const data = await response.json();
+
+  console.log(data);
 }
 
   return (
