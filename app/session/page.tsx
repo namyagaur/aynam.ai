@@ -7,16 +7,17 @@ export default function SessionPage() {
   const router = useRouter();  
 
   // Read values passed from Practice page
+  const [error, setError] = useState("");
   const topic = searchParams.get("topic") || "Unknown Topic";
   const duration = searchParams.get("duration") || "10";
   const difficulty = searchParams.get("difficulty") || "Medium";
-
+  const transcriptRef = useRef<HTMLDivElement>(null);
   const [seconds, setSeconds] = useState(0);
   const [recordingStatus, setRecordingStatus] = useState<
   "idle" | "recording" | "paused"
 >("idle");
-  const [transcript, setTranscript] = useState("");
-
+const [finalTranscript, setFinalTranscript] = useState("");
+const [interimTranscript, setInterimTranscript] = useState("");
 const recognitionRef = useRef<any>(null);
  useEffect(() => {
   if (recordingStatus !== "recording") return;
@@ -27,6 +28,12 @@ const recognitionRef = useRef<any>(null);
 
   return () => clearInterval(interval);
 }, [recordingStatus]);
+useEffect(() => {
+  transcriptRef.current?.scrollTo({
+    top: transcriptRef.current.scrollHeight,
+    behavior: "smooth",
+  });
+}, [finalTranscript, interimTranscript]);
 
 useEffect(() => {
   const SpeechRecognition =
@@ -38,6 +45,7 @@ useEffect(() => {
     return;
   }
 
+
   const recognition = new SpeechRecognition();
 
   recognition.continuous = true;
@@ -45,17 +53,32 @@ useEffect(() => {
   recognition.lang = "en-US";
   
 recognition.onresult = (event: any) => {
-  let text = "";
+  let interim = "";
+  let final = "";
 
-  for (let i = 0; i < event.results.length; i++) {
-    text += event.results[i][0].transcript;
+  for (let i = event.resultIndex; i < event.results.length; i++) {
+    const transcript = event.results[i][0].transcript;
+
+    if (event.results[i].isFinal) {
+      final += transcript + " ";
+    } else {
+      interim += transcript;
+    }
   }
 
-  setTranscript(text);
-};
+  if (final) {
+    setFinalTranscript((prev) => prev + final);
+  }
 
+  setInterimTranscript(interim);
+};
 recognition.onerror = (event: any) => {
-  console.error(event.error);
+  if (event.error === "not-allowed") {
+    setError("Microphone permission denied.");
+  } else {
+    setError(event.error);
+  }
+
 };
 
 recognition.onend = () => {
@@ -71,7 +94,8 @@ recognition.onend = () => {
 function handleStartRecording() {
   if (!recognitionRef.current) return;
 
-  setTranscript("");
+ setFinalTranscript("");
+setInterimTranscript("");
   setSeconds(0);
 
   setRecordingStatus("recording");
@@ -95,7 +119,7 @@ function handleResumeRecording() {
   recognitionRef.current.start();
 }
  
- function handleEndSession() {
+function handleEndSession() {
   recognitionRef.current?.stop();
 
   setRecordingStatus("idle");
@@ -104,7 +128,8 @@ function handleResumeRecording() {
     `/feedback?topic=${encodeURIComponent(topic)}
     &duration=${duration}
     &difficulty=${difficulty}
-    &time=${seconds}`
+    &time=${seconds}
+    &transcript=${encodeURIComponent(finalTranscript)}`
   );
 }
 
@@ -130,7 +155,25 @@ function handleResumeRecording() {
         </p>
 
       </div>
+      <div className="mt-8 flex items-center gap-3">
 
+  <div
+    className={`h-3 w-3 rounded-full ${
+      recordingStatus === "recording"
+        ? "animate-pulse bg-red-500"
+        : "bg-gray-500"
+    }`}
+  />
+
+  <span className="text-white/70">
+    {recordingStatus === "idle" && "Ready"}
+
+    {recordingStatus === "recording" && "Listening..."}
+
+    {recordingStatus === "paused" && "Paused"}
+  </span>
+
+</div>
       {/* Timer */}
 
       <div className="mt-10">
@@ -184,19 +227,36 @@ function handleResumeRecording() {
       🛑 Stop Session
     </button>
   )}
+  {error && (
+  <p className="mt-4 text-red-400">
+    {error}
+  </p>
+)}
 
 </div>
 
       {/* Transcript */}
 
-      <div className="mt-10 rounded-lg border border-white/10 bg-[#1B2233] p-6">
+<div
+  ref={transcriptRef}
+  className="mt-10 h-72 overflow-y-auto rounded-lg border border-white/10 bg-[#1B2233] p-6"
+>
+        <div className="mb-6 flex items-center justify-between">
+  <h2 className="text-xl font-semibold">
+    Live Transcript
+  </h2>
 
-        <h2 className="text-xl font-semibold">
-          Transcript
-        </h2>
+  <span className="text-sm text-white/40">
+    {finalTranscript.split(/\s+/).filter(Boolean).length} words
+  </span>
+</div>
 
-        <p className="mt-4 whitespace-pre-wrap text-white/70">
-  {transcript || "Press Start Recording to begin speaking."}
+<p className="mt-6 whitespace-pre-wrap leading-8 text-lg text-white">  {finalTranscript}
+<span className="text-white/40 italic">    {interimTranscript}
+  </span>
+
+  {!finalTranscript && !interimTranscript &&
+    "Press Start Recording to begin speaking."}
 </p>
 
       </div>
