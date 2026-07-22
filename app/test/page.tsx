@@ -1,6 +1,8 @@
 import { tokenize, splitSentences } from "@/lib/analytics/tokenizer";
 import { analyzePace } from "@/lib/analytics/pace";
 import { analyzeFillers } from "@/lib/analytics/fillers";
+import { generateSpeechAnalytics } from "@/lib/analytics";
+
 export default function Page() {
 
   console.log(tokenize("Hello!! I built Aynam."));
@@ -19,6 +21,12 @@ export default function Page() {
 console.log(
   analyzeFillers(
     "Um... I think... like... basically... I built an AI system. Um actually it works."
+  )
+);
+console.log(
+  generateSpeechAnalytics(
+    "Um... I built Aynam. Actually it helps people communicate better. Um I really enjoyed building it.",
+    45
   )
 );
   return (
