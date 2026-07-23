@@ -3,6 +3,7 @@ import { analyzePace } from "./pace";
 import { countCharacters, countWords } from "./tokenizer";
 import { SpeechAnalytics } from "./types";
 import { analyzeVocabulary } from "./vocabulary";
+import { analyzeSentences } from "./sentence";
 
 export function generateSpeechAnalytics(
   transcript: string,
@@ -39,12 +40,7 @@ export function generateSpeechAnalytics(
     fillers,
 
     // Temporary
-    sentences: {
-      sentenceCount: 0,
-      averageSentenceLength: 0,
-      longestSentence: 0,
-      shortestSentence: 0,
-    },
+    sentences: analyzeSentences(transcript),
 
     analyticsSummary,
   };
