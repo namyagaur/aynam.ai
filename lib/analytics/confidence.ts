@@ -3,14 +3,17 @@ import {
   HESITATION_WORDS,
 } from "./constants";
 
-import { ConfidenceMetrics } from "./types";
+import {
+  ConfidenceMetrics,
+  ConfidenceWord,
+} from "./types";
 
-function countMatches(
+function findWords(
   text: string,
   phrases: string[]
-): number {
+): ConfidenceWord[] {
 
-  let total = 0;
+  const result: ConfidenceWord[] = [];
 
   for (const phrase of phrases) {
 
@@ -18,10 +21,17 @@ function countMatches(
 
     const matches = text.match(regex);
 
-    total += matches?.length ?? 0;
+    const count = matches?.length ?? 0;
+
+    if (count > 0) {
+      result.push({
+        word: phrase,
+        count,
+      });
+    }
   }
 
-  return total;
+  return result;
 }
 
 export function analyzeConfidence(
@@ -30,27 +40,15 @@ export function analyzeConfidence(
 
   const text = transcript.toLowerCase();
 
-  const hesitationCount = countMatches(
-    text,
-    HESITATION_WORDS
-  );
-
-  const confidentWordCount = countMatches(
-    text,
-    CONFIDENT_WORDS
-  );
-
-  let score = 70;
-
-  score += confidentWordCount * 5;
-
-  score -= hesitationCount * 5;
-
-  score = Math.max(0, Math.min(100, score));
-
   return {
-    hesitationCount,
-    confidentWordCount,
-    score,
+    hesitationWords: findWords(
+      text,
+      HESITATION_WORDS
+    ),
+
+    confidentWords: findWords(
+      text,
+      CONFIDENT_WORDS
+    ),
   };
 }

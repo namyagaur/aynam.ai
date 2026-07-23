@@ -33,10 +33,14 @@ export interface FillerMetrics {
   density: number;
   words: FillerWord[];
 }
+export interface ConfidenceWord {
+  word: string;
+  count: number;
+}
+
 export interface ConfidenceMetrics {
-  hesitationCount: number;
-  confidentWordCount: number;
-  score: number;
+  hesitationWords: ConfidenceWord[];
+  confidentWords: ConfidenceWord[];
 }
 
 export interface BasicMetrics {
