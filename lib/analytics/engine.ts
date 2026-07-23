@@ -30,7 +30,7 @@ export function generateSpeechAnalytics(
   const fillers = analyzeFillers(
     transcript
   );
-
+const sentences = analyzeSentences(transcript);
   const analyticsSummary =
     `You spoke ${basic.wordCount} words in ${durationSeconds} seconds (${pace.wordsPerMinute} WPM). ` +
     `Your speaking pace was ${pace.speakingPace}. ` +
