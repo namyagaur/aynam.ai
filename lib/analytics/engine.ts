@@ -4,11 +4,14 @@ import { countCharacters, countWords } from "./tokenizer";
 import { SpeechAnalytics } from "./types";
 import { analyzeVocabulary } from "./vocabulary";
 import { analyzeSentences } from "./sentence";
+import { analyzeConfidence } from "./confidence";
+
 
 export function generateSpeechAnalytics(
   transcript: string,
   durationSeconds: number
 ): SpeechAnalytics {
+  const confidence = analyzeConfidence(transcript);
 
   const basic = {
     wordCount: countWords(transcript),
@@ -34,14 +37,12 @@ export function generateSpeechAnalytics(
     `You used ${fillers.total} filler words and your vocabulary richness was ${vocabulary.vocabularyRichness}.`;
 
   return {
-    basic,
-    pace,
-    vocabulary,
-    fillers,
-
-    // Temporary
-    sentences: analyzeSentences(transcript),
-
-    analyticsSummary,
-  };
+  basic,
+  pace,
+  vocabulary,
+  fillers,
+  sentences,
+  confidence,
+  analyticsSummary,
+};
 }
