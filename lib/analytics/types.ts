@@ -33,6 +33,11 @@ export interface FillerMetrics {
   density: number;
   words: FillerWord[];
 }
+export interface ConfidenceMetrics {
+  hesitationCount: number;
+  confidentWordCount: number;
+  score: number;
+}
 
 export interface BasicMetrics {
   wordCount: number;
@@ -49,6 +54,8 @@ export interface SpeechAnalytics {
   sentences: SentenceMetrics;
 
   fillers: FillerMetrics;
+
+  confidence: ConfidenceMetrics;
 
   analyticsSummary: string;
 }
