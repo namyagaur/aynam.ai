@@ -6,8 +6,8 @@ import mockFeedback from "@/lib/mockFeedback";
 export default function FeedbackPage() {
   const router = useRouter();
 
-  const feedback = mockFeedback;
-
+const feedback =
+  JSON.parse(sessionStorage.getItem("feedback") || "{}");
   return (
     <main className="min-h-screen bg-[#101726] text-white">
       <div className="mx-auto max-w-6xl px-8 py-12">

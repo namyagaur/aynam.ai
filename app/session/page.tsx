@@ -124,22 +124,40 @@ async function handleEndSession() {
 
   setRecordingStatus("idle");
 
-  const response = await fetch("/api/feedback", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-  transcript: finalTranscript,
-  topic,
-  durationSeconds: duration,
-  difficulty,
-})
-  });
+  try {
+    const response = await fetch("/api/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        transcript: finalTranscript,
+        topic,
+        durationSeconds: seconds, // <-- use actual recording duration
+        difficulty,
+      }),
+    });
 
-  const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Failed to generate feedback");
+    }
 
-  console.log(data);
+    const data = await response.json();
+
+    console.log(data);
+
+    // We'll replace mockFeedback with this later
+    sessionStorage.setItem(
+      "feedback",
+      JSON.stringify(data)
+    );
+
+    router.push("/feedback");
+
+  } catch (error) {
+    console.error(error);
+    alert("Unable to generate feedback.");
+  }
 }
 
   return (
