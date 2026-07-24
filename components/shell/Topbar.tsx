@@ -36,8 +36,8 @@ export default function Topbar() {
       <div
         className="
           flex
-          h-12
-          w-[540px]
+          h-14
+          w-[620px]
           items-center
           rounded-2xl
           border

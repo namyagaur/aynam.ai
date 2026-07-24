@@ -24,13 +24,13 @@ export default function AppShell({
       <div
         className="
           h-full
-          p-4
+          p-2
         "
       >
         <div
           className="
             h-full
-            rounded-[34px]
+            rounded-[28px]
             border
             border-white/60
             bg-white/35
