@@ -1,171 +1,159 @@
 @import "tailwindcss";
 
-/* ------------------------------------------------ */
-/* RESET */
-/* ------------------------------------------------ */
+/* ==========================================================
+   DESIGN TOKENS
+========================================================== */
+
+:root {
+  --canvas: #F7F5F1;
+
+  --surface: #FFFFFF;
+  --surface-alt: #F2EEE8;
+
+  --text-primary: #1F1F1F;
+  --text-secondary: #666666;
+  --text-muted: #9A9A9A;
+
+  --border: #E7E1D7;
+
+  --accent: #6E61FF;
+
+  --success: #5B8C6A;
+  --warning: #C58A42;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================
+   RESET
+========================================================== */
 
 *,
 *::before,
-*::after{
-  box-sizing:border-box;
+*::after {
+  box-sizing: border-box;
 }
 
-html{
-  scroll-behavior:smooth;
+html {
+  scroll-behavior: smooth;
 }
 
-body{
+body {
+  margin: 0;
 
-  margin:0;
+  background: var(--canvas);
+  color: var(--text-primary);
 
-  overflow-y:auto;
-  overflow-x:hidden;
+  font-family: var(--font-geist-sans), sans-serif;
 
-  background:#0B1020;
+  text-rendering: optimizeLegibility;
 
-  color:#F4F6FB;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-  font-family:var(--font-geist-sans),sans-serif;
-
-  text-rendering:optimizeLegibility;
-
-  -webkit-font-smoothing:antialiased;
-
-  -moz-osx-font-smoothing:grayscale;
-}
-/* ------------------------------------------------ */
-/* SELECTION */
-/* ------------------------------------------------ */
-
-::selection{
-
-  background:#8CB8FF55;
-
-  color:white;
-
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* ------------------------------------------------ */
-/* SCROLLBAR */
-/* ------------------------------------------------ */
+/* ==========================================================
+   SELECTION
+========================================================== */
 
-::-webkit-scrollbar{
-
-  width:8px;
-
+::selection {
+  background: rgba(110, 97, 255, 0.18);
+  color: var(--text-primary);
 }
 
-::-webkit-scrollbar-track{
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
 
-  background:transparent;
-
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-::-webkit-scrollbar-thumb{
-
-  background:#253357;
-
-  border-radius:999px;
-
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb:hover{
-
-  background:#395089;
-
+::-webkit-scrollbar-thumb {
+  background: #d3cdc4;
+  border-radius: 999px;
 }
 
-/* ------------------------------------------------ */
-/* CURSOR */
-/* ------------------------------------------------ */
+::-webkit-scrollbar-thumb:hover {
+  background: #beb7ae;
+}
 
-@keyframes cursorBlink{
+/* ==========================================================
+   CURSOR
+========================================================== */
 
-  0%{
-    opacity:1;
+@keyframes cursorBlink {
+  0% {
+    opacity: 1;
   }
 
-  50%{
-    opacity:.15;
+  50% {
+    opacity: 0.15;
   }
 
-  100%{
-    opacity:1;
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-cursor {
+  animation: cursorBlink 0.8s ease-in-out infinite;
+}
+
+/* ==========================================================
+   FADE
+========================================================== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(8px);
   }
 
-}
-
-.animate-cursor{
-
-  animation:cursorBlink .8s ease-in-out infinite;
-
-}
-
-/* ------------------------------------------------ */
-/* FADE */
-/* ------------------------------------------------ */
-
-@keyframes fadeUp{
-
-  from{
-
-    opacity:0;
-
-    transform:translateY(8px);
-
-    filter:blur(8px);
-
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
   }
-
-  to{
-
-    opacity:1;
-
-    transform:translateY(0);
-
-    filter:blur(0);
-
-  }
-
 }
 
-.animate-fade{
-
-  animation:fadeUp .8s cubic-bezier(.22,1,.36,1);
-
+.animate-fade {
+  animation: fadeUp 0.8s cubic-bezier(.22, 1, .36, 1);
 }
 
-/* ------------------------------------------------ */
-/* UTILITIES */
-/* ------------------------------------------------ */
+/* ==========================================================
+   UTILITIES
+========================================================== */
 
-.text-primary{
-
-  color:#F4F6FB;
-
+.text-primary {
+  color: var(--text-primary);
 }
 
-.text-secondary{
-
-  color:#C8D0E5;
-
+.text-secondary {
+  color: var(--text-secondary);
 }
 
-.glow{
-
-  text-shadow:
-    0 0 24px rgba(130,180,255,.18);
-
+.text-muted {
+  color: var(--text-muted);
 }
 
-/* ------------------------------------------------ */
-/* LINKS */
-/* ------------------------------------------------ */
+/* ==========================================================
+   LINKS
+========================================================== */
 
-a{
-
-  color:inherit;
-
-  text-decoration:none;
-
+a {
+  color: inherit;
+  text-decoration: none;
 }
