@@ -40,27 +40,40 @@ export default function Sidebar() {
 
   return (
     <aside
-      className="
-      w-[310px]
-      p-5
-      "
-    >
-      <div
-        className="
-        flex
-        h-full
-        flex-col
-        rounded-[28px]
-        border
-        border-white/50
-        bg-[linear-gradient(180deg,#FCFBFF_0%,#F8F4FF_45%,#F5EFFB_100%)]
-        shadow-[0_20px_60px_rgba(90,70,160,.08)]
-        backdrop-blur-xl
-        "
-      >
+  className="w-[300px] border-r border-black/5"
+  style={{
+    background: `
+      radial-gradient(
+        circle at 12% 8%,
+        rgba(255,248,220,.55) 0%,
+        transparent 28%
+      ),
+
+      radial-gradient(
+        circle at 100% 100%,
+        rgba(193,219,232,.18) 0%,
+        transparent 45%
+      ),
+
+      radial-gradient(
+        circle at 60% 75%,
+        rgba(139,115,255,.08) 0%,
+        transparent 40%
+      ),
+
+      linear-gradient(
+        180deg,
+        #FCFBFF 0%,
+        #F8F4FF 45%,
+        #F4EEF9 100%
+      )
+    `,
+  }}
+>
+  <div className="flex h-full flex-col px-7 py-7">
         {/* Header */}
 
-        <div className="flex items-center justify-between px-6 pt-7">
+        <div className="flex items-center justify-between">
 
           <div className="flex items-center gap-2">
 
@@ -90,7 +103,7 @@ export default function Sidebar() {
 
         {/* Navigation */}
 
-        <nav className="mt-10 flex flex-col gap-2 px-4">
+        <nav className="mt-10 flex flex-col gap-2">
 
           {navItems.map((item) => {
 
@@ -109,8 +122,8 @@ export default function Sidebar() {
                 h-14
                 items-center
                 gap-4
-                rounded-2xl
-                px-5
+                rounded-[20px]
+px-4
                 transition-all
                 ${
                   active
@@ -141,7 +154,7 @@ export default function Sidebar() {
 
         {/* Settings */}
 
-        <div className="px-4 pb-6">
+        <div className="pb-2">
 
           <Link
             href="/settings"
