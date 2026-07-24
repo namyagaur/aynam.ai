@@ -56,9 +56,17 @@ export default function Sidebar({
       <div className="flex h-20 items-center justify-between px-7">
 
         {!collapsed && (
-          <h1 className="text-[22px] font-bold tracking-[-0.05em] text-[#17171B]">
-            Aynam
-          </h1>
+          <div className="flex items-center gap-2">
+
+    <h1 className="text-[22px] font-bold tracking-[-0.05em] text-[#17171B]">
+        Aynam
+    </h1>
+
+    <span className="text-lg">
+        ✨
+    </span>
+
+</div>
         )}
 
         <button
