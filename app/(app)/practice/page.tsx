@@ -50,7 +50,7 @@ export default function PracticePage() {
 
       {/* Left */}
 
-      <aside className="w-[285px] shrink-0">
+      <aside className="w-[280px] shrink-0">
 
         <CommunicationModes />
 

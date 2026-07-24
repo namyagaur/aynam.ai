@@ -9,7 +9,7 @@ export default function CommunicationModes() {
   const [selectedMode, setSelectedMode] = useState("hr");
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-3">
       {modes.map((mode) => (
         <div key={mode.id} onClick={() => setSelectedMode(mode.id)}>
           <ModeCard

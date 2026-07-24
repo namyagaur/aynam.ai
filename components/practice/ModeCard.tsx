@@ -20,57 +20,62 @@ export default function ModeCard({
   return (
     <button
       className={`
-        group w-full rounded-[28px] border bg-white
-        px-6 py-5 text-left transition-all duration-300
+      group
+      flex
+      h-[96px]
+      w-full
+      items-center
+      rounded-[24px]
+      border
+      bg-white
+      px-5
+      transition-all
+      duration-300
 
-        ${
-          selected
-            ? "border-[#8B7BFF] shadow-[0_12px_35px_rgba(139,123,255,0.12)]"
-            : "border-[#ECE8E2] hover:border-[#DDD6FE] hover:shadow-lg"
-        }
-      `}
+      ${
+        selected
+          ? "border-[#8C7AFF] shadow-[0_8px_30px_rgba(125,110,255,0.08)]"
+          : "border-[#ECE8E2] hover:border-[#D7CFFF]"
+      }
+    `}
     >
-      <div className="flex items-center">
+      {/* icon */}
 
-        {/* Icon */}
-
-        <div
-          className="flex h-14 w-14 items-center justify-center rounded-2xl"
-          style={{ backgroundColor: color }}
-        >
-          <Icon
-            size={26}
-            strokeWidth={2}
-            className="text-[#4F46E5]"
-          />
-        </div>
-
-        {/* Content */}
-
-        <div className="ml-5 flex-1">
-
-          <h3 className="text-[22px] font-semibold text-[#23232B]">
-            {title}
-          </h3>
-
-          <p className="mt-1 text-[15px] leading-6 text-[#6D6D75]">
-            {description}
-          </p>
-
-        </div>
-
-        {/* Arrow */}
-
-        <ChevronRight
+      <div
+        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
+        style={{
+          background: color,
+        }}
+      >
+        <Icon
           size={22}
-          className={`transition ${
-            selected
-              ? "text-[#7C6BFF]"
-              : "text-[#A5A5AE] group-hover:text-[#7C6BFF]"
-          }`}
+          strokeWidth={2}
+          className="text-[#4A47D5]"
         />
+      </div>
+
+      {/* text */}
+
+      <div className="ml-4 flex-1">
+
+        <h3 className="text-[18px] font-semibold leading-none text-[#26242C]">
+          {title}
+        </h3>
+
+        <p className="mt-2 text-[13px] leading-5 text-[#77747C]">
+          {description}
+        </p>
 
       </div>
+
+      <ChevronRight
+        size={18}
+        className={`transition ${
+          selected
+            ? "text-[#7C6BFF]"
+            : "text-[#B6B4BC] group-hover:text-[#7C6BFF]"
+        }`}
+      />
     </button>
   );
 }
