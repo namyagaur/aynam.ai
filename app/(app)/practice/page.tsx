@@ -1,5 +1,5 @@
 "use client";
-
+import CommunicationModes from "@/components/practice/CommunicationModes";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -52,7 +52,7 @@ export default function PracticePage() {
 
     <div className="flex gap-3">
 
-      {/* cards will come here */}
+      <CommunicationModes />
 
     </div>
 
