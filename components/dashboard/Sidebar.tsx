@@ -36,7 +36,13 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="h-screen w-72 border-r border-white/10 bg-[#0B1020] px-6 py-8">
+    <aside
+  style={{
+    background:
+      "linear-gradient(180deg,#FBF9FF 0%,#F8F4FF 35%,#F5F0FC 70%,#F3EDF9 100%)",
+  }}
+  className="flex h-full flex-col border-r border-[#ECE8F6]"
+>
 
       {/* Logo */}
 

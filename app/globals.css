@@ -11,7 +11,13 @@
 
   /* Surfaces */
 
---sidebar:#F8F5FF;
+--sidebar: linear-gradient(
+  180deg,
+  #FBF9FF 0%,
+  #F8F4FF 35%,
+  #F5F0FC 70%,
+  #F3EDF9 100%
+);
  --workspace:#FDFDFF;
 
   --card: rgba(255, 255, 255, 0.72);
