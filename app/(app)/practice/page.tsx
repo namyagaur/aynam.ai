@@ -27,30 +27,49 @@ export default function PracticePage() {
 
   {/* Header */}
 
-  <div>
-    <p className="text-sm text-neutral-500">
-      Practice
-    </p>
+  <div className="mb-6">
 
-    <h1 className="mt-2 text-5xl font-semibold tracking-tight text-[#1E1E24]">
-      Let's practice.
-    </h1>
+  <span className="text-[15px] font-medium text-[#76747D]">
+    Practice
+  </span>
 
-    <p className="mt-3 max-w-2xl text-lg text-neutral-500">
-      Choose a communication mode and let AI generate fresh speaking
-      topics tailored just for you.
-    </p>
-  </div>
+  <h1
+  className="
+    mt-1
+    font-serif
+    text-[58px]
+    leading-[58px]
+    tracking-[-2px]
+    text-[#232228]
+  "
+>
+    Practice
+  </h1>
+
+  <p
+    className="
+      mt-2
+      max-w-[520px]
+      text-[16px]
+      leading-8
+      text-[#6C6A73]
+    "
+  >
+    Choose a communication mode and let AI generate fresh
+    topics for you to speak on.
+  </p>
+
+</div>
 
   {/* Categories */}
 
-  <section className="mt-12 grid grid-cols-12 gap-8">
+ <section className="mt-4 flex gap-7 items-start">
 
-  {/* LEFT */}
+  {/* LEFT COLUMN */}
 
-  <div className="col-span-4">
+  <div className="w-[320px] shrink-0">
 
-    <h2 className="mb-5 text-lg font-medium">
+    <h2 className="mb-5 text-[18px] font-semibold text-[#2A2A2A]">
       Choose your practice mode
     </h2>
 
@@ -58,17 +77,37 @@ export default function PracticePage() {
 
   </div>
 
-  {/* RIGHT */}
+  {/* RIGHT COLUMN */}
 
-  <div className="col-span-8 rounded-[36px] border border-[#ECE8E2] bg-white p-8">
+  <div className="flex-1">
 
-    <h2 className="text-xl font-semibold">
-      AI Generated Topics
-    </h2>
+    <div className="rounded-[34px] border border-[#ECE8E2] bg-white p-8">
 
-    <p className="mt-2 text-[#6D6D75]">
-      Topics will appear here after selecting a mode.
-    </p>
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <h2 className="text-[32px] font-semibold">
+            AI Generated Topics
+          </h2>
+
+          <p className="mt-2 text-[#77767F]">
+            Fresh topics generated just for you.
+          </p>
+
+        </div>
+
+        <button
+          className="rounded-2xl border border-[#ECE8E2] px-6 py-3"
+        >
+          Generate New Topics
+        </button>
+
+      </div>
+
+      <div className="mt-10 h-[260px] rounded-3xl bg-[#FAF9F7]" />
+
+    </div>
 
   </div>
 
