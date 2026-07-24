@@ -4,7 +4,6 @@ import { ChevronRight } from "lucide-react";
 
 type ModeCardProps = {
   title: string;
-  description: string;
   icon: React.ElementType;
   color: string;
   selected?: boolean;
@@ -12,7 +11,6 @@ type ModeCardProps = {
 
 export default function ModeCard({
   title,
-  description,
   icon: Icon,
   color,
   selected = false,
@@ -57,15 +55,9 @@ export default function ModeCard({
       {/* text */}
 
       <div className="ml-4 flex-1">
-
-        <h3 className="text-[16px] font-semibold leading-none text-[#26242C]">
-          {title}
-        </h3>
-
-        <p className="mt-2 text-[12px] leading-5 text-[#77747C]">
-          {description}
-        </p>
-
+<h3 className="text-[16px] font-semibold text-[#24232B]">
+  {title}
+</h3>
       </div>
 
       <ChevronRight

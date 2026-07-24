@@ -14,7 +14,6 @@ export default function CommunicationModes() {
         <div key={mode.id} onClick={() => setSelectedMode(mode.id)}>
           <ModeCard
             title={mode.title}
-            description={mode.description}
             icon={mode.icon}
             color={mode.color}
             selected={selectedMode === mode.id}
