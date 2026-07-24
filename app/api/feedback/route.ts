@@ -41,10 +41,10 @@ export async function POST(request: NextRequest) {
   difficulty,
 });
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+model: "gemini-3.5-flash",
       contents: prompt,
     });
-
+console.log(response.text);
     return NextResponse.json({
       analytics,
       response: response.text,
