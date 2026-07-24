@@ -130,11 +130,11 @@ async function handleEndSession() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      transcript: finalTranscript,
-      topic,
-      duration,
-      difficulty,
-    }),
+  transcript: finalTranscript,
+  topic,
+  durationSeconds: duration,
+  difficulty,
+})
   });
 
   const data = await response.json();
