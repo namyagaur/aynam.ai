@@ -3,15 +3,29 @@ import { AppShell } from "@/components/layout";
 export default function DashboardPage() {
   return (
     <AppShell>
+      <div className="flex h-full flex-col">
 
-      <h1 className="text-[56px] leading-[60px] font-semibold tracking-[-0.04em] font-semibold tracking-tight">
-        Ready to practice your communication today?
-      </h1>
+        {/* Top Bar */}
 
-      <p className="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
-        Ready to practice your communication today?
-      </p>
+        <header className="flex h-14 items-center justify-between border-b border-black/5 px-8">
 
+          <span className="text-sm text-black/45">
+            Home
+          </span>
+
+          <button className="rounded-lg px-3 py-2 text-sm text-black/55 hover:bg-black/5">
+            ⌘K
+          </button>
+
+        </header>
+
+        {/* Workspace */}
+
+        <div className="flex-1 p-10">
+
+        </div>
+
+      </div>
     </AppShell>
   );
 }

@@ -24,8 +24,7 @@ export default function AppShell({ children }: Props) {
         />
       </aside>
 
-      <main className="flex-1 overflow-y-auto bg-[#F8F8F6] px-16 py-14">
-        {children}
+<main className="flex-1 overflow-hidden bg-[#F8F8F6]">        {children}
       </main>
     </div>
   );

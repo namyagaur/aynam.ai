@@ -22,7 +22,7 @@ export default function Sidebar({
   setCollapsed,
 }: SidebarProps) {
   return (
-    <aside className="flex h-full flex-col border-r border-black/6 bg-[#ECEBE7] px-4 py-5">
+    <aside className="flex h-full flex-col border-r border-black/[0.04] bg-[#F2F2EF] px-4 py-5">
       {/* Brand */}
 
       <div className="mb-10 flex items-center justify-between">
