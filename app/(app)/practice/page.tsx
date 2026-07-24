@@ -23,34 +23,32 @@ export default function PracticePage() {
   }
 
  return (
-  <main className="h-full overflow-hidden px-10 py-8">
-
+<main className="h-full overflow-y-auto bg-[#FFFDF9] px-8 pt-6 pb-6">
     {/* Header */}
 
-    <header className="mb-8">
+    <header className="mb-5">
 
-      <p className="text-[15px] text-[#7A7783]">
-        Practice
-      </p>
+  <span className="text-[14px] text-[#8B8792]">
+    Practice
+  </span>
 
-      <h1 className="mt-1 font-serif text-[62px] leading-[62px] tracking-[-2px] text-[#22212A]">
-        Practice
-      </h1>
+  <h1 className="mt-1 font-serif text-[52px] leading-[52px] tracking-[-1.5px] text-[#23222A]">
+    Practice
+  </h1>
 
-      <p className="mt-3 max-w-[480px] text-[17px] leading-8 text-[#6E6C74]">
-        Choose a communication mode and let AI generate
-        fresh topics for you to speak on.
-      </p>
+  <p className="mt-2 max-w-[430px] text-[15px] leading-7 text-[#706D77]">
+    Choose a communication mode and let AI generate
+    fresh topics for your next speaking session.
+  </p>
 
-    </header>
+</header>
 
     {/* Workspace */}
 
-    <div className="flex gap-6">
-
+<div className="flex items-start gap-5">
       {/* Left */}
 
-      <aside className="w-[280px] shrink-0">
+      <aside className="w-[255px] shrink-0">
 
         <CommunicationModes />
 

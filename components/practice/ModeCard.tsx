@@ -22,13 +22,13 @@ export default function ModeCard({
       className={`
       group
       flex
-      h-[96px]
+      h-[84px]
       w-full
       items-center
-      rounded-[24px]
+      rounded-[20px]
       border
       bg-white
-      px-5
+      px-4
       transition-all
       duration-300
 
@@ -42,13 +42,13 @@ export default function ModeCard({
       {/* icon */}
 
       <div
-        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
         style={{
           background: color,
         }}
       >
         <Icon
-          size={22}
+          size={18}
           strokeWidth={2}
           className="text-[#4A47D5]"
         />
@@ -58,11 +58,11 @@ export default function ModeCard({
 
       <div className="ml-4 flex-1">
 
-        <h3 className="text-[18px] font-semibold leading-none text-[#26242C]">
+        <h3 className="text-[16px] font-semibold leading-none text-[#26242C]">
           {title}
         </h3>
 
-        <p className="mt-2 text-[13px] leading-5 text-[#77747C]">
+        <p className="mt-2 text-[12px] leading-5 text-[#77747C]">
           {description}
         </p>
 
