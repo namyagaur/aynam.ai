@@ -22,145 +22,88 @@ export default function PracticePage() {
 );
   }
 
-  return (
-    <main className="flex h-full flex-col p-12">
+ return (
+  <main className="h-full overflow-hidden px-10 py-8">
 
-  {/* Header */}
+    {/* Header */}
 
-  <div className="mb-6">
+    <header className="mb-8">
 
-  <span className="text-[15px] font-medium text-[#76747D]">
-    Practice
-  </span>
+      <p className="text-[15px] text-[#7A7783]">
+        Practice
+      </p>
 
-  <h1
-  className="
-    mt-1
-    font-serif
-    text-[58px]
-    leading-[58px]
-    tracking-[-2px]
-    text-[#232228]
-  "
->
-    Practice
-  </h1>
+      <h1 className="mt-1 font-serif text-[62px] leading-[62px] tracking-[-2px] text-[#22212A]">
+        Practice
+      </h1>
 
-  <p
-    className="
-      mt-2
-      max-w-[520px]
-      text-[16px]
-      leading-8
-      text-[#6C6A73]
-    "
-  >
-    Choose a communication mode and let AI generate fresh
-    topics for you to speak on.
-  </p>
+      <p className="mt-3 max-w-[480px] text-[17px] leading-8 text-[#6E6C74]">
+        Choose a communication mode and let AI generate
+        fresh topics for you to speak on.
+      </p>
 
-</div>
+    </header>
 
-  {/* Categories */}
+    {/* Workspace */}
 
- <section className="mt-4 flex gap-7 items-start">
+    <div className="flex gap-6">
 
-  {/* LEFT COLUMN */}
+      {/* Left */}
 
-  <div className="w-[320px] shrink-0">
+      <aside className="w-[285px] shrink-0">
 
-    <h2 className="mb-5 text-[18px] font-semibold text-[#2A2A2A]">
-      Choose your practice mode
-    </h2>
+        <CommunicationModes />
 
-    <CommunicationModes />
+      </aside>
 
-  </div>
+      {/* Right */}
 
-  {/* RIGHT COLUMN */}
+      <section className="flex-1 rounded-[34px] border border-[#ECE7E1] bg-white p-8">
 
-  <div className="flex-1">
+        <div className="flex items-start justify-between">
 
-    <div className="rounded-[34px] border border-[#ECE8E2] bg-white p-8">
+          <div>
 
-      <div className="flex items-center justify-between">
+            <h2 className="text-[34px] font-semibold text-[#22212A]">
+              AI Generated Topics
+            </h2>
 
-        <div>
+            <p className="mt-2 text-[15px] text-[#75737B]">
+              Fresh topics generated just for you.
+            </p>
 
-          <h2 className="text-[32px] font-semibold">
-            AI Generated Topics
-          </h2>
+          </div>
 
-          <p className="mt-2 text-[#77767F]">
-            Fresh topics generated just for you.
-          </p>
+          <button
+            className="
+              rounded-2xl
+              border
+              border-[#EAE6E0]
+              bg-[#FCFBFA]
+              px-6
+              py-3
+              text-[15px]
+              transition
+              hover:bg-white
+            "
+          >
+            ✨ Generate New Topics
+          </button>
 
         </div>
 
-        <button
-          className="rounded-2xl border border-[#ECE8E2] px-6 py-3"
-        >
-          Generate New Topics
-        </button>
+        {/* Carousel Placeholder */}
 
-      </div>
+        <div className="mt-8 h-[300px] rounded-[30px] bg-[#FBFAF8]" />
 
-      <div className="mt-10 h-[260px] rounded-3xl bg-[#FAF9F7]" />
+        {/* Bottom Panel Placeholder */}
 
-    </div>
+        <div className="mt-6 h-[210px] rounded-[30px] bg-[#FCFBFA]" />
 
-  </div>
-
-</section>
-
-  {/* AI Topics */}
-
-  <section className="mt-12">
-
-    <div className="flex items-center justify-between">
-
-      <h2 className="text-lg font-medium">
-        AI Generated Topics
-      </h2>
-
-      <button>
-        Refresh
-      </button>
+      </section>
 
     </div>
 
-    <div className="mt-5">
-
-      {/* horizontal carousel */}
-
-    </div>
-
-  </section>
-
-  {/* Bottom Controls */}
-
-  <section className="mt-auto flex items-center justify-between pt-12">
-
-    <div>
-
-      {/* duration */}
-
-    </div>
-
-    <div>
-
-      {/* transcript */}
-
-    </div>
-
-    <div>
-
-      {/* start */}
-
-    </div>
-
-  </section>
-
-</main>
-  );
+  </main>
+);
 }
