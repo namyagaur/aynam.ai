@@ -1,25 +1,26 @@
 "use client";
 
 import { useState } from "react";
-
-import { modes } from "./modes";
 import ModeCard from "./ModeCard";
+import { modes } from "./modes";
 
 export default function CommunicationModes() {
   const [selectedMode, setSelectedMode] = useState("hr");
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex h-full flex-col gap-2">
+
       {modes.map((mode) => (
-        <div key={mode.id} onClick={() => setSelectedMode(mode.id)}>
-          <ModeCard
-            title={mode.title}
-            icon={mode.icon}
-            color={mode.color}
-            selected={selectedMode === mode.id}
-          />
-        </div>
+        <ModeCard
+          key={mode.id}
+          title={mode.title}
+          icon={mode.icon}
+          color={mode.color}
+          selected={selectedMode === mode.id}
+          onClick={() => setSelectedMode(mode.id)}
+        />
       ))}
+
     </div>
   );
 }

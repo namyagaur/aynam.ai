@@ -1,7 +1,8 @@
 "use client";
+
 import CommunicationModes from "@/components/practice/CommunicationModes";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function PracticePage() {
   const router = useRouter();
@@ -11,97 +12,153 @@ export default function PracticePage() {
   const [difficulty, setDifficulty] = useState("Medium");
 
   function handleStartSession() {
-    console.log({
-      topic,
-      duration,
-      difficulty,
-    });
-
-   router.push(
-  `/session?topic=${encodeURIComponent(topic)}&duration=${duration}&difficulty=${difficulty}`
-);
+    router.push(
+      `/session?topic=${encodeURIComponent(
+        topic
+      )}&duration=${duration}&difficulty=${difficulty}`
+    );
   }
 
- return (
-<main className="h-full overflow-y-auto bg-[#FFFDF9] px-8 pt-6 pb-6">
-    {/* Header */}
+  return (
+    <main className="h-full overflow-hidden bg-[#FFFCF8] px-6 py-5">
 
-    <header className="mb-5">
+      {/* ================= HEADER ================= */}
 
-  <span className="text-[14px] text-[#8B8792]">
-    Practice
-  </span>
+      <div className="mb-5">
 
-  <h1 className="mt-1 font-serif text-[52px] leading-[52px] tracking-[-1.5px] text-[#23222A]">
-    Practice
-  </h1>
+        <span className="text-[13px] font-medium text-[#8C8892]">
+          Practice
+        </span>
 
-  <p className="mt-2 max-w-[430px] text-[15px] leading-7 text-[#706D77]">
-    Choose a communication mode and let AI generate
-    fresh topics for your next speaking session.
-  </p>
+        <h1 className="mt-1 font-serif text-[48px] leading-[50px] tracking-[-1.5px] text-[#24222C]">
+          Practice
+        </h1>
 
-</header>
+        <p className="mt-2 max-w-[470px] text-[15px] leading-7 text-[#6F6B74]">
+          Choose a communication mode and let AI generate
+          fresh topics for your next speaking session.
+        </p>
 
-    {/* Workspace */}
+      </div>
 
-<div className="flex items-start gap-5">
-      {/* Left */}
+      {/* ================= BODY ================= */}
 
-      <aside className="w-[255px] shrink-0">
+      <div className="grid h-[calc(100%-120px)] grid-cols-[250px_1fr] gap-5">
 
-        <CommunicationModes />
+        {/* LEFT */}
 
-      </aside>
+        <aside className="overflow-hidden">
 
-      {/* Right */}
+          <CommunicationModes />
 
-      <section className="flex-1 rounded-[34px] border border-[#ECE7E1] bg-white p-8">
+        </aside>
 
-        <div className="flex items-start justify-between">
+        {/* RIGHT */}
 
-          <div>
+        <section className="flex flex-col rounded-[30px] border border-[#ECE7E2] bg-white p-6">
 
-            <h2 className="text-[34px] font-semibold text-[#22212A]">
-              AI Generated Topics
-            </h2>
+          {/* Header */}
 
-            <p className="mt-2 text-[15px] text-[#75737B]">
-              Fresh topics generated just for you.
-            </p>
+          <div className="flex items-center justify-between">
+
+            <div>
+
+              <h2 className="text-[20px] font-semibold text-[#26242D]">
+                AI Generated Topics
+              </h2>
+
+              <p className="mt-1 text-[13px] text-[#7A7781]">
+                Fresh AI generated practice prompts.
+              </p>
+
+            </div>
+
+            <button
+              className="
+                rounded-2xl
+                border
+                border-[#ECE7E1]
+                bg-[#FBFAF8]
+                px-5
+                py-2.5
+                text-[14px]
+                font-medium
+                transition
+                hover:bg-white
+              "
+            >
+              ✨ Generate New
+            </button>
 
           </div>
 
-          <button
-            className="
-              rounded-2xl
-              border
-              border-[#EAE6E0]
-              bg-[#FCFBFA]
-              px-6
-              py-3
-              text-[15px]
-              transition
-              hover:bg-white
-            "
-          >
-            ✨ Generate New Topics
-          </button>
+          {/* ================= CAROUSEL ================= */}
 
-        </div>
+          <div className="mt-5 flex-1 rounded-[28px] bg-[#FAF9F6]" />
 
-        {/* Carousel Placeholder */}
+          {/* ================= CONTROLS ================= */}
 
-        <div className="mt-8 h-[300px] rounded-[30px] bg-[#FBFAF8]" />
+          <div className="mt-5 grid h-[150px] grid-cols-4 rounded-[28px] border border-[#F1EEEA] bg-[#FCFBFA]">
 
-        {/* Bottom Panel Placeholder */}
+            {/* Duration */}
 
-        <div className="mt-6 h-[210px] rounded-[30px] bg-[#FCFBFA]" />
+            <div className="flex items-center justify-center border-r border-[#F1EEEA]">
 
-      </section>
+              <span className="text-[#A6A2AA]">
+                Duration Knob
+              </span>
 
-    </div>
+            </div>
 
-  </main>
-);
+            {/* Difficulty */}
+
+            <div className="flex items-center justify-center border-r border-[#F1EEEA]">
+
+              <span className="text-[#A6A2AA]">
+                Difficulty
+              </span>
+
+            </div>
+
+            {/* Transcript */}
+
+            <div className="flex items-center justify-center border-r border-[#F1EEEA]">
+
+              <span className="text-[#A6A2AA]">
+                Transcript
+              </span>
+
+            </div>
+
+            {/* CTA */}
+
+            <div className="flex items-center justify-center">
+
+              <button
+                onClick={handleStartSession}
+                className="
+                  rounded-2xl
+                  bg-[#4E5AE8]
+                  px-8
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-white
+                  transition
+                  hover:opacity-90
+                "
+              >
+                Start Session
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+  );
 }

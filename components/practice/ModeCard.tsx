@@ -7,6 +7,7 @@ type ModeCardProps = {
   icon: React.ElementType;
   color: string;
   selected?: boolean;
+  onClick?: () => void;
 };
 
 export default function ModeCard({
@@ -14,30 +15,32 @@ export default function ModeCard({
   icon: Icon,
   color,
   selected = false,
+  onClick,
 }: ModeCardProps) {
   return (
     <button
+      onClick={onClick}
       className={`
-      group
-      flex
-      h-[84px]
-      w-full
-      items-center
-      rounded-[20px]
-      border
-      bg-white
-      px-4
-      transition-all
-      duration-300
+        group
+        relative
+        flex
+        h-[72px]
+        w-full
+        items-center
+        rounded-[20px]
+        border
+        px-4
+        transition-all
+        duration-300
 
-      ${
-        selected
-          ? "border-[#8C7AFF] shadow-[0_8px_30px_rgba(125,110,255,0.08)]"
-          : "border-[#ECE8E2] hover:border-[#D7CFFF]"
-      }
-    `}
+        ${
+          selected
+            ? "border-[#8C7CFF] bg-white shadow-[0_8px_24px_rgba(110,100,255,0.08)]"
+            : "border-[#F0ECE6] bg-[#FFFEFC] hover:border-[#DDD5FF] hover:bg-white"
+        }
+      `}
     >
-      {/* icon */}
+      {/* Icon */}
 
       <div
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
@@ -48,25 +51,39 @@ export default function ModeCard({
         <Icon
           size={18}
           strokeWidth={2}
-          className="text-[#4A47D5]"
+          className="text-[#4D55E8]"
         />
       </div>
 
-      {/* text */}
+      {/* Title */}
 
-      <div className="ml-4 flex-1">
-<h3 className="text-[16px] font-semibold text-[#24232B]">
-  {title}
-</h3>
-      </div>
+      <span
+        className="
+          ml-4
+          flex-1
+          text-left
+          text-[15px]
+          font-semibold
+          text-[#2A2932]
+        "
+      >
+        {title}
+      </span>
+
+      {/* Arrow */}
 
       <ChevronRight
         size={18}
-        className={`transition ${
-          selected
-            ? "text-[#7C6BFF]"
-            : "text-[#B6B4BC] group-hover:text-[#7C6BFF]"
-        }`}
+        strokeWidth={2}
+        className={`
+          transition-colors
+
+          ${
+            selected
+              ? "text-[#7C6CFF]"
+              : "text-[#B6B3BD] group-hover:text-[#7C6CFF]"
+          }
+        `}
       />
     </button>
   );
