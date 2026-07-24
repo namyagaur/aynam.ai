@@ -23,107 +23,89 @@ export default function PracticePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#101726] p-10 text-white">
+    <main className="flex h-full flex-col p-12">
 
-      <h1 className="text-4xl font-bold">
-        Practice
-      </h1>
+  {/* Header */}
 
-      <p className="mt-2 text-white/60">
-        Configure your practice session.
-      </p>
+  <div>
+    <p className="text-sm text-neutral-500">
+      Practice
+    </p>
 
-      {/* Topic */}
+    <h1 className="mt-2 text-5xl font-semibold tracking-tight text-[#1E1E24]">
+      Let's practice.
+    </h1>
 
-      <div className="mt-10">
+    <p className="mt-3 max-w-2xl text-lg text-neutral-500">
+      Choose a communication mode and let AI generate fresh speaking
+      topics tailored just for you.
+    </p>
+  </div>
 
-        <label className="mb-2 block text-lg">
-          Topic
-        </label>
+  {/* Categories */}
 
-        <select
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          className="w-full rounded-lg border border-white/20 bg-[#1B2233] p-4"
-        >
-          <option>Tell me about yourself</option>
-          <option>Mock Interview</option>
-          <option>Public Speaking</option>
-          <option>Debate</option>
-          <option>Random Topic</option>
-        </select>
+  <section className="mt-12">
 
-      </div>
+    <h2 className="mb-5 text-lg font-medium">
+      Communication Mode
+    </h2>
 
-      {/* Duration */}
+    <div className="flex gap-3">
 
-      <div className="mt-8">
+      {/* cards will come here */}
 
-        <label className="mb-3 block text-lg">
-          Duration
-        </label>
+    </div>
 
-        <div className="flex gap-4">
+  </section>
 
-          {[5, 10, 15, 20].map((time) => (
+  {/* AI Topics */}
 
-            <button
-              key={time}
-              onClick={() => setDuration(time)}
-              className={`rounded-lg px-6 py-3 transition ${
-                duration === time
-                  ? "bg-sky-400 text-black"
-                  : "bg-[#1B2233]"
-              }`}
-            >
-              {time} min
-            </button>
+  <section className="mt-12">
 
-          ))}
+    <div className="flex items-center justify-between">
 
-        </div>
+      <h2 className="text-lg font-medium">
+        AI Generated Topics
+      </h2>
 
-      </div>
-
-      {/* Difficulty */}
-
-      <div className="mt-8">
-
-        <label className="mb-3 block text-lg">
-          Difficulty
-        </label>
-
-        <div className="flex gap-4">
-
-          {["Easy", "Medium", "Hard"].map((level) => (
-
-            <button
-              key={level}
-              onClick={() => setDifficulty(level)}
-              className={`rounded-lg px-6 py-3 transition ${
-                difficulty === level
-                  ? "bg-sky-400 text-black"
-                  : "bg-[#1B2233]"
-              }`}
-            >
-              {level}
-            </button>
-
-          ))}
-
-        </div>
-
-      </div>
-
-      {/* Start */}
-
-      <button
-        onClick={handleStartSession}
-        className="mt-12 rounded-lg bg-sky-400 px-8 py-4 text-lg font-semibold text-black"
-      >
-        Start Session
+      <button>
+        Refresh
       </button>
 
-    </main>
+    </div>
+
+    <div className="mt-5">
+
+      {/* horizontal carousel */}
+
+    </div>
+
+  </section>
+
+  {/* Bottom Controls */}
+
+  <section className="mt-auto flex items-center justify-between pt-12">
+
+    <div>
+
+      {/* duration */}
+
+    </div>
+
+    <div>
+
+      {/* transcript */}
+
+    </div>
+
+    <div>
+
+      {/* start */}
+
+    </div>
+
+  </section>
+
+</main>
   );
 }
