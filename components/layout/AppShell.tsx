@@ -1,42 +1,32 @@
-import { ReactNode } from "react";
+"use client";
+
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 
-type AppShellProps = {
-  children: ReactNode;
+type Props = {
+  children: React.ReactNode;
 };
 
-export default function AppShell({
-  children,
-}: AppShellProps) {
+export default function AppShell({ children }: Props) {
+  const [collapsed, setCollapsed] = useState(false);
+
+  const sidebarWidth = collapsed ? 72 : 320;
+
   return (
-    <div className="min-h-screen bg-[var(--canvas)]">
-      <div className="mx-auto flex h-screen max-w-[1700px] gap-6 p-6">
+<div className="flex h-screen overflow-hidden bg-[#F4F4F1]">      
+  <aside
+  style={{ width: sidebarWidth }}
+  className="shrink-0 border-r border-black/5 transition-all duration-300"
+>
+        <Sidebar
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
+      </aside>
 
-        {/* Sidebar */}
-
-        <div className="w-[290px] shrink-0">
-          <Sidebar />
-        </div>
-
-        {/* Workspace */}
-
-        <main
-          className="
-            flex-1
-            overflow-y-auto
-            rounded-[28px]
-            border
-            border-[var(--border)]
-            bg-[var(--surface)]
-            shadow-[var(--shadow)]
-          "
-        >
-          <div className="min-h-full p-10">
-            {children}
-          </div>
-        </main>
-
-      </div>
+      <main className="flex-1 overflow-y-auto bg-[#F8F8F6] px-16 py-14">
+        {children}
+      </main>
     </div>
   );
 }
