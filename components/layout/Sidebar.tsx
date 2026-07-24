@@ -1,18 +1,19 @@
 "use client";
 
-import {
-  House,
-  Mic,
-  History,
-  Settings,
-  Sparkles,
-  PanelLeftClose,
-  PanelLeftOpen,
-} from "lucide-react";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+
+import {
+  House,
+  Mic,
+  Sparkles,
+  History,
+  Settings,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Sparkle,
+} from "lucide-react";
 
 type SidebarProps = {
   collapsed: boolean;
@@ -49,29 +50,43 @@ export default function Sidebar({
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full flex-col border-r border-[var(--border)] bg-[var(--sidebar)]">
+    <aside
+      className="
+      flex
+      h-full
+      flex-col
+      border-r
+      border-[#ECE8F6]
+      bg-gradient-to-b
+      from-[#FCFBFF]
+      via-[#FAF8FF]
+      to-[#F6F2FF]
+      "
+    >
+      {/* HEADER */}
 
-      {/* Header */}
-
-      <div className="flex h-20 items-center justify-between px-7">
+      <div className="flex items-center justify-between px-8 pt-8">
 
         {!collapsed && (
+
           <div className="flex items-center gap-2">
 
-    <h1 className="text-[22px] font-bold tracking-[-0.05em] text-[#17171B]">
-        Aynam
-    </h1>
+            <h1 className="text-[24px] font-bold tracking-[-0.05em] text-[#17171B]">
+              Aynam
+            </h1>
 
-    <span className="text-lg">
-        ✨
-    </span>
+            <Sparkle
+              size={18}
+              className="fill-[#8B6BFF] text-[#8B6BFF]"
+            />
 
-</div>
+          </div>
+
         )}
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="rounded-xl p-2 transition hover:bg-black/5"
+          className="rounded-xl p-2 transition hover:bg-white"
         >
           {collapsed ? (
             <PanelLeftOpen size={20} />
@@ -82,67 +97,72 @@ export default function Sidebar({
 
       </div>
 
-      {/* Navigation */}
+      {/* NAVIGATION */}
 
-      <nav className="mt-6 flex flex-col gap-1 px-4">
+      <nav className="mt-12 flex flex-col gap-3 px-6">
 
         {navItems.map((item) => {
+
           const Icon = item.icon;
 
           const active = pathname.startsWith(item.href);
 
           return (
+
             <Link
               key={item.href}
               href={item.href}
               className={clsx(
-                "flex h-11 items-center rounded-xl transition-all duration-200",
+                "flex h-14 items-center rounded-2xl transition-all duration-300",
+
                 collapsed
                   ? "justify-center"
-                  : "gap-3 px-4",
+                  : "gap-4 px-5",
+
                 active
-                  ? "bg-[#F2ECFF] text-[#5E4AE3]"
-                  : "text-[#55556B] hover:bg-[#F6F3FF] hover:text-[#18181B]"
+                  ? "bg-gradient-to-r from-[#EEE7FF] to-[#F8F5FF] shadow-[0_8px_30px_rgba(135,95,255,.08)] text-[#6F55F6]"
+                  : "text-[#58586C] hover:bg-white/60"
               )}
             >
-              <Icon size={18} strokeWidth={1.8} />
+
+              <Icon size={21} strokeWidth={1.9} />
 
               {!collapsed && (
-                <span className="text-[15px] font-medium">
+                <span className="text-[17px] font-medium">
                   {item.label}
                 </span>
               )}
+
             </Link>
+
           );
+
         })}
 
       </nav>
 
       <div className="flex-1" />
 
-      {/* Settings */}
+      {/* SETTINGS */}
 
-      <div className="px-4 pb-6">
+      <div className="px-6 pb-8">
 
         <Link
           href="/settings"
-          className={clsx(
-            "flex h-14 items-center rounded-xl transition-all duration-200",
-            collapsed
-              ? "justify-center"
-              : "gap-3 px-4",
-            pathname.startsWith("/settings")
-              ? "bg-[var(--purple-soft)] text-[var(--purple)]"
-              : "text-[var(--muted)] hover:bg-black/5 hover:text-[var(--text)]"
-          )}
+          className="flex h-14 items-center gap-4 rounded-2xl px-5 text-[#58586C] hover:bg-white/60"
         >
-          <Settings size={18} strokeWidth={1.8} />
+
+          <Settings
+            size={20}
+            strokeWidth={1.9}
+          />
 
           {!collapsed && (
-            <span className="text-[15px] font-medium">
+            <span className="text-[17px] font-medium">
               Settings
             </span>
           )}
+
         </Link>
 
       </div>
