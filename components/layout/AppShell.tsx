@@ -10,21 +10,21 @@ type Props = {
 export default function AppShell({ children }: Props) {
   const [collapsed, setCollapsed] = useState(false);
 
-  const sidebarWidth = collapsed ? 72 : 320;
-
+const sidebarWidth = collapsed ? 88 : 300;
   return (
-<div className="flex h-screen overflow-hidden bg-[#F4F4F1]">      
-  <aside
-  style={{ width: sidebarWidth }}
-  className="shrink-0 border-r border-black/5 transition-all duration-300"
->
+    <div className="flex h-screen bg-[var(--window)]">
+      <aside
+        style={{ width: sidebarWidth }}
+        className="transition-all duration-300 ease-out"
+      >
         <Sidebar
           collapsed={collapsed}
           setCollapsed={setCollapsed}
         />
       </aside>
 
-<main className="flex-1 overflow-hidden bg-[#F8F8F6]">        {children}
+      <main className="flex-1 bg-[var(--workspace)]">
+        {children}
       </main>
     </div>
   );
