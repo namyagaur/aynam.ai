@@ -44,19 +44,35 @@ export default function PracticePage() {
 
   {/* Categories */}
 
-  <section className="mt-12">
+  <section className="mt-12 grid grid-cols-12 gap-8">
+
+  {/* LEFT */}
+
+  <div className="col-span-4">
 
     <h2 className="mb-5 text-lg font-medium">
-      Communication Mode
+      Choose your practice mode
     </h2>
 
-    <div className="flex gap-3">
+    <CommunicationModes />
 
-      <CommunicationModes />
+  </div>
 
-    </div>
+  {/* RIGHT */}
 
-  </section>
+  <div className="col-span-8 rounded-[36px] border border-[#ECE8E2] bg-white p-8">
+
+    <h2 className="text-xl font-semibold">
+      AI Generated Topics
+    </h2>
+
+    <p className="mt-2 text-[#6D6D75]">
+      Topics will appear here after selecting a mode.
+    </p>
+
+  </div>
+
+</section>
 
   {/* AI Topics */}
 
