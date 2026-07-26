@@ -9,27 +9,25 @@ export default function PracticePage() {
   const router = useRouter();
 
   const [topic, setTopic] = useState("Tell me about yourself");
-  const [duration, setDuration] = useState(10);
-  const [difficulty, setDifficulty] = useState("Medium");
 
-  function handleStartSession() {
-    router.push(
-      `/session?topic=${encodeURIComponent(
-        topic
-      )}&duration=${duration}&difficulty=${difficulty}`
-    );
-  }
+
 
   return (
 <main className="h-full overflow-hidden bg-[#FFFCF8]">
       {/* ================= HEADER ================= */}
 
       <div className="mb-8">
-        <h1 className="mt-1 font-serif text-[48px] leading-[50px] tracking-[-1.5px] text-[#24222C]">
-          Lets Practice
-        </h1>
 
-      </div>
+    <h1 className="text-[38px] font-serif tracking-[-1px] text-[#24222C]">
+        Choose what you'd like to practice
+    </h1>
+
+    <p className="mt-3 max-w-[560px] text-[15px] leading-7 text-[#77747F]">
+        Select a communication mode and let Aynam recommend
+        speaking topics tailored for your practice.
+    </p>
+
+</div>
 
       {/* ================= BODY ================= */}
 
@@ -52,7 +50,7 @@ export default function PracticePage() {
             <div>
 
               <h2 className="text-[18px] font-semibold text-[#26242D]">
-                AI Generated Topics
+                Choose a prompt that feels interesting today.
               </h2>
 
               <p className="mt-1 text-[13px] text-[#7A7781]">
@@ -61,22 +59,7 @@ export default function PracticePage() {
 
             </div>
 
-            <button
-              className="
-                rounded-2xl
-                border
-                border-[#ECE7E1]
-                bg-[#FBFAF8]
-                px-5
-                py-2.5
-                text-[14px]
-                font-medium
-                transition
-                hover:bg-white
-              "
-            >
-              ✨ Generate New
-            </button>
+            
 
           </div>
 
@@ -85,64 +68,7 @@ export default function PracticePage() {
 <div className="mt-3">
   <TopicsCarousel />
 </div>
-          {/* ================= CONTROLS ================= */}
-
-          <div className="mt-5 grid h-[120px] grid-cols-4 rounded-[28px] border border-[#F1EEEA] bg-[#FCFBFA]">
-
-            {/* Duration */}
-
-            <div className="flex items-center justify-center border-r border-[#F1EEEA]">
-
-              <span className="text-[#A6A2AA]">
-                Duration Knob
-              </span>
-
-            </div>
-
-            {/* Difficulty */}
-
-            <div className="flex items-center justify-center border-r border-[#F1EEEA]">
-
-              <span className="text-[#A6A2AA]">
-                Difficulty
-              </span>
-
-            </div>
-
-            {/* Transcript */}
-
-            <div className="flex items-center justify-center border-r border-[#F1EEEA]">
-
-              <span className="text-[#A6A2AA]">
-                Transcript
-              </span>
-
-            </div>
-
-            {/* CTA */}
-
-            <div className="flex items-center justify-center">
-
-              <button
-                onClick={handleStartSession}
-                className="
-                  rounded-2xl
-                  bg-[#4E5AE8]
-                  px-7 py-2.5
-                  text-sm
-                  font-semibold
-                  text-white
-                  transition
-                  hover:opacity-90
-                "
-              >
-                Start Session
-              </button>
-
-            </div>
-
-          </div>
-
+         
         </section>
 
       </div>
