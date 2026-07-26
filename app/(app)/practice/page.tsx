@@ -85,8 +85,9 @@ export default function PracticePage() {
 
           {/* ================= CAROUSEL ================= */}
 
-          <div className="mt-5 flex-1 rounded-[28px] bg-[#FAF9F6]" />
-
+<div className="mt-5 flex-1">
+  <TopicsCarousel />
+</div>
           {/* ================= CONTROLS ================= */}
 
           <div className="mt-5 grid h-[150px] grid-cols-4 rounded-[28px] border border-[#F1EEEA] bg-[#FCFBFA]">
