@@ -21,8 +21,7 @@ export default function PracticePage() {
   }
 
   return (
-    <main className="h-full overflow-hidden bg-[#FFFCF8] px-6 py-5">
-
+<main className="h-full overflow-hidden bg-[#FFFCF8]">
       {/* ================= HEADER ================= */}
 
       <div className="mb-5">
@@ -34,8 +33,7 @@ export default function PracticePage() {
 
       {/* ================= BODY ================= */}
 
-      <div className="grid h-[calc(100%-120px)] grid-cols-[250px_1fr] gap-5">
-
+<div className="mx-auto grid h-[calc(100%-92px)] max-w-[1240px] grid-cols-[290px_1fr] gap-7">
         {/* LEFT */}
 
         <aside className="overflow-hidden">
