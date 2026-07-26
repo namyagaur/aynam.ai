@@ -13,34 +13,34 @@ const topics = [
 
 export default function TopicsCarousel() {
   return (
-    <div className="relative mt-6">
+    <div className="relative mt-3">
 
       {/* Left Arrow */}
 
       <button
         className="
           absolute
-          left-[-22px]
+          left-[-14px]
           top-[72px]
           z-20
           flex
-          h-11
-          w-11
+          h-9
+          w-9
           items-center
           justify-center
           rounded-full
           border
           border-[#ECE8E2]
           bg-white
-          shadow-lg
+          shadow-sm
         "
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={16} />
       </button>
 
       {/* Cards */}
 
-      <div className="flex gap-4 overflow-hidden">
+      <div className="flex justify-center gap-3 overflow-hidden px-4">
 
         {topics.map((topic, index) => (
           <TopicCard
@@ -57,33 +57,33 @@ export default function TopicsCarousel() {
       <button
         className="
           absolute
-          right-[-22px]
+          right-[-14px]
           top-[72px]
           z-20
           flex
-          h-11
-          w-11
+          h-9
+          w-9
           items-center
           justify-center
           rounded-full
           border
           border-[#ECE8E2]
           bg-white
-          shadow-lg
+          shadow-sm
         "
       >
-        <ChevronRight size={18} />
+        <ChevronRight size={16} />
       </button>
 
       {/* Dots */}
 
-      <div className="mt-7 flex justify-center gap-2">
+      <div className="mt-5 flex justify-center gap-1.5">
 
-        <div className="h-2 w-2 rounded-full bg-[#DDD8EA]" />
-        <div className="h-2 w-2 rounded-full bg-[#DDD8EA]" />
+        <div className="h-1.5 w-1.5 rounded-full bg-[#DDD8EA]" />
+        <div className="h-1.5 w-1.5 rounded-full bg-[#DDD8EA]" />
         <div className="h-2 w-2 rounded-full bg-[#7B5CFA]" />
-        <div className="h-2 w-2 rounded-full bg-[#DDD8EA]" />
-        <div className="h-2 w-2 rounded-full bg-[#DDD8EA]" />
+        <div className="h-1.5 w-1.5 rounded-full bg-[#DDD8EA]" />
+        <div className="h-1.5 w-1.5 rounded-full bg-[#DDD8EA]" />
 
       </div>
 

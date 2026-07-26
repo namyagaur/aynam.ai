@@ -24,7 +24,7 @@ export default function PracticePage() {
 <main className="h-full overflow-hidden bg-[#FFFCF8]">
       {/* ================= HEADER ================= */}
 
-      <div className="mb-5">
+      <div className="mb-8">
         <h1 className="mt-1 font-serif text-[48px] leading-[50px] tracking-[-1.5px] text-[#24222C]">
           Lets Practice
         </h1>
@@ -33,8 +33,7 @@ export default function PracticePage() {
 
       {/* ================= BODY ================= */}
 
-<div className="mx-auto grid h-[calc(100%-92px)] max-w-[1240px] grid-cols-[290px_1fr] gap-7">
-        {/* LEFT */}
+<div className="grid h-[calc(100%-92px)] grid-cols-[330px_780px] gap-8">        {/* LEFT */}
 
         <aside className="overflow-hidden">
 
@@ -44,7 +43,7 @@ export default function PracticePage() {
 
         {/* RIGHT */}
 
-        <section className="flex flex-col rounded-[30px] border border-[#ECE7E2] bg-white p-6">
+        <section className="flex flex-col rounded-[26px] border border-[#ECE7E2] bg-white p-5">
 
           {/* Header */}
 
@@ -52,7 +51,7 @@ export default function PracticePage() {
 
             <div>
 
-              <h2 className="text-[20px] font-semibold text-[#26242D]">
+              <h2 className="text-[18px] font-semibold text-[#26242D]">
                 AI Generated Topics
               </h2>
 
@@ -83,12 +82,12 @@ export default function PracticePage() {
 
           {/* ================= CAROUSEL ================= */}
 
-<div className="mt-5 flex-1">
+<div className="mt-3">
   <TopicsCarousel />
 </div>
           {/* ================= CONTROLS ================= */}
 
-          <div className="mt-5 grid h-[150px] grid-cols-4 rounded-[28px] border border-[#F1EEEA] bg-[#FCFBFA]">
+          <div className="mt-5 grid h-[120px] grid-cols-4 rounded-[28px] border border-[#F1EEEA] bg-[#FCFBFA]">
 
             {/* Duration */}
 
@@ -129,8 +128,7 @@ export default function PracticePage() {
                 className="
                   rounded-2xl
                   bg-[#4E5AE8]
-                  px-8
-                  py-3
+                  px-7 py-2.5
                   text-sm
                   font-semibold
                   text-white
