@@ -3,6 +3,7 @@
 import CommunicationModes from "@/components/practice/CommunicationModes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import TopicsCarousel from "@/components/practice/topics/TopicsCarousel";
 
 export default function PracticePage() {
   const router = useRouter();
