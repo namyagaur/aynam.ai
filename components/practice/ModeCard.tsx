@@ -22,36 +22,35 @@ export default function ModeCard({
       onClick={onClick}
       className={`
         group
-        relative
         flex
-        h-[72px]
+        h-[66px]
         w-full
         items-center
-        rounded-[20px]
+        rounded-[18px]
         border
-        px-4
+        px-3.5
         transition-all
-        duration-300
+        duration-200
 
         ${
           selected
-            ? "border-[#8C7CFF] bg-white shadow-[0_8px_24px_rgba(110,100,255,0.08)]"
-            : "border-[#F0ECE6] bg-[#FFFEFC] hover:border-[#DDD5FF] hover:bg-white"
+            ? "border-[#8C7CFF] bg-white shadow-[0_6px_18px_rgba(110,100,255,.08)]"
+            : "border-[#F2EEE9] bg-[#FFFEFC] hover:border-[#DDD5FF] hover:bg-white"
         }
       `}
     >
       {/* Icon */}
 
       <div
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
         style={{
           background: color,
         }}
       >
         <Icon
-          size={18}
+          size={17}
           strokeWidth={2}
-          className="text-[#4D55E8]"
+          className="text-[#5B5CEB]"
         />
       </div>
 
@@ -59,12 +58,12 @@ export default function ModeCard({
 
       <span
         className="
-          ml-4
+          ml-3
           flex-1
           text-left
           text-[15px]
-          font-semibold
-          text-[#2A2932]
+          font-medium
+          text-[#26242C]
         "
       >
         {title}
@@ -73,17 +72,13 @@ export default function ModeCard({
       {/* Arrow */}
 
       <ChevronRight
-        size={18}
+        size={16}
         strokeWidth={2}
-        className={`
-          transition-colors
-
-          ${
-            selected
-              ? "text-[#7C6CFF]"
-              : "text-[#B6B3BD] group-hover:text-[#7C6CFF]"
-          }
-        `}
+        className={`transition-colors ${
+          selected
+            ? "text-[#7C6CFF]"
+            : "text-[#BBB7C3] group-hover:text-[#7C6CFF]"
+        }`}
       />
     </button>
   );
