@@ -25,19 +25,9 @@ export default function PracticePage() {
       {/* ================= HEADER ================= */}
 
       <div className="mb-5">
-
-        <span className="text-[13px] font-medium text-[#8C8892]">
-          Practice
-        </span>
-
         <h1 className="mt-1 font-serif text-[48px] leading-[50px] tracking-[-1.5px] text-[#24222C]">
-          Practice
+          Lets Practice
         </h1>
-
-        <p className="mt-2 max-w-[470px] text-[15px] leading-7 text-[#6F6B74]">
-          Choose a communication mode and let AI generate
-          fresh topics for your next speaking session.
-        </p>
 
       </div>
 
