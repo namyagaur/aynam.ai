@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "@/components/shell/Sidebar";
 import Topbar from "./Topbar";
 
 type Props = {

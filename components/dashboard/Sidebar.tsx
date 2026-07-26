@@ -60,8 +60,7 @@ export default function Sidebar() {
 
       {/* Navigation */}
 
-      <nav className="mt-14 space-y-2">
-
+<nav className="mt-10 space-y-1.5 px-3">
         {links.map((link) => {
 
           const Icon = link.icon;
@@ -76,10 +75,10 @@ export default function Sidebar() {
               className={`
               flex
               items-center
-              gap-3
-              rounded-xl
-              px-4
-              py-3
+              rounded-2xl
+px-3.5
+py-2.5
+gap-2.5
               transition
 
               ${
@@ -90,10 +89,10 @@ export default function Sidebar() {
               `}
             >
 
-              <Icon size={20} />
-
-              <span>{link.name}</span>
-
+              <Icon size={18} />
+<span className="text-[15px] font-medium">
+  {link.name}
+</span>
             </Link>
 
           );
@@ -103,7 +102,7 @@ export default function Sidebar() {
 
       {/* Bottom */}
 
-      <div className="absolute bottom-8">
+      {/* <div className="absolute bottom-8">
 
         <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
 
@@ -117,7 +116,7 @@ export default function Sidebar() {
 
         </div>
 
-      </div>
+      </div> */}
 
     </aside>
   );

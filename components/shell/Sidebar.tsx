@@ -40,7 +40,7 @@ export default function Sidebar() {
 
   return (
     <aside
-  className="w-[300px] border-r border-black/5"
+  className="w-[252px] border-r border-black/5"
   style={{
     background: `
       radial-gradient(
@@ -70,7 +70,7 @@ export default function Sidebar() {
     `,
   }}
 >
-  <div className="flex h-full flex-col px-7 py-7">
+  <div className="flex h-full flex-col px-5 py-6">
         {/* Header */}
 
         <div className="flex items-center justify-between">
@@ -96,14 +96,14 @@ export default function Sidebar() {
             hover:bg-white/60
             "
           >
-            <PanelLeftClose size={19} />
+            <PanelLeftClose size={17} />
           </button>
 
         </div>
 
         {/* Navigation */}
 
-        <nav className="mt-10 flex flex-col gap-2">
+        <nav className="mt-8 flex flex-col gap-1.5">
 
           {navItems.map((item) => {
 
@@ -119,11 +119,11 @@ export default function Sidebar() {
                 href={item.href}
                 className={`
                 flex
-                h-14
+                h-12
                 items-center
-                gap-4
-                rounded-[20px]
-px-4
+                gap-3
+                rounded-2xl
+px-3.5
                 transition-all
                 ${
                   active
@@ -134,11 +134,11 @@ px-4
               >
 
                 <Icon
-                  size={20}
+                  size={18}
                   strokeWidth={1.8}
                 />
 
-                <span className="text-[16px] font-medium">
+                <span className="text-[15px] font-medium">
                   {item.title}
                 </span>
 
@@ -160,22 +160,22 @@ px-4
             href="/settings"
             className="
             flex
-            h-14
+            h-12
             items-center
-            gap-4
+            gap-3
             rounded-2xl
-            px-5
+            px-3.5
             text-[#57576A]
             hover:bg-white/60
             "
           >
 
             <Settings
-              size={20}
+              size={18}
               strokeWidth={1.8}
             />
 
-            <span className="text-[16px] font-medium">
+            <span className="text-[15px] font-medium">
               Settings
             </span>
 
