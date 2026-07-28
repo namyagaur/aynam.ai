@@ -194,8 +194,8 @@ export default function DurationKnob({
             <feDropShadow
               dx="0"
               dy="12"
-              stdDeviation="18"
-              floodOpacity="0.12"
+              stdDeviation="24"
+              floodOpacity="0.08"
             />
           </filter>
 
@@ -204,14 +204,9 @@ export default function DurationKnob({
             cx="50%"
             cy="40%"
           >
-            <stop
-              offset="0%"
-              stopColor="#ffffff"
-            />
-            <stop
-              offset="100%"
-              stopColor="#F4F4F4"
-            />
+            <stop offset="0%" stopColor="#FFFFFF"/>
+<stop offset="65%" stopColor="#FCFCFD"/>
+<stop offset="100%" stopColor="#F2F2F5"/>
           </radialGradient>
 
           <linearGradient
@@ -227,7 +222,7 @@ export default function DurationKnob({
             />
             <stop
               offset="100%"
-              stopColor="#6D63F2"
+              stopColor="#6759E8"
             />
           </linearGradient>
         </defs>
@@ -263,7 +258,7 @@ export default function DurationKnob({
           d={trackArc}
           fill="none"
           stroke="#E8E5F4"
-          strokeWidth="7"
+          strokeWidth="6"
           strokeLinecap="round"
         />
 
@@ -272,7 +267,7 @@ export default function DurationKnob({
           d={activeArc}
           fill="none"
           stroke="url(#progress)"
-          strokeWidth="6"
+          strokeWidth="5.5"
           strokeLinecap="round"
         />
 
@@ -282,7 +277,7 @@ export default function DurationKnob({
         >
           <circle
             r={THUMB_RADIUS}
-            fill="#7C6CFF"
+            fill="#6759E8"
           />
 
           <path
@@ -320,10 +315,10 @@ export default function DurationKnob({
           x={CENTER}
           y={CENTER + 8}
           textAnchor="middle"
-          className="#5E54E8"
+          fill="#5E54E8"
           style={{
             fontSize: 52,
-            fontWeight: 700,
+            fontWeight: 600,
           }}
         >
           {value}
@@ -365,24 +360,14 @@ export default function DurationKnob({
                 textAnchor="middle"
                 className="fill-neutral-700"
                 style={{
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: 500,
+                  
                 }}
               >
                 {n}
               </text>
 
-              <text
-                x={p.x}
-                y={p.y + 14}
-                textAnchor="middle"
-                className="fill-neutral-500"
-                style={{
-                  fontSize: 14,
-                }}
-              >
-                min
-              </text>
             </g>
           );
         })}
