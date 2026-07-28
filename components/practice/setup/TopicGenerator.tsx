@@ -1,66 +1,103 @@
 "use client";
 
 import { useState } from "react";
-import TopicRow from "./TopicRow";
-import { publicSpeakingTopics } from "../data/topics";
+import RollingWheel from "./RollingWheel";
+import {
+  publicSpeakingTopics,
+  conversationTopics,
+  storytellingTopics,
+  socialTopics,
+} from "../data/topics";
 
-export default function TopicGenerator() {
-  const [currentIndex, setCurrentIndex] = useState(2);
-  const [rolling, setRolling] = useState(false);
+type Mode =
+  | "public-speaking"
+  | "conversation"
+  | "storytelling"
+  | "social";
 
-  const getTopic = (offset: number) => {
-    const length = publicSpeakingTopics.length;
-    return publicSpeakingTopics[
-      (currentIndex + offset + length) % length
-    ];
+type Props = {
+  selectedMode?: Mode;
+};
+
+export default function TopicGenerator({
+  selectedMode = "public-speaking",
+}: Props) {
+  const getTopics = () => {
+    switch (selectedMode) {
+      case "conversation":
+        return conversationTopics;
+
+      case "storytelling":
+        return storytellingTopics;
+
+      case "social":
+        return socialTopics;
+
+      default:
+        return publicSpeakingTopics;
+    }
   };
+
+  const topics = getTopics();
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [rolling, setRolling] = useState(false);
 
   const handleRoll = () => {
     if (rolling) return;
 
     setRolling(true);
 
-    const next = Math.floor(
-      Math.random() * publicSpeakingTopics.length
-    );
+    const totalSteps = 22 + Math.floor(Math.random() * 10);
 
-    setTimeout(() => {
-      setCurrentIndex(next);
-      setRolling(false);
-    }, 400);
+    let step = 0;
+
+    const roll = () => {
+      step++;
+
+      setCurrentIndex((prev) => (prev + 1) % topics.length);
+
+      if (step < totalSteps) {
+        const speed = Math.min(50 + step * 8, 250);
+
+        setTimeout(roll, speed);
+      } else {
+        setRolling(false);
+      }
+    };
+
+    roll();
   };
 
   return (
-    <section className="mt-10 flex flex-col items-center">
-
-      <div className="w-full max-w-xl">
-
-        <div className="border-t border-zinc-200 py-4">
-
-          <TopicRow topic={getTopic(-2)} />
-
-          <TopicRow topic={getTopic(-1)} />
-
-          <TopicRow topic={getTopic(0)} selected />
-
-          <TopicRow topic={getTopic(1)} />
-
-          <TopicRow topic={getTopic(2)} />
-
-        </div>
-
-        <div className="border-b border-zinc-200" />
-
-      </div>
+<section className="mt-8 flex flex-col items-center">
+      <RollingWheel
+        topics={topics}
+        currentIndex={currentIndex}
+      />
 
       <button
         onClick={handleRoll}
         disabled={rolling}
-        className="mt-6 rounded-full border border-zinc-300 px-5 py-2.5 text-sm font-medium transition hover:bg-zinc-100 disabled:opacity-50"
+        className="
+          mt-3
+          rounded-full
+          border
+          border-zinc-300
+          bg-white
+          px-6
+          py-3
+          text-sm
+          font-medium
+          transition-all
+          hover:scale-[1.02]
+          hover:bg-zinc-50
+          disabled:cursor-not-allowed
+          disabled:opacity-50
+        "
       >
         {rolling ? "Rolling..." : "🎲 Roll Topic"}
       </button>
-
     </section>
   );
 }
