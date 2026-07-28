@@ -20,7 +20,7 @@ const [secondsLeft, setSecondsLeft] = useState(() => duration * 60);
 
 // Recording
 const [isRecording, setIsRecording] = useState(false);
-
+const [isPaused, setIsPaused] = useState(false);
 const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 const streamRef = useRef<MediaStream | null>(null);
 const audioChunksRef = useRef<Blob[]>([]);
@@ -103,6 +103,23 @@ function finishRecording() {
   setIsRecording(false);
 
   console.log("Stopping...");
+}
+function togglePause() {
+  if (!mediaRecorderRef.current) return;
+
+  if (isPaused) {
+    mediaRecorderRef.current.resume();
+
+    setIsPaused(false);
+
+    console.log("▶ Resumed");
+  } else {
+    mediaRecorderRef.current.pause();
+
+    setIsPaused(true);
+
+    console.log("⏸ Paused");
+  }
 }
   return (
 <div className="flex w-full min-h-0 overflow-hidden">
