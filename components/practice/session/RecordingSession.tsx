@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
+import { transcribeAudio } from "@/services/speech";
 type Props = {
   topic: string;
   duration: number;
@@ -144,7 +144,7 @@ setIsStarting(true);
         }
       };
 
-      recorder.onstop = () => {
+      recorder.onstop = async () => {
         const mimeType = recorder.mimeType || "audio/webm";
         const audioBlob = new Blob(audioChunksRef.current, {
           type: mimeType,
@@ -154,7 +154,9 @@ setIsStarting(true);
           const nextURL = URL.createObjectURL(audioBlob);
           setAudioURL(nextURL);
         }
+        const result = await transcribeAudio(audioBlob);
 
+setTranscript(result.transcript);
         cleanupStream();
       };
 
@@ -437,9 +439,15 @@ setIsStarting(true);
           </div>
 
           <div className="mt-3 flex-1 space-y-3 overflow-y-auto text-[13px] leading-6">
-            <div className="text-zinc-300">
-              Your speech will appear here...
-            </div>
+            {transcript ? (
+  <div className="text-zinc-700 whitespace-pre-wrap">
+    {transcript}
+  </div>
+) : (
+  <div className="text-zinc-300">
+    Your speech will appear here...
+  </div>
+)}
           </div>
 
           <div className="mt-2 flex h-6 items-end gap-[2px] opacity-50">
