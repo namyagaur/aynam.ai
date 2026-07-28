@@ -71,6 +71,15 @@ console.log(stream.getAudioTracks());
         audioChunksRef.current.push(event.data);
       }
     };
+    recorder.onstop = () => {
+  const audioBlob = new Blob(audioChunksRef.current, {
+    type: "audio/webm",
+  });
+
+  console.log("✅ Recording finished");
+  console.log(audioBlob);
+};
+    
 
     recorder.start();
 
@@ -85,6 +94,15 @@ console.log(stream.getAudioTracks());
       "Microphone permission is required to start a practice session."
     );
   }
+}
+function finishRecording() {
+  mediaRecorderRef.current?.stop();
+
+  streamRef.current?.getTracks().forEach((track) => track.stop());
+
+  setIsRecording(false);
+
+  console.log("Stopping...");
 }
   return (
 <div className="flex w-full min-h-0 overflow-hidden">
@@ -197,6 +215,7 @@ console.log(stream.getAudioTracks());
               </button>
 
               <button
+              onClick={finishRecording}
                 className="
                 h-10
                 w-44
