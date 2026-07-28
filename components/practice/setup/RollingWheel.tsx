@@ -28,7 +28,7 @@ export default function RollingWheel({
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-[#F8F4EE] via-[#F8F4EE]/80 to-transparent" />
 
       {/* Highlight Window */}
-      <div className="pointer-events-none absolute left-4 right-4 top-1/2 z-10 h-14 -translate-y-1/2 rounded-2xl border border-zinc-200 bg-white shadow-md" />
+      <div className="pointer-events-none absolute left-4 right-4 top-1/2 z-10 h-14 -translate-y-1/2 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50/80 via-white to-violet-50/80 shadow-lg" />
 
       {/* Wheel */}
       <AnimatePresence mode="wait">
@@ -53,7 +53,7 @@ export default function RollingWheel({
 
           <TopicRow topic={getTopic(2)} opacity={15} />
         </motion.div>
-      </AnimatePresence>
+      </AnimatePresence><div className="pointer-events-none absolute left-4 right-4 top-1/2 z-10 h-14 -translate-y-1/2 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50/80 via-white to-violet-50/80 shadow-[0_8px_30px_rgba(108,99,255,0.10)]" />
     </div>
   );
 }

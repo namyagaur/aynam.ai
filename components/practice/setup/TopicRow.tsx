@@ -10,8 +10,11 @@ export default function TopicRow({
   opacity,
 }: Props) {
   return (
-    <div
-      style={{ opacity: opacity / 100 }}
+   <div
+  style={{
+    opacity: opacity / 100,
+    zIndex: selected ? 20 : 1,
+  }}
       className={`
         flex
         h-12
@@ -21,7 +24,7 @@ export default function TopicRow({
         duration-300
         ${
           selected
-            ? "scale-100"
+  ? "scale-[1.03]"
             : "scale-[0.95]"
         }
       `}
@@ -32,7 +35,7 @@ export default function TopicRow({
     leading-snug
     ${
       selected
-        ? "text-base font-semibold text-zinc-900"
+  ? "text-base font-semibold text-violet-700"
         : "text-sm text-zinc-500"
     }
   `}
