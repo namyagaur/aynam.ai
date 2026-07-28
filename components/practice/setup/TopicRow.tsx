@@ -38,8 +38,8 @@ export default function TopicRow({
     duration-300
     ${
       selected
-        ? "text-xl font-semibold text-[#6C63FF]"
-        : "text-base text-[#A8A1B8]"
+  ? "text-[#7C6CF8] font-semibold"
+  : "text-zinc-400"
     }
   `}
 >

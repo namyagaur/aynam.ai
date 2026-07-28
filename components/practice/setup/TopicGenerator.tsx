@@ -22,6 +22,7 @@ type Props = {
 export default function TopicGenerator({
   selectedMode = "public-speaking",
 }: Props) {
+  const [hasRolled, setHasRolled] = useState(false);
   const getTopics = () => {
     switch (selectedMode) {
       case "conversation":
@@ -47,7 +48,7 @@ export default function TopicGenerator({
     if (rolling) return;
 
     setRolling(true);
-
+setHasRolled(true);
     const totalSteps = 12 + Math.floor(Math.random() * 5);
 
     let step = 0;
@@ -76,28 +77,50 @@ export default function TopicGenerator({
         currentIndex={currentIndex}
       />
 
-      <button
-        onClick={handleRoll}
-        disabled={rolling}
-        className="
-          mt-3
-          rounded-full
-          border
-          border-zinc-300
-          bg-white
-          px-6
-          py-3
-          text-sm
-          font-medium
-          transition-all
-          hover:scale-[1.02]
-          hover:bg-zinc-50
-          disabled:cursor-not-allowed
-          disabled:opacity-50
-        "
-      >
-        {rolling ? "Rolling..." : "🎲 Roll Topic"}
-      </button>
+      <div className="mt-4 flex gap-3">
+  <button
+    onClick={handleRoll}
+    disabled={rolling}
+    className="
+      rounded-full
+      border
+      border-zinc-300
+      bg-white
+      px-6
+      py-3
+      text-sm
+      font-medium
+      transition-all
+      hover:scale-[1.02]
+      hover:bg-zinc-50
+      disabled:opacity-50
+    "
+  >
+    {rolling ? "Rolling..." : "🎲 Roll Again"}
+  </button>
+
+  {hasRolled && !rolling && (
+    <button
+      onClick={() => {
+        // next page later
+      }}
+      className="
+        rounded-full
+        bg-[#7C6CF8]
+        px-6
+        py-3
+        text-sm
+        font-medium
+        text-white
+        transition-all
+        hover:scale-[1.02]
+        hover:bg-[#6F5CF6]
+      "
+    >
+      Continue →
+    </button>
+  )}
+</div>
     </section>
   );
 }

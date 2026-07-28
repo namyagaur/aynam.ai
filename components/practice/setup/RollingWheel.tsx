@@ -30,10 +30,10 @@ export default function RollingWheel({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 48, opacity: 0 }}
           transition={{
-            duration: 0.35,
+            duration: 0.45,
             ease: "easeInOut",
           }}
-          className="flex flex-col py-4"
+          className="flex flex-col gap-1 py-4"
         >
           <TopicRow topic={getTopic(-2)} opacity={20} />
 
