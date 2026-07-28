@@ -8,6 +8,8 @@ import {
   storytellingTopics,
   socialTopics,
 } from "../data/topics";
+import DurationKnob from "@/components/practice/DurationKnob";
+import ModeSelector from "./ModeSelector";
 
 type Mode = "public-speaking" | "conversation" | "storytelling" | "social";
 
@@ -40,6 +42,8 @@ export default function TopicGenerator({
   const [rolling, setRolling] = useState(false);
   const [hasRolled, setHasRolled] = useState(false);
   const [step, setStep] = useState<"topic" | "setup">("topic");
+  const [duration, setDuration] = useState(5);
+
   const handleRoll = () => {
     if (rolling) return;
 
@@ -67,53 +71,78 @@ export default function TopicGenerator({
   };
 
   return (
-    <section className="mt-8 flex flex-col items-center">
-      <RollingWheel topics={topics} currentIndex={currentIndex} />
+  <section className="mt-2 flex flex-col items-center">
 
-      <div className="mt-4 flex gap-3">
-        <button
-          onClick={handleRoll}
-          disabled={rolling}
-          className="
-      rounded-full
-      border
-      border-zinc-300
-      bg-white
-      px-6
-      py-3
-      text-sm
-      font-medium
-      transition-all
-      hover:scale-[1.02]
-      hover:bg-zinc-50
-      disabled:opacity-50
-    "
-        >
-          {rolling ? "Rolling..." : "🎲 Roll Again"}
-        </button>
+    {step === "topic" && (
+      <>
+      <div className="-mt-2 mb-8">
+  <ModeSelector />
+</div>
+        <RollingWheel
+          topics={topics}
+          currentIndex={currentIndex}
+        />
 
-        {hasRolled && !rolling && (
+        <div className="mt-4 flex gap-3">
           <button
-            onClick={() => {
-              // next page later
-            }}
+            onClick={handleRoll}
+            disabled={rolling}
             className="
-        rounded-full
-        bg-[#7C6CF8]
-        px-6
-        py-3
-        text-sm
-        font-medium
-        text-white
-        transition-all
-        hover:scale-[1.02]
-        hover:bg-[#6F5CF6]
-      "
+              rounded-full
+              border
+              border-zinc-300
+              bg-white
+              px-6
+              py-3
+              text-sm
+              font-medium
+            "
           >
-            Continue →
+            {rolling
+              ? "Rolling..."
+              : hasRolled
+              ? "🎲 Roll Again"
+              : "🎲 Roll Topic"}
           </button>
-        )}
-      </div>
-    </section>
-  );
+
+          {hasRolled && !rolling && (
+            <button
+              onClick={() => setStep("setup")}
+              className="
+                rounded-full
+                bg-[#7C6CF8]
+                px-6
+                py-3
+                text-sm
+                font-medium
+                text-white
+              "
+            >
+              Continue →
+            </button>
+          )}
+        </div>
+      </>
+    )}
+
+    {step === "setup" && (
+      <div className="mt-12 flex flex-col items-center">
+
+  <p className="text-sm text-zinc-500">
+    Today's Topic
+  </p>
+
+  <h2 className="mt-2 text-4xl font-semibold text-[#7C6CF8]">
+    {topics[currentIndex]}
+  </h2>
+
+  <div className="mt-16">
+    <DurationKnob value={duration} />
+  </div>
+
+</div>
+    )}
+
+  </section>
+);
 }

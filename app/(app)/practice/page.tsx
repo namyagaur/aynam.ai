@@ -7,8 +7,7 @@ export default function PracticePage() {
 
       <PracticeHeader />
 
-      <ModeSelector />
-
+    
       <TopicGenerator />
 
     </main>
