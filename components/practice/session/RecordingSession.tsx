@@ -21,6 +21,10 @@ const [secondsLeft, setSecondsLeft] = useState(() => duration * 60);
 // Recording
 const [isRecording, setIsRecording] = useState(false);
 const [isPaused, setIsPaused] = useState(false);
+const [audioURL, setAudioURL] = useState("");
+useEffect(() => {
+  console.log("audioURL state:", audioURL);
+}, [audioURL]);
 const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 const streamRef = useRef<MediaStream | null>(null);
 const audioChunksRef = useRef<Blob[]>([]);
@@ -76,8 +80,13 @@ console.log(stream.getAudioTracks());
     type: "audio/webm",
   });
 
+  const url = URL.createObjectURL(audioBlob);
+
+  setAudioURL(url);
+
   console.log("✅ Recording finished");
   console.log(audioBlob);
+  console.log("Audio URL:", url);
 };
     
 
@@ -256,6 +265,19 @@ function togglePause() {
         <p className="mt-4 text-[11px] text-zinc-400">
           Your recording will be analyzed after finishing.
         </p>
+        {audioURL && (
+  <div className="mt-6 w-full max-w-md">
+    <p className="mb-2 text-center text-[12px] font-medium text-zinc-500">
+      Recording Preview
+    </p>
+
+    <audio
+      controls
+      src={audioURL}
+      className="w-full"
+    />
+  </div>
+)}
       </div>
 
       {/* Live Transcript Sidebar */}
