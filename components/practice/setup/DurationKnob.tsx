@@ -1,377 +1,250 @@
-"use client";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import React, { useMemo, useRef, useState } from "react";
+/**
+ * DurationKnob
+ * A circular duration picker rendered entirely in SVG.
+ * - 270° arc track (90° gap centered at the bottom)
+ * - 6 fixed stops: 1, 3, 5, 10, 15, 20 (minutes), evenly spaced around the arc
+ * - Draggable thumb that snaps to the nearest stop
+ * - Faint dotted guide ring tracing the full sweep
+ * - "Glass" white center showing the current value
+ *
+ * No external libraries — pointer events + basic trig only.
+ */
 
-type Props = {
-  value: number; // 1 - 20
-  onChange: (value: number) => void;
-};
+export interface DurationKnobProps {
+  value: number;
+  onChange: (v: number) => void;
+}
 
-const MIN = 1;
-const MAX = 20;
+const STOPS = [1, 3, 5, 10, 15, 20] as const;
 
-// 270° knob
-const START_ANGLE = 225;
-const END_ANGLE = 495;
-const SWEEP = END_ANGLE - START_ANGLE;
+const START_ANGLE = -135; // degrees, 0 = 12 o'clock, clockwise positive
+const END_ANGLE = 135;
+const ARC_SWEEP = END_ANGLE - START_ANGLE; // 270
 
-const SIZE = 290;
+const SIZE = 300;
 const CENTER = SIZE / 2;
+const TRACK_RADIUS = 108;
+const DOT_RADIUS = 130;
+const LABEL_RADIUS = 150;
+const THUMB_RADIUS = 15;
 
-const OUTER_RADIUS = 98;
-const TRACK_RADIUS = 84;
-const THUMB_RADIUS = 10;
+const STOP_ANGLE_STEP = ARC_SWEEP / (STOPS.length - 1);
 
-const LABELS = [1, 5, 10, 15, 20];
+function toRad(deg: number) {
+  return (deg * Math.PI) / 180;
+}
 
-const clamp = (v: number, min: number, max: number) =>
-  Math.min(max, Math.max(min, v));
-
-function polarToCartesian(
-  cx: number,
-  cy: number,
-  r: number,
-  angle: number
-) {
-  const rad = ((angle - 90) * Math.PI) / 180;
-
+/** angle: 0 = top, clockwise positive */
+function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
+  const rad = toRad(angleDeg);
   return {
-    x: cx + r * Math.cos(rad),
-    y: cy + r * Math.sin(rad),
+    x: cx + r * Math.sin(rad),
+    y: cy - r * Math.cos(rad),
   };
 }
 
-function describeArc(
-  cx: number,
-  cy: number,
-  r: number,
-  start: number,
-  end: number
-) {
-  const s = polarToCartesian(cx, cy, r, end);
-  const e = polarToCartesian(cx, cy, r, start);
-
-  const largeArc = end - start <= 180 ? 0 : 1;
-
-  return `M ${s.x} ${s.y}
-          A ${r} ${r} 0 ${largeArc} 0 ${e.x} ${e.y}`;
+function describeArc(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
+  const start = polarToCartesian(cx, cy, r, startDeg);
+  const end = polarToCartesian(cx, cy, r, endDeg);
+  const largeArcFlag = endDeg - startDeg <= 180 ? 0 : 1;
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
 }
 
-export default function DurationKnob({
-  value,
-  onChange,
-}: Props) {
+function angleForValue(value: number): number {
+  const idx = STOPS.indexOf(value as (typeof STOPS)[number]);
+  const safeIdx = idx === -1 ? 2 : idx; // fall back to the "5" stop
+  return START_ANGLE + safeIdx * STOP_ANGLE_STEP;
+}
+
+function nearestStopFromAngle(angle: number): number {
+  const clamped = Math.min(END_ANGLE, Math.max(START_ANGLE, angle));
+  const idx = Math.round((clamped - START_ANGLE) / STOP_ANGLE_STEP);
+  const safeIdx = Math.min(STOPS.length - 1, Math.max(0, idx));
+  return STOPS[safeIdx];
+}
+
+export default function DurationKnob({ value, onChange }: DurationKnobProps) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const dragging = useRef(false);
-  const [, force] = useState(false);
+  const [dragging, setDragging] = useState(false);
 
-  const angle =
-    START_ANGLE +
-    ((clamp(value, MIN, MAX) - MIN) / (MAX - MIN)) * SWEEP;
+  const currentAngle = angleForValue(value);
 
-  const thumb = polarToCartesian(
-    CENTER,
-    CENTER,
-    TRACK_RADIUS,
-    angle
+  const angleFromPointer = useCallback((clientX: number, clientY: number) => {
+    const svg = svgRef.current;
+    if (!svg) return currentAngle;
+    const rect = svg.getBoundingClientRect();
+    const scale = SIZE / rect.width;
+    const x = (clientX - rect.left) * scale;
+    const y = (clientY - rect.top) * scale;
+    const dx = x - CENTER;
+    const dy = y - CENTER;
+    // 0 = top, clockwise positive
+    let angle = (Math.atan2(dx, -dy) * 180) / Math.PI;
+
+    // The forbidden 90° gap sits at the bottom, split across ±180.
+    // Anything past our usable range clamps to the nearer end rather
+    // than wrapping around through the gap.
+    if (angle > END_ANGLE && angle <= 180) angle = END_ANGLE;
+    if (angle < START_ANGLE && angle >= -180) angle = START_ANGLE;
+    return angle;
+  }, [currentAngle]);
+
+  const commitFromPointer = useCallback(
+    (clientX: number, clientY: number) => {
+      const angle = angleFromPointer(clientX, clientY);
+      const stop = nearestStopFromAngle(angle);
+      if (stop !== value) onChange(stop);
+    },
+    [angleFromPointer, onChange, value]
   );
 
-  const activeArc = useMemo(
-    () =>
-      describeArc(
-        CENTER,
-        CENTER,
-        TRACK_RADIUS,
-        START_ANGLE,
-        angle
-      ),
-    [angle]
-  );
+  useEffect(() => {
+    if (!dragging) return;
 
-  const trackArc = useMemo(
-    () =>
-      describeArc(
-        CENTER,
-        CENTER,
-        TRACK_RADIUS,
-        START_ANGLE,
-        END_ANGLE
-      ),
-    []
-  );
+    const handleMove = (e: PointerEvent) => {
+      e.preventDefault();
+      commitFromPointer(e.clientX, e.clientY);
+    };
+    const handleUp = () => setDragging(false);
 
-  function pointerToValue(
-    clientX: number,
-    clientY: number
-  ) {
-    if (!svgRef.current) return value;
+    window.addEventListener("pointermove", handleMove, { passive: false });
+    window.addEventListener("pointerup", handleUp);
+    window.addEventListener("pointercancel", handleUp);
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+      window.removeEventListener("pointercancel", handleUp);
+    };
+  }, [dragging, commitFromPointer]);
 
-    const rect =
-      svgRef.current.getBoundingClientRect();
+  const handleThumbPointerDown = (e: React.PointerEvent) => {
+    e.preventDefault();
+    setDragging(true);
+  };
 
-    const x = clientX - rect.left - CENTER;
-    const y = clientY - rect.top - CENTER;
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const idx = STOPS.indexOf(value as (typeof STOPS)[number]);
+    const currentIdx = idx === -1 ? 2 : idx;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+      e.preventDefault();
+      onChange(STOPS[Math.min(STOPS.length - 1, currentIdx + 1)]);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+      e.preventDefault();
+      onChange(STOPS[Math.max(0, currentIdx - 1)]);
+    }
+  };
 
-    let deg =
-      (Math.atan2(y, x) * 180) / Math.PI + 90;
-
-    if (deg < 0) deg += 360;
-
-    if (deg < START_ANGLE) deg += 360;
-
-    deg = clamp(deg, START_ANGLE, END_ANGLE);
-
-    const percent =
-      (deg - START_ANGLE) / SWEEP;
-
-    return Math.round(
-      MIN + percent * (MAX - MIN)
+  // Faint dotted guide ring across the full 270° sweep.
+  const guideDots = [];
+  const DOT_COUNT = 60;
+  for (let i = 0; i <= DOT_COUNT; i++) {
+    const angle = START_ANGLE + (ARC_SWEEP / DOT_COUNT) * i;
+    const { x, y } = polarToCartesian(CENTER, CENTER, DOT_RADIUS, angle);
+    guideDots.push(
+      <circle key={i} cx={x} cy={y} r={1.6} className="fill-gray-300" />
     );
   }
 
-  function update(
-    e:
-      | React.PointerEvent<SVGSVGElement>
-      | PointerEvent
-  ) {
-    onChange(pointerToValue(e.clientX, e.clientY));
-  }
-
-  function down(
-    e: React.PointerEvent<SVGSVGElement>
-  ) {
-    dragging.current = true;
-    force((v) => !v);
-
-    update(e);
-
-    window.addEventListener(
-      "pointermove",
-      move
-    );
-    window.addEventListener(
-      "pointerup",
-      up
-    );
-  }
-
-  function move(e: PointerEvent) {
-    if (!dragging.current) return;
-    update(e);
-  }
-
-  function up() {
-    dragging.current = false;
-    force((v) => !v);
-
-    window.removeEventListener(
-      "pointermove",
-      move
-    );
-    window.removeEventListener(
-      "pointerup",
-      up
-    );
-  }
+  const thumbPos = polarToCartesian(CENTER, CENTER, TRACK_RADIUS, currentAngle);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="relative select-none" style={{ width: SIZE, height: SIZE }}>
       <svg
         ref={svgRef}
+        viewBox={`0 0 ${SIZE} ${SIZE}`}
         width={SIZE}
         height={SIZE}
-        className="select-none touch-none cursor-pointer overflow-visible"
-        onPointerDown={down}
+        className="overflow-visible"
       >
         <defs>
-          <filter
-            id="shadow"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feDropShadow
-              dx="0"
-              dy="12"
-              stdDeviation="24"
-              floodOpacity="0.08"
-            />
-          </filter>
-
-          <radialGradient
-            id="glass"
-            cx="50%"
-            cy="40%"
-          >
-            <stop offset="0%" stopColor="#FFFFFF"/>
-<stop offset="65%" stopColor="#FCFCFD"/>
-<stop offset="100%" stopColor="#F2F2F5"/>
-          </radialGradient>
-
-          <linearGradient
-            id="progress"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop
-              offset="0%"
-              stopColor="#B8A9FF"
-            />
-            <stop
-              offset="100%"
-              stopColor="#6759E8"
-            />
+          <linearGradient id="knob-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#6366F1" />
+            <stop offset="100%" stopColor="#8B5CF6" />
           </linearGradient>
         </defs>
 
-        {/* dotted guide */}
-        {Array.from({ length: 72 }).map((_, i) => {
-          const a =
-            START_ANGLE +
-            (i / 71) * SWEEP;
+        {/* dotted guide ring */}
+        <g>{guideDots}</g>
 
-          const p =
-            polarToCartesian(
-              CENTER,
-              CENTER,
-              OUTER_RADIUS,
-              a
-            );
+        {/* background track */}
+        <path
+          d={describeArc(CENTER, CENTER, TRACK_RADIUS, START_ANGLE, END_ANGLE)}
+          fill="none"
+          strokeWidth={8}
+          strokeLinecap="round"
+          className="stroke-gray-200"
+        />
 
+        {/* active track, from start up to the current value */}
+        <path
+          d={describeArc(CENTER, CENTER, TRACK_RADIUS, START_ANGLE, currentAngle)}
+          fill="none"
+          strokeWidth={8}
+          strokeLinecap="round"
+          stroke="url(#knob-gradient)"
+        />
+
+        {/* fixed stop labels */}
+        {STOPS.map((stop, i) => {
+          const angle = START_ANGLE + i * STOP_ANGLE_STEP;
+          const { x, y } = polarToCartesian(CENTER, CENTER, LABEL_RADIUS, angle);
+          const active = stop === value;
           return (
-            <circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r="1.8"
-              fill="#D7D3E8"
-              opacity="0.8"
-            />
+            <text
+              key={stop}
+              x={x}
+              y={y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className={
+                active
+                  ? "text-[13px] font-semibold fill-indigo-500"
+                  : "text-[13px] font-medium fill-gray-400"
+              }
+            >
+              {stop} min
+            </text>
           );
         })}
 
-        {/* background arc */}
-        <path
-          d={trackArc}
-          fill="none"
-          stroke="#E8E5F4"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-
-        {/* active */}
-        <path
-          d={activeArc}
-          fill="none"
-          stroke="url(#progress)"
-          strokeWidth="5.5"
-          strokeLinecap="round"
-        />
-
-        {/* thumb */}
+        {/* draggable thumb */}
         <g
-          transform={`translate(${thumb.x},${thumb.y})`}
+          transform={`translate(${thumbPos.x} ${thumbPos.y})`}
+          onPointerDown={handleThumbPointerDown}
+          tabIndex={0}
+          role="slider"
+          aria-valuemin={STOPS[0]}
+          aria-valuemax={STOPS[STOPS.length - 1]}
+          aria-valuenow={value}
+          aria-label="Practice duration in minutes"
+          onKeyDown={handleKeyDown}
+          className="cursor-grab outline-none active:cursor-grabbing"
+          style={{ touchAction: "none" }}
         >
-          <circle
-            r={THUMB_RADIUS}
-            fill="#6759E8"
-          />
-
+          <circle r={THUMB_RADIUS} className="fill-white stroke-indigo-500" strokeWidth={2.5} />
           <path
-            d="M-3 -1 L0 3 L5 -4"
+            d="M -5 0 L -1.5 4 L 5.5 -4.5"
             fill="none"
-            stroke="white"
-            strokeWidth="2"
+            stroke="#6366F1"
+            strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </g>
-
-        {/* glass center */}
-        <g filter="url(#shadow)">
-          <circle
-            cx={CENTER}
-            cy={CENTER}
-            r="58"
-            fill="url(#glass)"
-            stroke="#ECECF2"
-            strokeWidth="2"
-          />
-
-          <circle
-            cx={CENTER}
-            cy={CENTER}
-            r="66"
-            fill="none"
-            stroke="#F7F7FA"
-            strokeWidth="2"
-          />
-        </g>
-
-        <text
-          x={CENTER}
-          y={CENTER + 8}
-          textAnchor="middle"
-          fill="#5E54E8"
-          style={{
-            fontSize: 44,
-            fontWeight: 600,
-          }}
-        >
-          {value}
-        </text>
-
-        <text
-          x={CENTER}
-          y={CENTER + 36}
-          textAnchor="middle"
-          className="fill-neutral-500"
-          style={{
-            fontSize: 16,
-          }}
-        >
-          min
-        </text>
-
-        {/* labels */}
-        {LABELS.map((n) => {
-          const a =
-            START_ANGLE +
-            ((n - MIN) /
-              (MAX - MIN)) *
-              SWEEP;
-
-          const p =
-            polarToCartesian(
-              CENTER,
-              CENTER,
-              OUTER_RADIUS + 17,
-              a
-            );
-
-          return (
-            <g key={n}>
-              <text
-                x={p.x}
-                y={p.y - 6}
-                textAnchor="middle"
-                className="fill-neutral-700"
-                style={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  
-                }}
-              >
-                {n}
-              </text>
-
-            </g>
-          );
-        })}
       </svg>
+
+      {/* glass center */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div
+          className="flex h-36 w-36 flex-col items-center justify-center rounded-full bg-white/90 backdrop-blur-sm ring-1 ring-black/5"
+          style={{ boxShadow: "0 12px 30px rgba(15, 23, 42, 0.08)" }}
+        >
+          <span className="text-4xl font-bold text-gray-900">{value}</span>
+          <span className="text-sm font-medium text-gray-400">min</span>
+        </div>
+      </div>
     </div>
   );
 }
