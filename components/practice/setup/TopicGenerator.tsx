@@ -73,18 +73,22 @@ export default function TopicGenerator({
     roll();
   };
 
-  if (step === "recording") {
-    return (
+  return (
+  <section
+    className={
+      step === "recording"
+        ? "mt-2 flex h-full min-h-0 flex-col"
+        : "mt-2 flex flex-col items-center"
+    }
+  >
+
+    {step === "recording" && (
       <RecordingSession
         topic={topics[currentIndex]}
         duration={duration}
         onEnd={() => setStep("setup")}
       />
-    );
-  }
-
-  return (
-  <section className="mt-2 flex flex-col items-center">
+    )}
 
     {step === "topic" && (
       <>

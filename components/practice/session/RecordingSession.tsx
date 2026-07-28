@@ -39,11 +39,11 @@ export default function RecordingSession({
   const progressDeg =
     totalSeconds > 0 ? (elapsed / totalSeconds) * 360 : 0;
 
-    return (
-<div className="flex h-full w-full overflow-hidden">
+  return (
+<div className="flex w-full min-h-0 overflow-hidden">
       {/* Recording Panel */}
-      <div className="flex flex-1 flex-col items-center justify-center px-10 py-6 transition-all duration-300 ease-out">
-        <div className="flex w-full max-w-3xl items-center justify-between">
+<div className="flex flex-1 flex-col items-center px-10 pt-2 pb-4 transition-all duration-300 ease-out">   
+       <div className="flex w-full max-w-3xl items-center justify-between mb-6">
           <button
             onClick={onEnd}
             className="text-[13px] text-zinc-500 transition hover:text-zinc-900"
@@ -69,23 +69,23 @@ export default function RecordingSession({
         </div>
 
         {/* Topic */}
-        <h1 className="mt-4 max-w-xl text-center text-[22px] font-semibold leading-tight tracking-tight text-[#6B63F6]">
+        <h1 className="mt-0 max-w-xl text-center text-[22px] font-semibold leading-tight tracking-tight text-[#6B63F6]">
           {topic}
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-1 text-[13px] text-zinc-500">
+        <p className="mt-2 text-[13px] text-zinc-500">
           Speak naturally. There is no right or wrong answer.
         </p>
 
         {/* Duration Pill */}
-        <div className="mt-2.5 rounded-full border border-[#ECE9FF] bg-[#F7F6FF] px-3.5 py-1 text-[12px] font-medium text-[#6B63F6]">
+        <div className="mt-4 rounded-full border border-[#ECE9FF] bg-[#F7F6FF] px-3.5 py-1 text-[12px] font-medium text-[#6B63F6]">
           {duration} min session
         </div>
 
         {/* Timer */}
         <div
-          className="relative mt-4 aspect-square w-[160px] shrink-0 rounded-full"
+          className="relative mt-5 aspect-square w-[160px] shrink-0 rounded-full"
           style={{
             background: `conic-gradient(#7C6CF8 ${progressDeg}deg, #E5E7EB ${progressDeg}deg)`,
           }}
@@ -109,7 +109,7 @@ export default function RecordingSession({
         </div>
 
         {/* Bottom Buttons */}
-        <div className="mt-5 flex items-center gap-3">
+        <div className="mt-6 flex items-center gap-3">
           {!started ? (
             <button
               onClick={() => setStarted(true)}
@@ -176,11 +176,11 @@ export default function RecordingSession({
 
       {/* Live Transcript Sidebar */}
       <div
-        className={`h-screen shrink-0 overflow-hidden border-l border-zinc-100/70 transition-all duration-300 ease-out ${
+        className={`h-full shrink-0 overflow-hidden border-l border-zinc-100/70 transition-all duration-300 ease-out ${
           showTranscript ? "w-[320px]" : "w-0"
         }`}
       >
-        <div className="flex h-full w-full flex-col px-5 py-4">
+        <div className="flex h-full w-full flex-col px-5 pt-6 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-[14px] font-semibold text-zinc-800">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C6CF8" strokeWidth="2">

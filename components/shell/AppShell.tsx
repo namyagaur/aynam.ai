@@ -37,11 +37,11 @@ export default function AppShell({ children }: Props) {
       >
         <Topbar />
 
-        <div className="flex h-[calc(100%-72px)]">
+        <div className="flex h-[calc(100%-72px)] min-h-0">
 
           <Sidebar />
 
-          <section className="flex-1 bg-[#FFFDF7] overflow-y-auto">
+          <section className="min-h-0 flex-1 overflow-y-auto bg-[#FFFDF7]">
             {children}
           </section>
 
