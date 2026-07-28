@@ -9,11 +9,7 @@ import {
   socialTopics,
 } from "../data/topics";
 
-type Mode =
-  | "public-speaking"
-  | "conversation"
-  | "storytelling"
-  | "social";
+type Mode = "public-speaking" | "conversation" | "storytelling" | "social";
 
 type Props = {
   selectedMode?: Mode;
@@ -22,7 +18,6 @@ type Props = {
 export default function TopicGenerator({
   selectedMode = "public-speaking",
 }: Props) {
-  const [hasRolled, setHasRolled] = useState(false);
   const getTopics = () => {
     switch (selectedMode) {
       case "conversation":
@@ -43,12 +38,13 @@ export default function TopicGenerator({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rolling, setRolling] = useState(false);
-
+  const [hasRolled, setHasRolled] = useState(false);
+  const [step, setStep] = useState<"topic" | "setup">("topic");
   const handleRoll = () => {
     if (rolling) return;
 
     setRolling(true);
-setHasRolled(true);
+    setHasRolled(true);
     const totalSteps = 12 + Math.floor(Math.random() * 5);
 
     let step = 0;
@@ -71,17 +67,14 @@ setHasRolled(true);
   };
 
   return (
-<section className="mt-8 flex flex-col items-center">
-      <RollingWheel
-        topics={topics}
-        currentIndex={currentIndex}
-      />
+    <section className="mt-8 flex flex-col items-center">
+      <RollingWheel topics={topics} currentIndex={currentIndex} />
 
       <div className="mt-4 flex gap-3">
-  <button
-    onClick={handleRoll}
-    disabled={rolling}
-    className="
+        <button
+          onClick={handleRoll}
+          disabled={rolling}
+          className="
       rounded-full
       border
       border-zinc-300
@@ -95,16 +88,16 @@ setHasRolled(true);
       hover:bg-zinc-50
       disabled:opacity-50
     "
-  >
-    {rolling ? "Rolling..." : "🎲 Roll Again"}
-  </button>
+        >
+          {rolling ? "Rolling..." : "🎲 Roll Again"}
+        </button>
 
-  {hasRolled && !rolling && (
-    <button
-      onClick={() => {
-        // next page later
-      }}
-      className="
+        {hasRolled && !rolling && (
+          <button
+            onClick={() => {
+              // next page later
+            }}
+            className="
         rounded-full
         bg-[#7C6CF8]
         px-6
@@ -116,11 +109,11 @@ setHasRolled(true);
         hover:scale-[1.02]
         hover:bg-[#6F5CF6]
       "
-    >
-      Continue →
-    </button>
-  )}
-</div>
+          >
+            Continue →
+          </button>
+        )}
+      </div>
     </section>
   );
 }
