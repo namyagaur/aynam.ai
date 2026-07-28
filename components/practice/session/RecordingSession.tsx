@@ -54,6 +54,8 @@ const audioChunksRef = useRef<Blob[]>([]);
     });
 
     streamRef.current = stream;
+    console.log(stream);
+console.log(stream.getAudioTracks());
 
     // Create MediaRecorder
     const recorder = new MediaRecorder(stream);
