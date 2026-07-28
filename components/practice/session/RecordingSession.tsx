@@ -40,10 +40,10 @@ export default function RecordingSession({
     totalSeconds > 0 ? (elapsed / totalSeconds) * 360 : 0;
 
     return (
-    <div className="flex h-full w-full overflow-hidden bg-white">
-      {/* Recording Panel */}
-      <div className="flex flex-1 flex-col items-center justify-center px-6 py-3 transition-all duration-300 ease-out">
-        <div className="flex w-full max-w-2xl items-center justify-between">
+<div className="flex h-full min-h-[calc(100vh-88px)] w-full bg-white">
+          {/* Recording Panel */}
+      <div className="flex flex-1 flex-col items-center px-10 pt-8 pb-6 transition-all duration-300 ease-out">
+        <div className="flex w-full max-w-3xl items-center justify-between">
           <button
             onClick={onEnd}
             className="text-[13px] text-zinc-500 transition hover:text-zinc-900"
@@ -85,7 +85,7 @@ export default function RecordingSession({
 
         {/* Timer */}
         <div
-          className="relative mt-4 aspect-square w-[180px] shrink-0 rounded-full"
+          className="relative mt-4 aspect-square w-[160px] shrink-0 rounded-full"
           style={{
             background: `conic-gradient(#7C6CF8 ${progressDeg}deg, #E5E7EB ${progressDeg}deg)`,
           }}
@@ -177,7 +177,7 @@ export default function RecordingSession({
       {/* Live Transcript Sidebar */}
       <div
         className={`h-screen shrink-0 overflow-hidden border-l border-zinc-100 bg-white transition-all duration-300 ease-out ${
-          showTranscript ? "w-[28%]" : "w-0"
+          showTranscript ? "w-[320px]" : "w-0"
         }`}
       >
         <div className="flex h-full w-full flex-col px-5 py-4">
