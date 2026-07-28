@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type Props = {
   topic: string;
@@ -14,8 +14,16 @@ export default function RecordingSession({
   onEnd,
 }: Props) {
   const [showTranscript, setShowTranscript] = useState(false);
-  const [started, setStarted] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(() => duration * 60);
+const [started, setStarted] = useState(false);
+
+const [secondsLeft, setSecondsLeft] = useState(() => duration * 60);
+
+// Recording
+const [isRecording, setIsRecording] = useState(false);
+
+const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+const streamRef = useRef<MediaStream | null>(null);
+const audioChunksRef = useRef<Blob[]>([]);
 
   // Only ticks once the user presses Start
   useEffect(() => {
