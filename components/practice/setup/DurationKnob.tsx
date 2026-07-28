@@ -18,8 +18,8 @@ const SWEEP = END_ANGLE - START_ANGLE;
 const SIZE = 340;
 const CENTER = SIZE / 2;
 
-const OUTER_RADIUS = 116;
-const TRACK_RADIUS = 102;
+const OUTER_RADIUS = 118;
+const TRACK_RADIUS = 104;
 const THUMB_RADIUS = 12;
 
 const LABELS = [1, 5, 10, 15, 20];
@@ -228,10 +228,10 @@ export default function DurationKnob({
         </defs>
 
         {/* dotted guide */}
-        {Array.from({ length: 60 }).map((_, i) => {
+        {Array.from({ length: 72 }).map((_, i) => {
           const a =
             START_ANGLE +
-            (i / 59) * SWEEP;
+            (i / 71) * SWEEP;
 
           const p =
             polarToCartesian(
@@ -297,7 +297,7 @@ export default function DurationKnob({
             cy={CENTER}
             r="72"
             fill="url(#glass)"
-            stroke="#EBEAF1"
+            stroke="#ECECF2"
             strokeWidth="2"
           />
 
@@ -306,7 +306,7 @@ export default function DurationKnob({
             cy={CENTER}
             r="82"
             fill="none"
-            stroke="#F2F1F7"
+            stroke="#F7F7FA"
             strokeWidth="2"
           />
         </g>
