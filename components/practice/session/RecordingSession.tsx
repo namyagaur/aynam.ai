@@ -46,7 +46,44 @@ const audioChunksRef = useRef<Blob[]>([]);
   const elapsed = totalSeconds - secondsLeft;
   const progressDeg =
     totalSeconds > 0 ? (elapsed / totalSeconds) * 360 : 0;
+    async function startRecording() {
+  try {
+    // Ask for microphone access
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+    });
 
+    streamRef.current = stream;
+
+    // Create MediaRecorder
+    const recorder = new MediaRecorder(stream);
+
+    mediaRecorderRef.current = recorder;
+
+    // Reset old chunks
+    audioChunksRef.current = [];
+
+    // Save chunks as they arrive
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    recorder.start();
+
+    setStarted(true);
+    setIsRecording(true);
+
+    console.log("🎤 Recording started");
+  } catch (err) {
+    console.error(err);
+
+    alert(
+      "Microphone permission is required to start a practice session."
+    );
+  }
+}
   return (
 <div className="flex w-full min-h-0 overflow-hidden">
       {/* Recording Panel */}
@@ -120,7 +157,7 @@ const audioChunksRef = useRef<Blob[]>([]);
         <div className="mt-8 flex items-center gap-3">
           {!started ? (
             <button
-              onClick={() => setStarted(true)}
+              onClick={startRecording}
               className="
               h-10
               w-32
