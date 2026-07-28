@@ -5,7 +5,7 @@ export default function PracticePage() {
   return (
     <main className="h-full bg-[#FFFCF8] px-10 py-8">
 
-      <PracticeHeader />
+ 
 
     
       <TopicGenerator />

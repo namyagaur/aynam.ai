@@ -8,8 +8,10 @@ import {
   storytellingTopics,
   socialTopics,
 } from "../data/topics";
-import DurationKnob from "@/components/practice/DurationKnob";
+import DurationKnob from "@/components/practice/setup/DurationKnob";
 import ModeSelector from "./ModeSelector";
+import PracticeSetup from "./PracticeSetup";
+import PracticeHeader from "./PracticeHeader";
 
 type Mode = "public-speaking" | "conversation" | "storytelling" | "social";
 
@@ -75,6 +77,7 @@ export default function TopicGenerator({
 
     {step === "topic" && (
       <>
+      <PracticeHeader />
       <div className="-mt-2 mb-8">
   <ModeSelector />
 </div>
@@ -125,23 +128,14 @@ export default function TopicGenerator({
       </>
     )}
 
-    {step === "setup" && (
-      <div className="mt-12 flex flex-col items-center">
-
-  <p className="text-sm text-zinc-500">
-    Today's Topic
-  </p>
-
-  <h2 className="mt-2 text-4xl font-semibold text-[#7C6CF8]">
-    {topics[currentIndex]}
-  </h2>
-
-  <div className="mt-16">
-    <DurationKnob value={duration} />
-  </div>
-
-</div>
-    )}
+   {step === "setup" && (
+  <PracticeSetup
+    topic={topics[currentIndex]}
+    duration={duration}
+    setDuration={setDuration}
+    onBack={() => setStep("topic")}
+  />
+)}
 
   </section>
 );
