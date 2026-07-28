@@ -16,16 +16,16 @@ const START_ANGLE = 225;
 const END_ANGLE = 495;
 const SWEEP = END_ANGLE - START_ANGLE;
 
-const SIZE = 290;
+const SIZE = 255;
 const CENTER = SIZE / 2;
 
 // Slightly tightened radii so the arc, dots, and labels read as one
 // coherent ring instead of three separately-spaced elements.
-const GUIDE_RADIUS = 100;
-const TRACK_RADIUS = 82;
+const GUIDE_RADIUS = 88;
+const TRACK_RADIUS = 72;
 const LABEL_RADIUS = GUIDE_RADIUS + 22;
-const GLASS_RADIUS = 60;
-const GLASS_RING_RADIUS = 68;
+const GLASS_RADIUS = 54;
+const GLASS_RING_RADIUS = 60;
 const THUMB_RADIUS = 9;
 const THUMB_CORE_RADIUS = 3.5;
 
@@ -222,7 +222,7 @@ export default function DurationKnob({ value, onChange }: Props) {
           textAnchor="middle"
           fill="#5E54E8"
           style={{
-            fontSize: 40,
+            fontSize: 34,
             fontWeight: 600,
             letterSpacing: "-0.02em",
             transition: "opacity 100ms ease-out",
@@ -235,7 +235,7 @@ export default function DurationKnob({ value, onChange }: Props) {
           y={CENTER + 24}
           textAnchor="middle"
           className="fill-neutral-400"
-          style={{ fontSize: 13, fontWeight: 500, letterSpacing: "0.02em" }}
+          style={{ fontSize: 12, fontWeight: 500, letterSpacing: "0.02em" }}
         >
           min
         </text>
