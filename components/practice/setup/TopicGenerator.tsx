@@ -139,6 +139,13 @@ export default function TopicGenerator({
 />
 
 )}
+{step === "recording" && (
+  <RecordingSession
+    topic={topics[currentIndex]}
+    duration={duration}
+    onEnd={() => setStep("setup")}
+  />
+)}
 
   </section>
 );
