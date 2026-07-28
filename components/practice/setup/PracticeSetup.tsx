@@ -8,9 +8,10 @@ type Props = {
   duration: number;
   setDuration: (n: number) => void;
   onBack: () => void;
+  onContinue: () => void;
 };
 
-export default function PracticeSetup({ topic, duration, setDuration, onBack }: Props) {
+export default function PracticeSetup({ topic, duration, setDuration, onBack,onContinue, }: Props) {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col items-center pt-2">
       <button
@@ -81,7 +82,9 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack }: 
     hover:-translate-y-0.5
     hover:shadow-[0_18px_40px_rgba(103,89,232,.34)]
     active:translate-y-0
+    
   "
+  onClick={onContinue}
 >
   Continue →
 </button>

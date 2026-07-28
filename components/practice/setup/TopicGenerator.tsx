@@ -8,11 +8,10 @@ import {
   storytellingTopics,
   socialTopics,
 } from "../data/topics";
-import DurationKnob from "@/components/practice/setup/DurationKnob";
 import ModeSelector from "./ModeSelector";
 import PracticeSetup from "./PracticeSetup";
 import PracticeHeader from "./PracticeHeader";
-
+import RecordingSession from "../session/RecordingSession";
 type Mode = "public-speaking" | "conversation" | "storytelling" | "social";
 
 type Props = {
@@ -43,7 +42,9 @@ export default function TopicGenerator({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rolling, setRolling] = useState(false);
   const [hasRolled, setHasRolled] = useState(false);
-  const [step, setStep] = useState<"topic" | "setup">("topic");
+  const [step, setStep] = useState<
+  "topic" | "setup" | "recording"
+>("topic");
   const [duration, setDuration] = useState(5);
 
   const handleRoll = () => {
@@ -130,10 +131,19 @@ export default function TopicGenerator({
 
    {step === "setup" && (
   <PracticeSetup
+  topic={topics[currentIndex]}
+  duration={duration}
+  setDuration={setDuration}
+  onBack={() => setStep("topic")}
+  onContinue={() => setStep("recording")}
+/>
+
+)}
+{step === "recording" && (
+  <RecordingSession
     topic={topics[currentIndex]}
     duration={duration}
-    setDuration={setDuration}
-    onBack={() => setStep("topic")}
+    onEnd={() => setStep("setup")}
   />
 )}
 
