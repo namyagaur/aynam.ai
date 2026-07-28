@@ -20,7 +20,7 @@ export default function RecordingSession({
     useState<RecordingState>("idle");
   const [secondsLeft, setSecondsLeft] = useState(() => duration * 60);
   const [audioURL, setAudioURL] = useState("");
-
+  const [isStarting, setIsStarting] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -54,6 +54,15 @@ export default function RecordingSession({
       }
     };
   }, [recordingState]);
+
+  useEffect(() => {
+  if (
+    recordingState === "recording" &&
+    secondsLeft === 0
+  ) {
+    finishRecording();
+  }
+}, [secondsLeft, recordingState]);
 
   useEffect(() => {
     const previousURL = audioURLRef.current;
@@ -106,6 +115,9 @@ export default function RecordingSession({
   };
 
   const startRecording = async () => {
+    if (isStarting) return;
+
+setIsStarting(true);
     if (
       typeof navigator === "undefined" ||
       !navigator.mediaDevices?.getUserMedia ||
@@ -156,10 +168,12 @@ export default function RecordingSession({
       recorder.start();
       setSecondsLeft(duration * 60);
       setRecordingState("recording");
+      setIsStarting(false);
     } catch {
       cleanupStream();
       mediaRecorderRef.current = null;
       setRecordingState("idle");
+      setIsStarting(false);
       alert(
         "Microphone permission is required to start a practice session."
       );
@@ -306,6 +320,7 @@ export default function RecordingSession({
           {recordingState === "idle" || recordingState === "finished" ? (
             <button
               onClick={startRecording}
+              disabled={isStarting}
               className="
               h-10
               w-32
@@ -319,7 +334,7 @@ export default function RecordingSession({
               hover:scale-[1.01]
             "
             >
-              ▶ Start
+              {isStarting ? "Starting..." : "▶ Start"}
             </button>
           ) : (
             <>
