@@ -73,6 +73,16 @@ export default function TopicGenerator({
     roll();
   };
 
+  if (step === "recording") {
+    return (
+      <RecordingSession
+        topic={topics[currentIndex]}
+        duration={duration}
+        onEnd={() => setStep("setup")}
+      />
+    );
+  }
+
   return (
   <section className="mt-2 flex flex-col items-center">
 
@@ -139,14 +149,6 @@ export default function TopicGenerator({
 />
 
 )}
-{step === "recording" && (
-  <RecordingSession
-    topic={topics[currentIndex]}
-    duration={duration}
-    onEnd={() => setStep("setup")}
-  />
-)}
-
-  </section>
+</section>
 );
 }

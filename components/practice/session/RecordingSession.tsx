@@ -40,8 +40,9 @@ export default function RecordingSession({
     totalSeconds > 0 ? (elapsed / totalSeconds) * 360 : 0;
 
     return (
-<div className="flex h-full min-h-[calc(100vh-88px)] w-full">          {/* Recording Panel */}
-      <div className="flex flex-1 flex-col items-center px-10 pt-8 pb-6 transition-all duration-300 ease-out">
+<div className="flex h-full w-full overflow-hidden">
+      {/* Recording Panel */}
+      <div className="flex flex-1 flex-col items-center justify-center px-10 py-6 transition-all duration-300 ease-out">
         <div className="flex w-full max-w-3xl items-center justify-between">
           <button
             onClick={onEnd}
