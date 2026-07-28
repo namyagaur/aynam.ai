@@ -30,7 +30,7 @@ export default function RecordingSession({
   const started = recordingState !== "idle";
   const isPaused = recordingState === "paused";
   const isFinished = recordingState === "finished";
-
+  const [transcript, setTranscript] = useState("");
   useEffect(() => {
     setSecondsLeft(duration * 60);
   }, [duration]);
