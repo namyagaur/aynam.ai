@@ -48,7 +48,7 @@ export default function TopicGenerator({
 
     setRolling(true);
 
-    const totalSteps = 22 + Math.floor(Math.random() * 10);
+    const totalSteps = 12 + Math.floor(Math.random() * 5);
 
     let step = 0;
 
@@ -58,7 +58,7 @@ export default function TopicGenerator({
       setCurrentIndex((prev) => (prev + 1) % topics.length);
 
       if (step < totalSteps) {
-        const speed = Math.min(50 + step * 8, 250);
+        const speed = Math.min(35 + step * 5, 110);
 
         setTimeout(roll, speed);
       } else {

@@ -17,26 +17,29 @@ export default function TopicRow({
   }}
       className={`
         flex
-        h-12
+        h-10
         items-center
-        px-6
+        justify-center
         transition-all
         duration-300
         ${
           selected
-  ? "scale-[1.03]"
-            : "scale-[0.95]"
+? "scale-[1.04]"
+            : "scale-100"
         }
       `}
     >
       <p
   className={`
-    line-clamp-2
-    leading-snug
+    whitespace-nowrap
+    overflow-hidden
+    text-ellipsis
+    transition-all
+    duration-300
     ${
       selected
-  ? "text-base font-semibold text-violet-700"
-        : "text-sm text-zinc-500"
+        ? "text-xl font-semibold text-[#6C63FF]"
+        : "text-base text-[#A8A1B8]"
     }
   `}
 >
