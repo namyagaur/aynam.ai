@@ -40,8 +40,7 @@ export default function RecordingSession({
     totalSeconds > 0 ? (elapsed / totalSeconds) * 360 : 0;
 
     return (
-<div className="flex h-full min-h-[calc(100vh-88px)] w-full bg-white">
-          {/* Recording Panel */}
+<div className="flex h-full min-h-[calc(100vh-88px)] w-full">          {/* Recording Panel */}
       <div className="flex flex-1 flex-col items-center px-10 pt-8 pb-6 transition-all duration-300 ease-out">
         <div className="flex w-full max-w-3xl items-center justify-between">
           <button
@@ -176,7 +175,7 @@ export default function RecordingSession({
 
       {/* Live Transcript Sidebar */}
       <div
-        className={`h-screen shrink-0 overflow-hidden border-l border-zinc-100 bg-white transition-all duration-300 ease-out ${
+        className={`h-screen shrink-0 overflow-hidden border-l border-zinc-100/70 transition-all duration-300 ease-out ${
           showTranscript ? "w-[320px]" : "w-0"
         }`}
       >
