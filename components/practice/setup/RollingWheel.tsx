@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import TopicRow from "./TopicRow";
 
 type RollingWheelProps = {
@@ -23,16 +23,16 @@ export default function RollingWheel({
 
       
       {/* Wheel */}
-      <AnimatePresence mode="wait">
+      
         <motion.div
-          key={currentIndex}
-          initial={{ y: -48, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 48, opacity: 0 }}
-          transition={{
-            duration: 0.35,
-            ease: "easeInOut",
-          }}
+       
+          animate={{
+  y: [0, -18, 0],
+}}
+transition={{
+  duration: 0.18,
+  ease: "easeOut",
+}}
           className="flex flex-col py-4"
         >
           <TopicRow topic={getTopic(-2)} opacity={20} />
@@ -45,7 +45,7 @@ export default function RollingWheel({
 
 <TopicRow topic={getTopic(2)} opacity={20} />
         </motion.div>
-      </AnimatePresence>
+      
     </div>
   );
 }
