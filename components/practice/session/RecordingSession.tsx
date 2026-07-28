@@ -27,14 +27,14 @@ const audioChunksRef = useRef<Blob[]>([]);
 
   // Only ticks once the user presses Start
   useEffect(() => {
-    if (!started) return;
+    if (!started || isPaused) return;
 
     const interval = setInterval(() => {
       setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [started]);
+  }, [started, isPaused]);
 
   const mm = Math.floor(secondsLeft / 60);
   const ss = secondsLeft % 60;
@@ -213,22 +213,23 @@ function togglePause() {
           ) : (
             <>
               <button
-                className="
-                h-10
-                w-32
-                rounded-full
-                border
-                border-zinc-200
-                bg-white
-                text-[14px]
-                font-medium
-                text-[#6759E8]
-                shadow-sm
-                transition
-                hover:bg-zinc-50
-              "
-              >
-                ⏸ Pause
+  onClick={togglePause}
+  className="
+    h-10
+    w-32
+    rounded-full
+    border
+    border-zinc-200
+    bg-white
+    text-[14px]
+    font-medium
+    text-[#6759E8]
+    shadow-sm
+    transition
+    hover:bg-zinc-50
+  "
+>
+                {isPaused ? "▶ Resume" : "⏸ Pause"}
               </button>
 
               <button
