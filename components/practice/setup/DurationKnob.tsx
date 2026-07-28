@@ -15,12 +15,12 @@ const START_ANGLE = 225;
 const END_ANGLE = 495;
 const SWEEP = END_ANGLE - START_ANGLE;
 
-const SIZE = 340;
+const SIZE = 290;
 const CENTER = SIZE / 2;
 
-const OUTER_RADIUS = 118;
-const TRACK_RADIUS = 104;
-const THUMB_RADIUS = 12;
+const OUTER_RADIUS = 98;
+const TRACK_RADIUS = 84;
+const THUMB_RADIUS = 10;
 
 const LABELS = [1, 5, 10, 15, 20];
 
@@ -295,7 +295,7 @@ export default function DurationKnob({
           <circle
             cx={CENTER}
             cy={CENTER}
-            r="72"
+            r="58"
             fill="url(#glass)"
             stroke="#ECECF2"
             strokeWidth="2"
@@ -304,7 +304,7 @@ export default function DurationKnob({
           <circle
             cx={CENTER}
             cy={CENTER}
-            r="82"
+            r="66"
             fill="none"
             stroke="#F7F7FA"
             strokeWidth="2"
@@ -317,7 +317,7 @@ export default function DurationKnob({
           textAnchor="middle"
           fill="#5E54E8"
           style={{
-            fontSize: 52,
+            fontSize: 44,
             fontWeight: 600,
           }}
         >
@@ -330,7 +330,7 @@ export default function DurationKnob({
           textAnchor="middle"
           className="fill-neutral-500"
           style={{
-            fontSize: 18,
+            fontSize: 16,
           }}
         >
           min
@@ -348,7 +348,7 @@ export default function DurationKnob({
             polarToCartesian(
               CENTER,
               CENTER,
-              OUTER_RADIUS + 28,
+              OUTER_RADIUS + 18,
               a
             );
 
