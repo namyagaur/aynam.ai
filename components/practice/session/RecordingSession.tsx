@@ -69,23 +69,23 @@ export default function RecordingSession({
         </div>
 
         {/* Topic */}
-        <h1 className="mt-0 max-w-xl text-center text-[22px] font-semibold leading-tight tracking-tight text-[#6B63F6]">
+<h1 className="mt-4 max-w-2xl text-center text-[30px] font-semibold leading-[1.15] tracking-[-0.03em] text-[#6B63F6]">
           {topic}
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-2 text-[13px] text-zinc-500">
+        <p className="mt-2 text-[15px] text-zinc-500">
           Speak naturally. There is no right or wrong answer.
         </p>
 
         {/* Duration Pill */}
-        <div className="mt-4 rounded-full border border-[#ECE9FF] bg-[#F7F6FF] px-3.5 py-1 text-[12px] font-medium text-[#6B63F6]">
+        <div className="mt-5 rounded-full border border-[#ECE9FF] bg-[#F7F6FF] px-3.5 py-1 text-[12px] font-medium text-[#6B63F6]">
           {duration} min session
         </div>
 
         {/* Timer */}
         <div
-          className="relative mt-5 aspect-square w-[160px] shrink-0 rounded-full"
+          className="relative mt-7 aspect-square w-[170px] shrink-0 rounded-full"
           style={{
             background: `conic-gradient(#7C6CF8 ${progressDeg}deg, #E5E7EB ${progressDeg}deg)`,
           }}
@@ -109,7 +109,7 @@ export default function RecordingSession({
         </div>
 
         {/* Bottom Buttons */}
-        <div className="mt-6 flex items-center gap-3">
+        <div className="mt-8 flex items-center gap-3">
           {!started ? (
             <button
               onClick={() => setStarted(true)}
@@ -169,7 +169,7 @@ export default function RecordingSession({
           )}
         </div>
 
-        <p className="mt-2 text-[11px] text-zinc-400">
+        <p className="mt-4 text-[11px] text-zinc-400">
           Your recording will be analyzed after finishing.
         </p>
       </div>
