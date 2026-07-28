@@ -348,7 +348,7 @@ export default function DurationKnob({
             polarToCartesian(
               CENTER,
               CENTER,
-              OUTER_RADIUS + 18,
+              OUTER_RADIUS + 17,
               a
             );
 
