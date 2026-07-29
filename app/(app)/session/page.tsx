@@ -1,10 +1,19 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 export default function SessionPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-[#101726] p-10 text-white">Loading session…</main>}>
+      <SessionPageContent />
+    </Suspense>
+  );
+}
+
+function SessionPageContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();  
+  const router = useRouter();
 
   // Read values passed from Practice page
   const [error, setError] = useState("");
@@ -18,7 +27,32 @@ export default function SessionPage() {
 >("idle");
 const [finalTranscript, setFinalTranscript] = useState("");
 const [interimTranscript, setInterimTranscript] = useState("");
-const recognitionRef = useRef<any>(null);
+type SpeechRecognitionEventLike = {
+  resultIndex: number;
+  results: Array<{
+    isFinal: boolean;
+    transcript: string;
+  }>;
+};
+
+type SpeechRecognitionErrorLike = {
+  error: string;
+};
+
+type SpeechRecognitionInstance = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start: () => void;
+  stop: () => void;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorLike) => void) | null;
+  onend: (() => void) | null;
+};
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
+const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
  useEffect(() => {
   if (recordingStatus !== "recording") return;
 
@@ -36,9 +70,11 @@ useEffect(() => {
 }, [finalTranscript, interimTranscript]);
 
 useEffect(() => {
-  const SpeechRecognition =
-    (window as any).SpeechRecognition ||
-    (window as any).webkitSpeechRecognition;
+  const windowWithSpeech = window as Window & {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  };
+  const SpeechRecognition = windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
     alert("Speech Recognition is not supported in this browser.");
@@ -52,12 +88,13 @@ useEffect(() => {
   recognition.interimResults = true;
   recognition.lang = "en-US";
   
-recognition.onresult = (event: any) => {
+recognition.onresult = (event: SpeechRecognitionEventLike) => {
   let interim = "";
   let final = "";
 
   for (let i = event.resultIndex; i < event.results.length; i++) {
-    const transcript = event.results[i][0].transcript;
+    const result = event.results[i];
+    const transcript = result.transcript;
 
     if (event.results[i].isFinal) {
       final += transcript + " ";
@@ -72,7 +109,7 @@ recognition.onresult = (event: any) => {
 
   setInterimTranscript(interim);
 };
-recognition.onerror = (event: any) => {
+recognition.onerror = (event: SpeechRecognitionErrorLike) => {
   if (event.error === "not-allowed") {
     setError("Microphone permission denied.");
   } else {
