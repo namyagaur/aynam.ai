@@ -30,7 +30,14 @@ export default function RecordingSession({
   const started = recordingState !== "idle";
   const isPaused = recordingState === "paused";
   const isFinished = recordingState === "finished";
-  const [transcript, setTranscript] = useState("");
+  type TranscriptSegment = {
+  id: string;
+  text: string;
+  start: number;
+  end: number;
+};
+
+const [transcript, setTranscript] = useState<TranscriptSegment[]>([]);
   useEffect(() => {
     setSecondsLeft(duration * 60);
   }, [duration]);
@@ -439,13 +446,15 @@ setTranscript(result.transcript);
           </div>
 
           <div className="mt-3 flex-1 space-y-3 overflow-y-auto text-[13px] leading-6">
-            {transcript ? (
-  <div className="text-zinc-700 whitespace-pre-wrap">
-    {transcript}
-  </div>
+            {transcript.length === 0 ? (
+  <div>Your speech will appear here...</div>
 ) : (
-  <div className="text-zinc-300">
-    Your speech will appear here...
+  <div className="space-y-3">
+    {transcript.map((segment) => (
+      <div key={segment.id}>
+        <p>{segment.text}</p>
+      </div>
+    ))}
   </div>
 )}
           </div>

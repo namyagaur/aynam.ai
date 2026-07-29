@@ -1,5 +1,12 @@
+export interface TranscriptSegment {
+  id: string;
+  text: string;
+  start: number;
+  end: number;
+}
+
 export interface SpeechResult {
-  transcript: string;
+  transcript: TranscriptSegment[];
 }
 
 export async function transcribeAudio(
@@ -19,6 +26,13 @@ export async function transcribeAudio(
 console.log(data);
 
 return {
-  transcript: data.transcript,
+  transcript: [
+    {
+      id: crypto.randomUUID(),
+      text: data.transcript,
+      start: 0,
+      end: 0,
+    },
+  ],
 };
 }
