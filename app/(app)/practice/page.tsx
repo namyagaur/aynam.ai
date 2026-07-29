@@ -1,5 +1,3 @@
-import PracticeHeader from "@/components/practice/setup/PracticeHeader";
-import ModeSelector from "@/components/practice/setup/ModeSelector";
 import TopicGenerator from "@/components/practice/setup/TopicGenerator";
 export default function PracticePage() {
   return (
