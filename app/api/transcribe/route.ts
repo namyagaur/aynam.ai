@@ -12,19 +12,20 @@ export async function POST(request: Request) {
 
   if (!(audioFile instanceof File)) {
     return NextResponse.json(
-      {
-        error: "No audio file received.",
-      },
-      {
-        status: 400,
-      }
+      { error: "No audio file received." },
+      { status: 400 }
     );
   }
 
+  const transcription = await groq.audio.transcriptions.create({
+    file: audioFile,
+    model: "whisper-large-v3",
+    response_format: "verbose_json",
+    language: "en",
+    temperature: 0,
+  });
+
   return NextResponse.json({
-    success: true,
-    fileName: audioFile.name,
-    fileSize: audioFile.size,
-    fileType: audioFile.type,
+    transcript: transcription.text,
   });
 }
