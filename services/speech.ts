@@ -16,9 +16,9 @@ export async function transcribeAudio(
 
   const data = await response.json();
 
-  console.log(data);
+console.log(data);
 
-  return {
-    transcript: "Uploading audio...",
-  };
+return {
+  transcript: data.transcript,
+};
 }
