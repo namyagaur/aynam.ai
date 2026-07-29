@@ -5,12 +5,20 @@ export interface SpeechResult {
 export async function transcribeAudio(
   audio: Blob
 ): Promise<SpeechResult> {
-  console.log("Received audio:", audio);
+  const formData = new FormData();
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  formData.append("file", audio, "recording.webm");
+
+  const response = await fetch("/api/transcribe", {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  console.log(data);
 
   return {
-    transcript:
-      "Hello! This is a dummy transcript coming from speech.ts. If you can read this, the architecture is working correctly.",
+    transcript: "Uploading audio...",
   };
 }
