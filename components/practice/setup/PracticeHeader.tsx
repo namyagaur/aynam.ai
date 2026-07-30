@@ -6,7 +6,7 @@ export default function PracticeHeader() {
       </h1>
 
       <p className="mt-2 text-[15px] text-[#77747F]">
-Let's practice something meaningful today.      </p>
+Let&apos;s practice something meaningful today.      </p>
     </header>
   );
 }
