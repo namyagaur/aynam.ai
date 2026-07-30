@@ -43,7 +43,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   const animationFrameRef = useRef<number | null>(null);
   const microphoneRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const startedAtRef = useRef<number | null>(null);
-  const { transcript, appendSegment, replaceSegment, reset: resetTranscript } = useTranscript();
+  const { liveTranscript, appendSegment, replaceSegment, reset: resetTranscript } = useTranscript();
 
   const clearChunkTimer = useCallback(() => {
     if (chunkTimerRef.current) {
@@ -422,11 +422,11 @@ enqueueChunkTranscription(
 
   return useMemo(() => ({
     ...state,
-    transcript,
+    liveTranscript,
     startRecording,
     pauseRecording,
     resumeRecording,
     finishRecording,
     reset,
-  }), [state, transcript, startRecording, pauseRecording, resumeRecording, finishRecording, reset]);
+  }), [state, liveTranscript, startRecording, pauseRecording, resumeRecording, finishRecording, reset]);
 }
