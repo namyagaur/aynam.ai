@@ -120,7 +120,7 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
       </div>
 
       <TranscriptPanel
-        transcript={engine.transcript}
+        liveTranscript={engine.liveTranscript}
         showTranscript={showTranscript}
         onToggle={() => setShowTranscript(false)}
         isListening={isRecording}
