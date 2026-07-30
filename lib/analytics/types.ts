@@ -48,18 +48,23 @@ export interface BasicMetrics {
   characterCount: number;
 }
 
-export interface SpeechAnalytics {
+/** Reserved for future objective pause analysis. */
+export interface PauseMetrics {
+  readonly _reserved?: never;
+}
+
+/** Reserved for future objective repetition analysis. */
+export interface RepetitionMetrics {
+  readonly _reserved?: never;
+}
+
+export interface SpeechAnalysis {
   basic: BasicMetrics;
-
   pace: PaceMetrics;
-
   vocabulary: VocabularyMetrics;
-
   sentences: SentenceMetrics;
-
   fillers: FillerMetrics;
-
   confidence: ConfidenceMetrics;
-
-  analyticsSummary: string;
+  pauses?: PauseMetrics;
+  repetitions?: RepetitionMetrics;
 }

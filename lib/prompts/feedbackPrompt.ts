@@ -1,8 +1,8 @@
-import { SpeechAnalytics } from "@/lib/analytics";
+import type { SpeechAnalysis } from "@/lib/analytics";
 
 interface PromptParams {
   transcript: string;
-  analytics: SpeechAnalytics;
+  analytics: SpeechAnalysis;
   topic?: string;
   difficulty?: string;
 }
