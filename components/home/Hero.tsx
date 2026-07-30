@@ -37,7 +37,7 @@ export default function Hero() {
               text-[#58586C]
             "
           >
-            Let's continue improving your{" "}
+            Let&apos;s continue improving your{" "}
             <span className="text-[#7F63FF] font-medium">
               communication.
             </span>
