@@ -31,7 +31,7 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
     text-zinc-500
   "
 >
-  Take your time. You've got this.
+  Take your time. You&apos;ve got this.
 </p>
 
 <div className="mt-4 flex flex-col items-center">

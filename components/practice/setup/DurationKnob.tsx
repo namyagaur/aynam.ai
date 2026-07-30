@@ -1,7 +1,7 @@
 // DurationKnob.tsx
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   value: number; // 1 - 20
@@ -68,6 +68,7 @@ function angleToValue(deg: number) {
 export default function DurationKnob({ value, onChange }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
   const dragging = useRef(false);
+  const handleUpRef = useRef<(() => void) | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const angle = useMemo(() => valueToAngle(value), [value]);
@@ -139,8 +140,21 @@ export default function DurationKnob({ value, onChange }: Props) {
     dragging.current = false;
     setIsDragging(false);
     window.removeEventListener("pointermove", handleMove);
-    window.removeEventListener("pointerup", handleUp);
+    if (handleUpRef.current) {
+      window.removeEventListener("pointerup", handleUpRef.current);
+    }
   }, [handleMove]);
+
+  useEffect(() => {
+    handleUpRef.current = handleUp;
+
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      if (handleUpRef.current) {
+        window.removeEventListener("pointerup", handleUpRef.current);
+      }
+    };
+  }, [handleMove, handleUp]);
 
   const handleDown = useCallback(
     (e: React.PointerEvent<SVGSVGElement>) => {
