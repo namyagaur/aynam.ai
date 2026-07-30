@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { transcribeAudio } from "@/services/speech";
+import { transcribeAudio } from "@/services/transcriber";
 import { useTranscript } from "@/hooks/useTranscript";
 import { TranscriptionQueue } from "@/services/transcriptionQueue";
 import {
