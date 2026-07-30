@@ -1,18 +1,27 @@
-import type { TranscriptSegment } from "@/types/transcript";
+import { useEffect, useRef } from "react";
 
 type Props = {
-  transcript: TranscriptSegment[];
+  liveTranscript: string;
   showTranscript: boolean;
   onToggle: () => void;
   isListening: boolean;
 };
 
 export default function TranscriptPanel({
-  transcript,
+  liveTranscript,
   showTranscript,
   onToggle,
   isListening,
 }: Props) {
+  const transcriptContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    transcriptContainerRef.current?.scrollTo({
+      top: transcriptContainerRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [liveTranscript]);
+
   return (
     <div
       className={`h-full shrink-0 overflow-hidden border-l border-zinc-100/70 transition-all duration-300 ease-out ${
@@ -52,17 +61,11 @@ export default function TranscriptPanel({
           {isListening ? "Listening..." : "Stand by"}
         </div>
 
-        <div className="mt-3 flex-1 space-y-3 overflow-y-auto text-[13px] leading-6">
-          {transcript.length === 0 ? (
+        <div ref={transcriptContainerRef} className="mt-3 flex-1 overflow-y-auto text-[13px] leading-6">
+          {!liveTranscript ? (
             <div>Your speech will appear here...</div>
           ) : (
-            <div className="space-y-3">
-              {transcript.map((segment) => (
-                <div key={segment.id}>
-                  <p>{segment.text}</p>
-                </div>
-              ))}
-            </div>
+            <p>{liveTranscript}</p>
           )}
         </div>
 
