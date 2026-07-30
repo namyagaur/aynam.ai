@@ -28,21 +28,18 @@ export default function Typewriter({
   useEffect(() => {
     completed.current = false;
 
-    setDisplayed("");
-    setShowCursor(cursor);
-
-    const start = setTimeout(() => {
+    const start = window.setTimeout(() => {
       let i = 0;
 
-      const interval = setInterval(() => {
+      const interval = window.setInterval(() => {
         i++;
 
         setDisplayed(text.slice(0, i));
 
         if (i >= text.length) {
-          clearInterval(interval);
+          window.clearInterval(interval);
 
-          setTimeout(() => {
+          window.setTimeout(() => {
             setShowCursor(false);
 
             if (!completed.current) {
@@ -53,10 +50,10 @@ export default function Typewriter({
         }
       }, speed);
 
-      return () => clearInterval(interval);
+      return () => window.clearInterval(interval);
     }, delay);
 
-    return () => clearTimeout(start);
+    return () => window.clearTimeout(start);
   }, [text, speed, delay, cursor, onComplete]);
 
   return (

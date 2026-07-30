@@ -1,11 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Onboarding() {
-  const router = useRouter();
-
   const [step, setStep] = useState(0);
 
   const [form, setForm] = useState({
@@ -81,7 +78,7 @@ const toggleGoal = (goal: string) => {
     </h1>
 
     <p className="text-white/60">
-        Choose as many as you'd like.
+        Choose as many as you&apos;d like.
     </p>
 
     <div className="grid grid-cols-2 gap-4">
