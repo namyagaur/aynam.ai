@@ -1,55 +1,39 @@
-export default function ReviewIntro() {
+import { ArrowLeft, AudioLines } from "lucide-react";
+import { mockSessionReview } from "@/lib/data/mockSessionReview";
+
+export function ReviewIntro() {
+  const { session } = mockSessionReview;
+
   return (
-    <section className="mb-12">
-
-      {/* Top Bar */}
-
+    <div className="w-full">
       <div className="flex items-center justify-between">
-
-        <button className="flex items-center gap-2 text-[15px] font-medium text-[#4B5563] transition hover:text-black">
-
-          <span className="text-lg">←</span>
-
-          <span>End Session</span>
-
+        <button
+          type="button"
+          className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-800"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          End Session
         </button>
 
-        <div className="flex items-center gap-3">
-
-          <div className="rounded-full bg-[#F3F0FF] px-5 py-2 text-sm font-medium text-[#5B5CEB]">
-
-            3 min selected
-
-          </div>
-
-          <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[#ECECEC] bg-white shadow-sm transition hover:bg-[#FAFAFA]">
-
-            ✦
-
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-indigo-50 px-3.5 py-1.5 text-sm font-medium text-indigo-600">
+            {session.durationLabel}
+          </span>
+          <button
+            type="button"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50"
+          >
+            <AudioLines className="h-4 w-4" />
           </button>
-
         </div>
-
       </div>
 
-      {/* Title */}
-
-      <div className="mt-14 flex flex-col items-center">
-
-        <h1 className="text-[54px] font-semibold tracking-[-0.04em] text-[#5B5CEB]">
-
+      <div className="mt-6 text-center">
+        <h1 className="text-3xl font-bold tracking-tight text-indigo-600">
           Session Review
-
         </h1>
-
-        <p className="mt-3 text-[17px] text-[#6B7280]">
-
-          Great job, Namya! Here's your communication breakdown.
-
-        </p>
-
+        <p className="mt-1.5 text-sm text-gray-500">{session.subtitle}</p>
       </div>
-
-    </section>
+    </div>
   );
 }
