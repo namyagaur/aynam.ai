@@ -28,11 +28,16 @@ export function ReviewIntro() {
         </div>
       </div>
 
-      <div className="mt-6 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-indigo-600">
+      <div className="mt-10 text-center">
+        <h1 className="text-[54px]
+leading-none
+font-semibold
+tracking-[-0.04em] font-bold tracking-tight text-indigo-600">
           Session Review
         </h1>
-        <p className="mt-1.5 text-sm text-gray-500">{session.subtitle}</p>
+        <p className="mt-1.5 text-[17px]
+leading-7
+text-[#667085] text-gray-500">{session.subtitle}</p>
       </div>
     </div>
   );
