@@ -1,31 +1,23 @@
-export default function ReviewHeader() {
+import ReviewHeader from "./ReviewHeader";
+
+export default function ReviewPageOne() {
   return (
-    <header className="mb-10">
-      <div className="flex items-center justify-between">
-        <button className="flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground">
-          ? End Session
-        </button>
+    <section className="mx-auto w-full max-w-6xl">
 
-        <div className="flex items-center gap-3">
-          <div className="rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-            3 min selected
-          </div>
+      <ReviewHeader />
 
-          <button className="flex h-10 w-10 items-center justify-center rounded-full border">
-            ?
-          </button>
-        </div>
-      </div>
+      <section className="mt-10 flex flex-col items-center">
 
-      <div className="mt-14 text-center">
-        <h1 className="text-5xl font-semibold tracking-tight text-primary">
+        <h1 className="text-5xl font-semibold tracking-tight text-[#5B5CEB]">
           Session Review
         </h1>
 
-        <p className="mt-5 text-lg text-muted-foreground">
+        <p className="mt-3 text-lg text-[#6B7280]">
           Great job, Namya! Here's your communication breakdown.
         </p>
-      </div>
-    </header>
+
+      </section>
+
+    </section>
   );
 }
