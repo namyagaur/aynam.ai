@@ -2,7 +2,7 @@ import { ReviewPageOne } from "./overview";
 
 export function SessionReview() {
   return (
-    <div className="h-screen w-full overflow-hidden bg-[#FCFCFD]">
+    <div className="flex h-screen w-full flex-col justify-center overflow-hidden bg-[#FCFCFD]">
       <ReviewPageOne />
     </div>
   );
