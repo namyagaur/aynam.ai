@@ -8,7 +8,7 @@ export function SessionHighlights() {
     <div className="mt-6">
       <h2 className="text-base font-semibold text-gray-900">Session Highlights</h2>
 
-      <div className="mt-3 grid grid-cols-3 gap-4">
+      <div className="mt-3 grid grid-cols-3 gap-6">
         <HighlightCard
           icon={Star}
           iconBg="bg-green-50"
@@ -57,7 +57,7 @@ function HighlightCard({
   BulletIcon?: React.ElementType;
 }) {
   return (
-    <div className="rounded-xl border border-gray-100 p-5">
+    <div className="min-h-[230px] rounded-[24px] border border-gray-100 p-6">
       <div className="flex items-center gap-2.5">
         <span className={`flex h-7 w-7 items-center justify-center rounded-full ${iconBg}`}>
           <Icon className={`h-3.5 w-3.5 ${iconColor}`} />
@@ -65,7 +65,7 @@ function HighlightCard({
         <p className="text-sm font-semibold text-gray-900">{title}</p>
       </div>
 
-      <ul className="mt-3 space-y-2.5">
+      <ul className="mt-3 space-y-4">
         {items.map((item, i) => (
           <li key={i} className="flex items-start gap-2 text-sm leading-snug text-gray-500">
             {BulletIcon && bulletColor ? (
