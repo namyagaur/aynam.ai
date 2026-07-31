@@ -5,7 +5,7 @@ export function ReviewIntro() {
   const { session } = mockSessionReview;
 
   return (
-    <div className="w-full">
+    <div className="mx-auto w-full max-w-[980px]">
       <div className="flex items-center justify-between">
         <button
           type="button"
@@ -16,28 +16,23 @@ export function ReviewIntro() {
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-indigo-50 px-3.5 py-1.5 text-sm font-medium text-indigo-600">
+          <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">
             {session.durationLabel}
           </span>
           <button
             type="button"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50"
           >
-            <AudioLines className="h-4 w-4" />
+            <AudioLines className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
-      <div className="mt-10 text-center">
-        <h1 className="text-[54px]
-leading-none
-font-semibold
-tracking-[-0.04em] font-bold tracking-tight text-indigo-600">
+      <div className="mt-2 text-center">
+        <h1 className="text-[30px] font-bold tracking-tight text-indigo-600">
           Session Review
         </h1>
-        <p className="mt-1.5 text-[17px]
-leading-7
-text-[#667085] text-gray-500">{session.subtitle}</p>
+        <p className="mt-0.5 text-sm text-gray-500">{session.subtitle}</p>
       </div>
     </div>
   );
