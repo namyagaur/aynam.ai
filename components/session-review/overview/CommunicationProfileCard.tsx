@@ -38,7 +38,7 @@ function RadarChart({ scores }: { scores: Record<string, number> }) {
   const axisLines = pillars.map((p) => toPoint(p.angle, MAX_RADIUS));
 
   return (
-    <svg viewBox="0 0 300 300" className="h-[300px] w-[300px]">
+    <svg viewBox="0 0 300 300" className="h-[360px] w-[360px]">
       {gridPolygons.map((points, i) => (
         <polygon
           key={i}
@@ -80,7 +80,7 @@ export function CommunicationProfileCard() {
   const right = pillars.filter((p) => p.angle === 60 || p.angle === 0 || p.angle === 300);
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
+    <div className="rounded-2xl border border-[#F1F3F5] bg-white p-10 shadow-[0_8px_40px_rgba(15,23,42,0.05)]">
       <div className="flex items-center gap-2">
         <h2 className="text-base font-semibold text-gray-900">
           Your Communication Profile
@@ -104,7 +104,7 @@ export function CommunicationProfileCard() {
         </div>
       </div>
 
-      <p className="mt-2 text-center text-sm text-gray-400">
+      <p className="mt-2 text-center text-[15px] text-gray-400">
         Each pillar shows how effectively you communicated.
       </p>
     </div>
@@ -122,13 +122,13 @@ function PillarLabel({
 }) {
   const Icon = pillar.icon;
   return (
-    <div className={`flex items-center gap-2.5 ${align === "right" ? "flex-row-reverse text-right" : ""}`}>
+    <div className={`flex items-center gap-4 ${align === "right" ? "flex-row-reverse text-right" : ""}`}>
       <span className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${pillar.iconBg}`}>
         <Icon className={`h-4 w-4 ${pillar.iconColor}`} />
       </span>
       <div>
-        <p className="text-sm font-medium text-gray-900">{pillar.label}</p>
-        <p className="text-sm text-gray-900">
+        <p className="text-[15px] font-medium text-gray-900">{pillar.label}</p>
+        <p className="text-[15px] text-gray-900">
           <span className="font-semibold">{score}</span>
           <span className="text-gray-400"> /100</span>
         </p>
