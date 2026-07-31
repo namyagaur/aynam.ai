@@ -1,20 +1,17 @@
-import ReviewIntro from "./ReviewIntro";
-import CommunicationProfileCard from "./CommunicationProfileCard";
-import SessionHighlights from "./SessionHighlights";
-import ReviewPagination from "./ReviewPagination";
+import { ReviewIntro } from "./ReviewIntro";
+import { CommunicationProfileCard } from "./CommunicationProfileCard";
+import { SessionHighlights } from "./SessionHighlights";
+import { ReviewPagination } from "./ReviewPagination";
 
-export default function ReviewPageOne() {
+export function ReviewPageOne() {
   return (
-    <div className="mx-auto max-w-6xl">
-
+    <div className="mx-auto flex h-full w-full max-w-[540px] flex-col justify-center px-6 py-6">
       <ReviewIntro />
-
-      <CommunicationProfileCard />
-
-      <SessionHighlights />
-
-      <ReviewPagination />
-
+      <div className="mt-6">
+        <CommunicationProfileCard />
+        <SessionHighlights />
+        <ReviewPagination />
+      </div>
     </div>
   );
 }
