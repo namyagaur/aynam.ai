@@ -5,7 +5,7 @@ export function ReviewPagination() {
   const dots = Array.from({ length: pagination.totalPages });
 
   return (
-    <div className="mt-5 flex items-center justify-center gap-2">
+    <div className="mt-10 flex items-center justify-center gap-2">
       <div className="flex items-center gap-1.5">
         {dots.map((_, i) => (
           <span

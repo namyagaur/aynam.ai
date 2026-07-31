@@ -5,8 +5,8 @@ import { ReviewPagination } from "./ReviewPagination";
 
 export function ReviewPageOne() {
   return (
-    <div className="mx-auto flex h-full w-full max-w-[540px] flex-col justify-center px-6 py-6">
-      <ReviewIntro />
+<div className="mx-auto flex h-full w-full max-w-[1180px] flex-col">
+        <ReviewIntro />
       <div className="mt-6">
         <CommunicationProfileCard />
         <SessionHighlights />
