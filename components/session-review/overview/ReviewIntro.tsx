@@ -1,9 +1,9 @@
 import { ArrowLeft, AudioLines } from "lucide-react";
 import { mockSessionReview } from "@/lib/data/mockSessionReview";
 
-type Props = { title?: string; subtitle?: string };
+type Props = { title?: string; subtitle?: string; onNext?: () => void };
 
-export function ReviewIntro({ title = "Session Review", subtitle }: Props) {
+export function ReviewIntro({ title = "Session Review", subtitle, onNext }: Props) {
   const { session } = mockSessionReview;
 
   return (
@@ -17,16 +17,19 @@ export function ReviewIntro({ title = "Session Review", subtitle }: Props) {
           End Session
         </button>
 
-        <div className="flex items-center gap-2">
-          <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">
-            {session.durationLabel}
-          </span>
-          <button
-            type="button"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50"
-          >
-            <AudioLines className="h-3.5 w-3.5" />
-          </button>
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">
+              {session.durationLabel}
+            </span>
+            <button
+              type="button"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:bg-gray-50"
+            >
+              <AudioLines className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          {onNext ? <button type="button" onClick={onNext} className="rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs font-medium text-indigo-600 shadow-sm transition hover:bg-indigo-50">Next →</button> : null}
         </div>
       </div>
 

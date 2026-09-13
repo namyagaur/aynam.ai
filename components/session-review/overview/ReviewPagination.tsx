@@ -12,7 +12,7 @@ export function ReviewPagination({ currentPage, onPrevious, onNext }: Props) {
   const dots = Array.from({ length: pagination.totalPages });
 
   return (
-    <div className="mt-auto flex items-center justify-center gap-3 pt-4">
+    <div className="mt-2 flex items-center justify-center gap-3 pt-4">
       {onPrevious ? (
         <button type="button" aria-label="Previous review page" onClick={onPrevious} className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-indigo-200 hover:text-indigo-600">
           <ChevronLeft className="h-4 w-4" />
@@ -32,8 +32,8 @@ export function ReviewPagination({ currentPage, onPrevious, onNext }: Props) {
         Page {currentPage} of {pagination.totalPages}
       </span>
       {onNext ? (
-        <button type="button" aria-label="Next review page" onClick={onNext} className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-indigo-200 hover:text-indigo-600">
-          <ChevronRight className="h-4 w-4" />
+        <button type="button" aria-label="Next review page" onClick={onNext} className="flex h-9 items-center gap-1 rounded-full border border-indigo-200 bg-white px-3 text-sm font-medium text-indigo-600 shadow-sm transition hover:bg-indigo-50">
+          Next <ChevronRight className="h-4 w-4" />
         </button>
       ) : null}
     </div>

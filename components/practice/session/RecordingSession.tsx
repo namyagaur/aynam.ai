@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useRecordingEngine } from "@/hooks/useRecordingEngine";
 import Timer from "./Timer";
 import TranscriptPanel from "./TranscriptPanel";
@@ -13,10 +14,26 @@ type Props = {
 };
 
 export default function RecordingSession({ topic, duration, onEnd }: Props) {
+  const router = useRouter();
   const [showTranscript, setShowTranscript] = useState(false);
   const engine = useRecordingEngine(duration);
   const isFinished = engine.recordingState === "finished";
   const isRecording = engine.recordingState === "recording";
+  const [isFinishing, setIsFinishing] = useState(false);
+
+  const finishAndOpenReview = async () => {
+    setIsFinishing(true);
+    try {
+      const transcript = await engine.finishRecording();
+      sessionStorage.setItem(
+        "session-review-input",
+        JSON.stringify({ transcript, topic, durationSeconds: duration * 60 })
+      );
+      router.push("/session/review");
+    } catch {
+      setIsFinishing(false);
+    }
+  };
 
   const statusMessage = useMemo(() => {
     if (engine.error) {
@@ -96,7 +113,8 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
               </button>
 
               <button
-                onClick={engine.finishRecording}
+                onClick={() => void finishAndOpenReview()}
+                disabled={isFinishing}
                 className="h-10 w-44 rounded-full bg-[#6B63F6] text-[14px] font-medium text-white shadow-[0_10px_20px_rgba(107,99,246,.2)] transition hover:scale-[1.01]"
               >
                 ■ Finish Session

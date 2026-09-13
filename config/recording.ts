@@ -7,7 +7,8 @@ export const RecordingConfig = {
   maxChunkRetries: 3,
   retryBaseDelayMs: 500,
   retryMaxDelayMs: 4000,
-  minChunkSize: 5000,
+  // Brief answers may create a small Opus/WebM blob; do not discard them.
+  minChunkSize: 512,
   hallucinationFilter: {
     enabled: true,
     patterns: [

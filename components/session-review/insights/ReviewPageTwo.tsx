@@ -8,9 +8,9 @@ export function ReviewPageTwo({ onPrevious }: { onPrevious: () => void }) {
   const maxFiller = Math.max(...insights.fillers.map((item) => item.count));
 
   return (
-    <div className="mx-auto flex h-full max-h-full w-full max-w-[1120px] flex-col px-10 pt-6 pb-4">
+    <div className="mx-auto flex min-h-full w-full max-w-[1120px] flex-col px-10 pt-6 pb-6">
       <ReviewIntro title={insights.title} subtitle={insights.subtitle} />
-      <div className="mt-5 grid flex-1 grid-cols-5 grid-rows-[1fr_0.92fr] gap-4">
+      <div className="mt-5 grid grid-cols-5 grid-rows-[1fr_0.92fr] gap-4">
         <section className="col-span-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
           <SectionTitle icon={Lightbulb} label="Try saying it like this" />
           <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2">

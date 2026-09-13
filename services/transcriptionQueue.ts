@@ -14,4 +14,8 @@ export class TranscriptionQueue {
     this.queue = task.then(() => undefined);
     return task;
   }
+
+  drain() {
+    return this.queue;
+  }
 }
