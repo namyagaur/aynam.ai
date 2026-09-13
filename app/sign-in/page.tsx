@@ -10,19 +10,27 @@ export default function SignInPage() {
 const [error, setError] = useState("");
 
 async function handleSignIn() {
+  console.log("LOGIN BUTTON CLICKED");
+  console.log("EMAIL:", email);
+
   setLoading(true);
   setError("");
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
+
+  console.log("SUPABASE DATA:", data);
+  console.log("SUPABASE ERROR:", error);
 
   if (error) {
     setError(error.message);
     setLoading(false);
     return;
   }
+
+  console.log("LOGIN SUCCESS");
 
   window.location.href = "/dashboard";
 }
