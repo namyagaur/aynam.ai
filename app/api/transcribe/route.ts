@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 export async function POST(request: Request) {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    console.error("[transcribe] GROQ_API_KEY is not configured");
+    return NextResponse.json(
+      { error: "Live transcription is not configured. Add GROQ_API_KEY to your environment." },
+      { status: 500 }
+    );
+  }
+
   const contentType = request.headers.get("content-type") ?? "";
 
   if (!contentType.includes("multipart/form-data")) {
@@ -45,6 +50,7 @@ export async function POST(request: Request) {
       fileSize: audioFile.size,
     });
 
+    const groq = new Groq({ apiKey });
     const transcription = await groq.audio.transcriptions.create({
       file: audioFile,
       model: "whisper-large-v3",
@@ -52,21 +58,16 @@ export async function POST(request: Request) {
       language: "en",
       temperature: 0,
     });
-    console.log("Groq returned:", transcription);
-console.log("Groq text:", transcription.text);
-
     return NextResponse.json({
       transcript: transcription.text,
     });
   } catch (error) {
-    console.error("[transcribe] failed to parse multipart body", {
+    console.error("[transcribe] request failed", {
       contentType,
       error,
     });
 
-    return NextResponse.json(
-      { error: "Failed to parse multipart form-data body." },
-      { status: 400 }
-    );
+    const message = error instanceof Error ? error.message : "Unable to transcribe audio.";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

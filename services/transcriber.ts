@@ -75,7 +75,11 @@ export async function transcribeAudio(
       });
 
       if (!response.ok) {
-        throw new Error(`Transcription failed with status ${response.status}`);
+        const errorPayload = await response.json().catch(() => null);
+        const message = typeof errorPayload?.error === "string"
+          ? errorPayload.error
+          : `Transcription failed with status ${response.status}`;
+        throw new Error(message);
       }
 
       const data = await response.json();

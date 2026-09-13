@@ -57,7 +57,7 @@ function HighlightCard({
   BulletIcon?: React.ElementType;
 }) {
   return (
-    <div className="rounded-2xl border border-gray-100 p-5">
+    <div className="rounded-2xl border border-gray-100 p-4">
       <div className="flex items-center gap-2">
         <span className={`flex h-6 w-6 items-center justify-center rounded-full ${iconBg}`}>
           <Icon className={`h-3 w-3 ${iconColor}`} />
@@ -65,7 +65,7 @@ function HighlightCard({
         <p className="text-sm font-semibold text-gray-900">{title}</p>
       </div>
 
-      <ul className="mt-2 space-y-3">
+      <ul className="mt-2 space-y-2">
         {items.map((item, i) => (
           <li key={i} className="flex items-start gap-1.5 text-[13px] leading-snug text-gray-500">
             {BulletIcon && bulletColor ? (

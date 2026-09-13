@@ -1,9 +1,15 @@
+"use client";
+
+import { useState } from "react";
 import { ReviewPageOne } from "./overview";
+import { ReviewPageTwo } from "./insights";
 
 export function SessionReview() {
+  const [page, setPage] = useState<1 | 2>(1);
+
   return (
-    <div className="flex h-screen w-full flex-col justify-center overflow-hidden bg-[#FCFCFD]">
-      <ReviewPageOne />
-    </div>
+    <main className="h-screen overflow-hidden bg-[#FCFCFD]">
+      {page === 1 ? <ReviewPageOne onNext={() => setPage(2)} /> : <ReviewPageTwo onPrevious={() => setPage(1)} />}
+    </main>
   );
 }

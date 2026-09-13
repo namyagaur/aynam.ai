@@ -1,7 +1,9 @@
 import { ArrowLeft, AudioLines } from "lucide-react";
 import { mockSessionReview } from "@/lib/data/mockSessionReview";
 
-export function ReviewIntro() {
+type Props = { title?: string; subtitle?: string };
+
+export function ReviewIntro({ title = "Session Review", subtitle }: Props) {
   const { session } = mockSessionReview;
 
   return (
@@ -30,9 +32,9 @@ export function ReviewIntro() {
 
       <div className="mt-2 text-center">
         <h1 className="text-[30px] font-bold tracking-tight text-indigo-600">
-          Session Review
+          {title}
         </h1>
-        <p className="mt-0.5 text-sm text-gray-500">{session.subtitle}</p>
+        <p className="mt-0.5 text-sm text-gray-500">{subtitle ?? session.subtitle}</p>
       </div>
     </div>
   );

@@ -52,7 +52,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
     }
   }, []);
 
-  const cleanupResources = useCallback(() => {
+  const cleanupResources = useCallback((abortTranscriptions = true) => {
     recordingActiveRef.current = false;
     clearChunkTimer();
 
@@ -86,8 +86,10 @@ export function useRecordingEngine(totalDurationMinutes: number) {
     stopMediaRecorder(mediaRecorderRef.current);
     mediaRecorderRef.current = null;
 
-    transcriptionControllerRef.current?.abort();
-    transcriptionControllerRef.current = null;
+    if (abortTranscriptions) {
+      transcriptionControllerRef.current?.abort();
+      transcriptionControllerRef.current = null;
+    }
   }, [clearChunkTimer]);
 
   const clearAudioUrl = useCallback(() => {
@@ -213,6 +215,9 @@ export function useRecordingEngine(totalDurationMinutes: number) {
               });
             }
           } catch (error) {
+            const message = error instanceof Error ? error.message : "Unable to transcribe this audio segment.";
+            console.error("[recording] transcription failed", { chunkIndex, error });
+            setState((previous) => ({ ...previous, error: message }));
             replaceSegment(pendingSegment.id, {
               ...pendingSegment,
               status: error instanceof Error && error.name === "AbortError" ? "pending" : "failed",
@@ -392,7 +397,10 @@ enqueueChunkTranscription(
       setState((previous) => ({ ...previous, audioUrl: nextUrl }));
     }
 
-    cleanupResources();
+    // Let the recorder's final onstop handler enqueue its chunk and allow the
+    // queue to finish it. Aborting here used to discard the last (and often
+    // only) spoken audio when the user pressed Finish.
+    cleanupResources(false);
     setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
   }, [cleanupResources, clearChunkTimer]);
 

@@ -66,7 +66,7 @@ export function CommunicationProfileCard() {
   const right = pillars.filter((p) => p.angle === 60 || p.angle === 0 || p.angle === 300);
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white px-10 py-5 shadow-sm">
+    <div className="rounded-2xl border border-gray-100 bg-white px-10 py-4 shadow-sm">
       <div className="flex items-center gap-2">
         <h2 className="text-sm font-semibold text-gray-900">Your Communication Profile</h2>
         <Info className="h-3.5 w-3.5 text-gray-300" />
