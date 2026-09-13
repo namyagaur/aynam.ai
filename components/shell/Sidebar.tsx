@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
 import { usePathname } from "next/navigation";
 import {
   House,
@@ -37,7 +38,10 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-
+  async function handleLogout() {
+  await supabase.auth.signOut();
+  window.location.href = "/sign-in";
+}
   return (
     <aside
   className="w-[252px] border-r border-black/5"
