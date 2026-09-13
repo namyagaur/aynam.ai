@@ -278,7 +278,14 @@ enqueueChunkTranscription(
         }
 
         if (streamRef.current) {
-          startNextChunkRecorder(streamRef.current);
+          // Chromium can emit `stop` before the underlying encoder is fully
+          // released. Starting another recorder in the same event turn throws
+          // NotSupportedError, so yield briefly before opening the next chunk.
+          window.setTimeout(() => {
+            if (recordingActiveRef.current && streamRef.current) {
+              startNextChunkRecorder(streamRef.current);
+            }
+          }, 50);
         }
       };
 
