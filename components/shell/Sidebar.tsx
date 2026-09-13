@@ -25,7 +25,7 @@ const navItems = [
   },
   {
     title: "Insights",
-    href: "/feedback",
+    href: "/insights",
     icon: Sparkles,
   },
   {
