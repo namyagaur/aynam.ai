@@ -12,17 +12,17 @@ import ModeSelector from "./ModeSelector";
 import PracticeSetup from "./PracticeSetup";
 import PracticeHeader from "./PracticeHeader";
 import RecordingSession from "../session/RecordingSession";
-type Mode = "public-speaking" | "conversation" | "storytelling" | "social";
+type Mode = "public" | "conversation" | "storytelling" | "social" | "custom";
 
 type Props = {
   selectedMode?: Mode;
 };
 
 export default function TopicGenerator({
-  selectedMode = "public-speaking",
+  selectedMode = "public",
 }: Props) {
-  const getTopics = () => {
-    switch (selectedMode) {
+  const getTopics = (activeMode: Mode) => {
+    switch (activeMode) {
       case "conversation":
         return conversationTopics;
 
@@ -37,8 +37,9 @@ export default function TopicGenerator({
     }
   };
 
-  const topics = getTopics();
-
+  const [mode, setMode] = useState<Mode>(selectedMode);
+  const [topics, setTopics] = useState<string[]>(() => getTopics(selectedMode));
+  const [isGenerating, setIsGenerating] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rolling, setRolling] = useState(false);
   const [hasRolled, setHasRolled] = useState(false);
@@ -47,11 +48,39 @@ export default function TopicGenerator({
 >("topic");
   const [duration, setDuration] = useState(5);
 
+  const refreshTopics = async (activeMode = mode) => {
+    if (activeMode !== "custom") {
+      setTopics([...getTopics(activeMode)].sort(() => Math.random() - 0.5));
+      setCurrentIndex(0);
+      setHasRolled(true);
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await fetch("/api/topics", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: activeMode }) });
+      const data = await response.json();
+      if (!response.ok || !Array.isArray(data.topics)) throw new Error("Unable to create topics.");
+      setTopics(data.topics);
+      setCurrentIndex(0);
+      setHasRolled(true);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleModeChange = (nextMode: string) => {
+    const activeMode = nextMode as Mode;
+    setMode(activeMode);
+    void refreshTopics(activeMode);
+  };
+
   const handleRoll = () => {
     if (rolling) return;
 
     setRolling(true);
     setHasRolled(true);
+    if (mode === "custom") void refreshTopics();
     const totalSteps = 12 + Math.floor(Math.random() * 5);
 
     let step = 0;
@@ -94,7 +123,7 @@ export default function TopicGenerator({
       <>
       <PracticeHeader />
       <div className="-mt-2 mb-8">
-  <ModeSelector />
+  <ModeSelector selected={mode} onChange={handleModeChange} />
 </div>
         <RollingWheel
           topics={topics}
@@ -104,7 +133,7 @@ export default function TopicGenerator({
         <div className="mt-4 flex gap-3">
           <button
             onClick={handleRoll}
-            disabled={rolling}
+            disabled={rolling || isGenerating}
             className="
               rounded-full
               border
@@ -118,6 +147,8 @@ export default function TopicGenerator({
           >
             {rolling
               ? "Rolling..."
+              : isGenerating
+              ? "Creating topic..."
               : hasRolled
               ? "🎲 Roll Again"
               : "🎲 Roll Topic"}

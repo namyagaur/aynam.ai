@@ -1,11 +1,9 @@
-"use client";
-
-import { useState } from "react";
 import { modes } from "../data/modes";
 import ModeChip from "./ModeChip";
 
-export default function ModeSelector() {
-  const [selected, setSelected] = useState("hr");
+type Props = { selected: string; onChange: (mode: string) => void };
+
+export default function ModeSelector({ selected, onChange }: Props) {
 
   return (
     <section className="mt-10">
@@ -15,7 +13,7 @@ export default function ModeSelector() {
             key={mode.id}
             {...mode}
             selected={selected === mode.id}
-            onClick={() => setSelected(mode.id)}
+            onClick={() => onChange(mode.id)}
           />
         ))}
 
