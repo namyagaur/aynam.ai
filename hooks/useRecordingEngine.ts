@@ -43,7 +43,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   const animationFrameRef = useRef<number | null>(null);
   const microphoneRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const startedAtRef = useRef<number | null>(null);
-  const { liveTranscript, appendSegment, replaceSegment, reset: resetTranscript } = useTranscript();
+  const { liveTranscript, appendSegment, replaceSegment, getLiveTranscript, reset: resetTranscript } = useTranscript();
 
   const clearChunkTimer = useCallback(() => {
     if (chunkTimerRef.current) {
@@ -262,7 +262,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   type: recorder.mimeType || "audio/webm",
 });
 
-if (segmentBlob.size < 5000) {
+if (segmentBlob.size < RecordingConfig.minChunkSize) {
   console.log("[recording] skipping tiny chunk", segmentBlob.size);
   return;
 }
@@ -375,7 +375,7 @@ enqueueChunkTranscription(
     setState((previous) => ({ ...previous, recordingState: "recording" }));
   }, []);
 
-  const finishRecording = useCallback(() => {
+  const finishRecording = useCallback(async () => {
     recordingActiveRef.current = false;
     clearChunkTimer();
 
@@ -383,11 +383,15 @@ enqueueChunkTranscription(
     if (!recorder) {
       cleanupResources();
       setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
-      return;
+      return getLiveTranscript();
     }
 
     if (recorder.state === "recording" || recorder.state === "paused") {
+      const recorderStopped = new Promise<void>((resolve) =>
+        recorder.addEventListener("stop", () => resolve(), { once: true })
+      );
       recorder.stop();
+      await recorderStopped;
     }
 
     const blob = createAudioBlob(chunksRef.current, recorder.mimeType || undefined);
@@ -401,8 +405,10 @@ enqueueChunkTranscription(
     // queue to finish it. Aborting here used to discard the last (and often
     // only) spoken audio when the user pressed Finish.
     cleanupResources(false);
+    await transcriptionQueueRef.current.drain();
     setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
-  }, [cleanupResources, clearChunkTimer]);
+    return getLiveTranscript();
+  }, [cleanupResources, clearChunkTimer, getLiveTranscript]);
 
   const reset = useCallback(() => {
     cleanupResources();

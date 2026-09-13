@@ -8,7 +8,7 @@ export function SessionReview() {
   const [page, setPage] = useState<1 | 2>(1);
 
   return (
-    <main className="h-screen overflow-hidden bg-[#FCFCFD]">
+    <main className="min-h-full bg-[#FCFCFD]">
       {page === 1 ? <ReviewPageOne onNext={() => setPage(2)} /> : <ReviewPageTwo onPrevious={() => setPage(1)} />}
     </main>
   );

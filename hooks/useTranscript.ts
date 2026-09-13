@@ -25,10 +25,16 @@ export function useTranscript() {
     setLiveTranscript("");
   }, []);
 
+  const getLiveTranscript = useCallback(
+    () => liveTranscriptBuilderRef.current.getTranscript(),
+    []
+  );
+
   return {
     liveTranscript,
     appendSegment,
     replaceSegment,
+    getLiveTranscript,
     reset,
   };
 }
