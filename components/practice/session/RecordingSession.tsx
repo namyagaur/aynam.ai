@@ -33,20 +33,6 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
       }
       const reviewInput = { transcript, topic, durationSeconds: duration * 60 };
       sessionStorage.setItem("session-review-input", JSON.stringify(reviewInput));
-      const feedbackResponse = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(reviewInput),
-      });
-      if (!feedbackResponse.ok) {
-        const responseBody = await feedbackResponse.json().catch(() => null);
-        throw new Error(typeof responseBody?.error === "string" ? responseBody.error : "Unable to generate your AI review.");
-      }
-      const feedback = await feedbackResponse.json();
-      sessionStorage.setItem(
-        "session-review-input",
-        JSON.stringify({ ...reviewInput, ...feedback })
-      );
       router.push("/session/review");
     } catch (error) {
       setIsFinishing(false);
