@@ -20,18 +20,37 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
   const isFinished = engine.recordingState === "finished";
   const isRecording = engine.recordingState === "recording";
   const [isFinishing, setIsFinishing] = useState(false);
+  const [finishError, setFinishError] = useState<string | null>(null);
 
   const finishAndOpenReview = async () => {
     setIsFinishing(true);
+    setFinishError(null);
+    let transcript = "";
     try {
-      const transcript = await engine.finishRecording();
+      transcript = await engine.finishRecording();
+      if (!transcript.trim()) {
+        throw new Error("No speech was captured. Please check your microphone and try again.");
+      }
+      const reviewInput = { transcript, topic, durationSeconds: duration * 60 };
+      sessionStorage.setItem("session-review-input", JSON.stringify(reviewInput));
+      const feedbackResponse = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewInput),
+      });
+      if (!feedbackResponse.ok) {
+        const responseBody = await feedbackResponse.json().catch(() => null);
+        throw new Error(typeof responseBody?.error === "string" ? responseBody.error : "Unable to generate your AI review.");
+      }
+      const feedback = await feedbackResponse.json();
       sessionStorage.setItem(
         "session-review-input",
-        JSON.stringify({ transcript, topic, durationSeconds: duration * 60 })
+        JSON.stringify({ ...reviewInput, ...feedback })
       );
       router.push("/session/review");
-    } catch {
+    } catch (error) {
       setIsFinishing(false);
+      setFinishError(error instanceof Error ? error.message : "Unable to finish this session.");
     }
   };
 
@@ -128,6 +147,7 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
         <Waveform audioLevel={engine.audioLevel} isSpeaking={engine.isSpeaking} />
 
         <p className="mt-2 text-[11px] text-zinc-500">{statusMessage}</p>
+        {finishError ? <p role="alert" className="mt-2 max-w-md text-center text-xs text-red-600">{finishError}</p> : null}
 
         {isFinished && engine.audioUrl ? (
           <>

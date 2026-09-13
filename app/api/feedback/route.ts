@@ -3,12 +3,12 @@ import { GoogleGenAI } from "@google/genai";
 import { buildFeedbackPrompt } from "@/lib/prompts/feedbackPrompt";
 import { generateSpeechAnalytics } from "@/lib/analytics";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
-});
-
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: "AI feedback is not configured." }, { status: 500 });
+    }
     const {
       transcript,
       durationSeconds,
@@ -40,14 +40,16 @@ export async function POST(request: NextRequest) {
   topic,
   difficulty,
 });
+    const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-model: "gemini-3.5-flash",
+model: "gemini-2.5-flash",
       contents: prompt,
+      config: { responseMimeType: "application/json" },
     });
-console.log(response.text);
+    const review = JSON.parse(response.text || "{}");
     return NextResponse.json({
       analytics,
-      response: response.text,
+      review,
     });
 
   } catch (error) {
