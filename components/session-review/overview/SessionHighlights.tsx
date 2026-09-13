@@ -1,8 +1,7 @@
 import { Star, AlertTriangle, MessageCircle, CheckCircle2 } from "lucide-react";
 import { mockSessionReview } from "@/lib/data/mockSessionReview";
 
-export function SessionHighlights() {
-  const { highlights } = mockSessionReview;
+export function SessionHighlights({ highlights = mockSessionReview.highlights }: { highlights?: typeof mockSessionReview.highlights }) {
 
   return (
     <div className="mt-3">

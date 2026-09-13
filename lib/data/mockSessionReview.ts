@@ -59,3 +59,58 @@ export const mockSessionReview = {
 };
 
 export type MockSessionReview = typeof mockSessionReview;
+export type SessionReviewData = typeof mockSessionReview;
+
+type UnknownRecord = Record<string, unknown>;
+const object = (value: unknown): UnknownRecord => value && typeof value === "object" ? value as UnknownRecord : {};
+const strings = (value: unknown): string[] => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+const score = (value: unknown, fallback: number) => typeof value === "number" && Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : fallback;
+
+export function buildSessionReview(input: unknown): SessionReviewData {
+  const payload = object(input);
+  const ai = object(payload.review);
+  const analytics = object(payload.analytics);
+  const pace = object(analytics.pace);
+  const sentences = object(analytics.sentences);
+  const fillers = object(analytics.fillers);
+  const coaching = object(ai.personalizedCoaching);
+  const clarity = object(ai.clarity);
+  const fluency = object(ai.fluency);
+  const confidence = object(ai.confidence);
+  const aiVocabulary = object(ai.vocabulary);
+  const structure = object(ai.structure);
+  const original = typeof payload.transcript === "string" ? payload.transcript : "";
+  const durationSeconds = typeof payload.durationSeconds === "number" ? payload.durationSeconds : 0;
+  const fillerWords = Array.isArray(fillers.words) ? fillers.words.map(object).map((item) => ({ label: typeof item.word === "string" ? item.word : "filler", count: typeof item.count === "number" ? item.count : 0 })).filter((item) => item.count > 0).slice(0, 5) : [];
+
+  return {
+    ...mockSessionReview,
+    session: { ...mockSessionReview.session, durationLabel: `${Math.max(1, Math.round(durationSeconds / 60))} min selected` },
+    communicationProfile: {
+      clarity: score(clarity.score, mockSessionReview.communicationProfile.clarity),
+      fluency: score(fluency.score, mockSessionReview.communicationProfile.fluency),
+      confidence: score(confidence.score, mockSessionReview.communicationProfile.confidence),
+      vocabulary: score(aiVocabulary.score, mockSessionReview.communicationProfile.vocabulary),
+      structure: score(structure.score, mockSessionReview.communicationProfile.structure),
+      presence: score(confidence.score, mockSessionReview.communicationProfile.presence),
+    },
+    highlights: {
+      strengths: [...strings(clarity.strengths), ...strings(confidence.strengths)].slice(0, 3),
+      improvements: [...strings(fluency.improvements), ...strings(clarity.improvements)].slice(0, 3),
+      understood: [typeof object(ai.overallAssessment).summary === "string" ? object(ai.overallAssessment).summary : "", typeof coaching.topPriority === "string" ? coaching.topPriority : ""].filter(Boolean),
+    },
+    insights: {
+      ...mockSessionReview.insights,
+      rewrite: { original: original.slice(0, 260) || mockSessionReview.insights.rewrite.original, suggested: typeof coaching.example === "string" && coaching.example ? coaching.example : mockSessionReview.insights.rewrite.suggested, reason: typeof coaching.topPriority === "string" && coaching.topPriority ? coaching.topPriority : mockSessionReview.insights.rewrite.reason },
+      fillers: fillerWords.length ? fillerWords : mockSessionReview.insights.fillers,
+      quickStats: [
+        { label: "Total Words", value: String(object(analytics.basic).wordCount ?? 0) },
+        { label: "Speaking Time", value: `${String(Math.floor(durationSeconds / 60)).padStart(2, "0")}:${String(durationSeconds % 60).padStart(2, "0")}` },
+        { label: "Average Pace", value: `${pace.wordsPerMinute ?? 0} WPM` },
+        { label: "Sentences", value: String(sentences.sentenceCount ?? 0) },
+        { label: "Longest Sentence", value: `${sentences.longestSentence ?? 0} words` },
+      ],
+      challenge: typeof coaching.dailyExercise === "string" && coaching.dailyExercise ? coaching.dailyExercise : mockSessionReview.insights.challenge,
+    },
+  };
+}
