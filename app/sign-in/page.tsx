@@ -1,11 +1,31 @@
 "use client";
-
+import { supabase } from "@/lib/supabase/client";
 import { useState } from "react";
 import { Mail, ArrowRight } from "lucide-react";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+
+async function handleSignIn() {
+  setLoading(true);
+  setError("");
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    setError(error.message);
+    setLoading(false);
+    return;
+  }
+
+  window.location.href = "/dashboard";
+}
 
   return (
     <main
@@ -327,11 +347,17 @@ export default function SignInPage() {
                 "
               />
             </div>
-
+            {error && (
+  <p className="mt-2 text-[11px] text-red-500">
+    {error}
+  </p>
+)}
             {/* CONTINUE */}
 
             <button
               type="button"
+              onClick={handleSignIn}
+              disabled={loading}
               className="
                 mt-2.5
                 flex
@@ -350,7 +376,7 @@ export default function SignInPage() {
                 hover:bg-[#1F2023]
               "
             >
-              Continue
+              {loading ? "Signing in..." : "Continue"}
               <ArrowRight className="h-[15px] w-[15px]" />
             </button>
 
