@@ -60,8 +60,7 @@ function RadarChart({ scores }: { scores: Record<string, number> }) {
   );
 }
 
-export function CommunicationProfileCard() {
-  const { communicationProfile } = mockSessionReview;
+export function CommunicationProfileCard({ profile = mockSessionReview.communicationProfile }: { profile?: typeof mockSessionReview.communicationProfile }) {
   const left = pillars.filter((p) => p.angle === 120 || p.angle === 180 || p.angle === 240);
   const right = pillars.filter((p) => p.angle === 60 || p.angle === 0 || p.angle === 300);
 
@@ -75,15 +74,15 @@ export function CommunicationProfileCard() {
       <div className="mt-0 flex items-center justify-center gap-4">
         <div className="flex w-32 flex-col justify-between gap-5 py-0">
           {left.map((p) => (
-            <PillarLabel key={p.key} pillar={p} score={communicationProfile[p.key]} align="left" />
+            <PillarLabel key={p.key} pillar={p} score={profile[p.key]} align="left" />
           ))}
         </div>
 
-        <RadarChart scores={communicationProfile} />
+        <RadarChart scores={profile} />
 
         <div className="flex w-36 flex-col justify-between gap-7 py-2">
           {right.map((p) => (
-            <PillarLabel key={p.key} pillar={p} score={communicationProfile[p.key]} align="right" />
+            <PillarLabel key={p.key} pillar={p} score={profile[p.key]} align="right" />
           ))}
         </div>
       </div>

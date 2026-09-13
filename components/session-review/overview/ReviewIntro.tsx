@@ -1,10 +1,9 @@
 import { ArrowLeft, AudioLines } from "lucide-react";
 import { mockSessionReview } from "@/lib/data/mockSessionReview";
 
-type Props = { title?: string; subtitle?: string; onNext?: () => void };
+type Props = { title?: string; subtitle?: string; onNext?: () => void; session?: typeof mockSessionReview.session };
 
-export function ReviewIntro({ title = "Session Review", subtitle, onNext }: Props) {
-  const { session } = mockSessionReview;
+export function ReviewIntro({ title = "Session Review", subtitle, onNext, session = mockSessionReview.session }: Props) {
 
   return (
     <div className="mx-auto w-full max-w-[980px]">

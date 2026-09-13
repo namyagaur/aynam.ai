@@ -42,7 +42,9 @@ export async function POST(request: NextRequest) {
 });
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-model: "gemini-2.5-flash",
+      // The API key's project no longer has access to Gemini 2.5 Flash.
+      // Gemini returned this supported replacement in its 404 response.
+      model: "gemini-3.6-flash",
       contents: prompt,
       config: { responseMimeType: "application/json" },
     });
