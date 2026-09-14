@@ -3,6 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, MoreHorizontal, Play, Sparkles } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Eye,
+  
+  Trash2,
+  X,
+} from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 
 type Session = {
@@ -161,6 +169,10 @@ export default function HistoryPage() {
   const [sessions, setSessions] = useState<HistorySession[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeMenuSessionId, setActiveMenuSessionId] = useState<string | number | null>(null);
+  const [sessionToDelete, setSessionToDelete] = useState<HistorySession | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
     const loadSessions = async () => {
@@ -224,6 +236,106 @@ export default function HistoryPage() {
 
     sessionStorage.setItem("session-review-input", JSON.stringify(reviewInput));
     router.push("/session/review");
+  };
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  useEffect(() => {
+    if (activeMenuSessionId === null) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target?.closest("[data-session-menu]")) {
+        setActiveMenuSessionId(null);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActiveMenuSessionId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeMenuSessionId]);
+
+  useEffect(() => {
+    if (!sessionToDelete) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !isDeleting) {
+        setSessionToDelete(null);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [sessionToDelete, isDeleting]);
+
+  const handleConfirmDelete = async () => {
+    if (!sessionToDelete || isDeleting) return;
+
+    setIsDeleting(true);
+
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setToast({
+          message: "Couldn't delete this session. Please try again.",
+          type: "error",
+        });
+        setIsDeleting(false);
+        setSessionToDelete(null);
+        return;
+      }
+
+      const { error: deleteError } = await supabase
+        .from("sessions")
+        .delete()
+        .eq("id", sessionToDelete.id)
+        .eq("user_id", user.id);
+
+      if (deleteError) {
+        setToast({
+          message: "Couldn't delete this session. Please try again.",
+          type: "error",
+        });
+        setIsDeleting(false);
+        setSessionToDelete(null);
+        return;
+      }
+
+      setSessions((prev) => prev.filter((item) => item.id !== sessionToDelete.id));
+      setToast({
+        message: "Session deleted",
+        type: "success",
+      });
+      setSessionToDelete(null);
+    } catch {
+      setToast({
+        message: "Couldn't delete this session. Please try again.",
+        type: "error",
+      });
+      setSessionToDelete(null);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -332,6 +444,46 @@ export default function HistoryPage() {
                           <button type="button" aria-label="More session actions" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#b3acb8] transition hover:bg-[#f6f2fb] hover:text-[#66549b]">
                             <MoreHorizontal className="h-4 w-4" />
                           </button>
+                          <div className="relative" data-session-menu>
+                            <button
+                              type="button"
+                              aria-label="More session actions"
+                              onClick={() =>
+                                setActiveMenuSessionId((prev) =>
+                                  prev === session.id ? null : session.id
+                                )
+                              }
+                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#b3acb8] transition hover:bg-[#f6f2fb] hover:text-[#66549b]"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </button>
+                            {activeMenuSessionId === session.id && (
+                              <div className="absolute right-0 top-full z-30 mt-1.5 w-44 rounded-xl border border-[#ebe6e0] bg-white p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveMenuSessionId(null);
+                                    openFeedback(session);
+                                  }}
+                                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[12px] font-medium text-[#3b3641] transition hover:bg-[#f6f2fb] hover:text-[#6758d8]"
+                                >
+                                  <Eye className="h-3.5 w-3.5 text-[#8f8894]" />
+                                  <span>View feedback</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveMenuSessionId(null);
+                                    setSessionToDelete(session);
+                                  }}
+                                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[12px] font-medium text-[#dc2626] transition hover:bg-[#fef2f2]"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5 text-[#dc2626]" />
+                                  <span>Delete session</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </article>
@@ -340,6 +492,69 @@ export default function HistoryPage() {
               )}
             </div>
           </div>
+
+          {sessionToDelete && (
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="delete-session-dialog-title"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-[2px]"
+            >
+              <div className="w-full max-w-sm rounded-[22px] border border-[#ebe6e0] bg-white p-6 shadow-2xl">
+                <h3
+                  id="delete-session-dialog-title"
+                  className="text-[17px] font-semibold tracking-[-0.02em] text-[#292633]"
+                >
+                  Delete this session?
+                </h3>
+                <p className="mt-2 text-[13px] leading-6 text-[#7b7484]">
+                  This will permanently remove this practice session and its feedback.
+                </p>
+                <div className="mt-6 flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isDeleting) setSessionToDelete(null);
+                    }}
+                    disabled={isDeleting}
+                    className="rounded-xl border border-[#ebe6e0] bg-white px-4 py-2 text-[13px] font-medium text-[#696273] transition hover:bg-[#f8f6f4] disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleConfirmDelete}
+                    disabled={isDeleting}
+                    className="inline-flex items-center justify-center rounded-xl bg-[#dc2626] px-4 py-2 text-[13px] font-medium text-white shadow-sm transition hover:bg-[#b91c1c] disabled:opacity-50"
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {toast && (
+            <div
+              role="status"
+              className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-[#3b3745] bg-[#292633] px-4 py-3 text-[13px] font-medium text-white shadow-[0_8px_30px_rgba(0,0,0,0.18)]"
+            >
+              {toast.type === "success" ? (
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#34d399]" />
+              ) : (
+                <AlertCircle className="h-4 w-4 shrink-0 text-[#f87171]" />
+              )}
+              <span>{toast.message}</span>
+              <button
+                type="button"
+                onClick={() => setToast(null)}
+                aria-label="Dismiss notification"
+                className="ml-1 text-white/60 transition hover:text-white"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
         </main>
   );
 }
