@@ -52,7 +52,11 @@ export function SessionReview() {
           const { error } = await supabase.from("sessions").insert({
             user_id: user.id,
             created_at: new Date().toISOString(),
-            duration_seconds: completed.durationSeconds,
+            topic: completed.topic,
+            allocated_duration_seconds: Math.round(completed.durationSeconds ?? 0),
+            elapsed_duration_seconds: Math.round(completed.elapsedDurationSeconds ?? 0),
+            speaking_duration_seconds: Math.round(completed.speakingDurationSeconds ?? 0),
+            duration_seconds: Math.round(completed.durationSeconds ?? 0),
             transcript: completed.transcript,
             analysis: completed.analytics,
             feedback: completed.review,
