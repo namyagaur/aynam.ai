@@ -1,12 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+
 import {
   Bell,
   Search,
   ChevronDown,
+  Flower2,
 } from "lucide-react";
 
 export default function Topbar() {
+  const [name, setName] = useState("Learner");
+
+  useEffect(() => {
+    const loadName = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+      const fullName = profile?.full_name;
+      setName(typeof fullName === "string" && fullName.trim() ? fullName.trim() : "Learner");
+    };
+    void Promise.resolve().then(loadName);
+  }, []);
+
   return (
     <header
       className="
@@ -80,10 +97,10 @@ export default function Topbar() {
 
         <div className="flex items-center gap-3">
 
-          <div className="h-10 w-10 rounded-full bg-[#DDD]" />
+          <Flower2 size={14} className="text-[#7B68D8]" aria-hidden="true" />
 
           <span className="font-medium">
-            Namya
+            {name}
           </span>
 
           <ChevronDown size={16} />
