@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
     const {
       transcript,
       durationSeconds,
+      speakingDurationSeconds,
       topic,
       difficulty,
     } = await request.json();
@@ -30,7 +31,8 @@ export async function POST(request: NextRequest) {
     // Generate deterministic analytics
     const analytics = generateSpeechAnalytics(
       transcript,
-      durationSeconds
+      durationSeconds,
+      speakingDurationSeconds
     );
 
     // Temporary prompt (we'll improve this later)
