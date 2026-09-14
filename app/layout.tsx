@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
 const geist = Geist({
@@ -23,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${geist.variable} font-sans bg-[var(--window)] text-[var(--text)] antialiased`}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
