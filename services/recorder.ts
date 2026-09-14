@@ -15,9 +15,20 @@ export function getSupportedMimeType(): string | null {
     return null;
   }
 
-  const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+  ];
 
-  return candidates.find((candidate) => MediaRecorder.isTypeSupported(candidate)) ?? null;
+  return candidates.find((candidate) => {
+    try {
+      return MediaRecorder.isTypeSupported(candidate);
+    } catch {
+      return false;
+    }
+  }) ?? null;
 }
 
 export function createMediaRecorder(
@@ -26,8 +37,16 @@ export function createMediaRecorder(
   onError: (error: Error) => void
 ): MediaRecorder {
   const mimeType = getSupportedMimeType();
-  const options = mimeType ? { mimeType } : undefined;
-  const recorder = new MediaRecorder(stream, options);
+  let recorder: MediaRecorder;
+  try {
+    recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+  } catch (error) {
+    if (!mimeType) {
+      throw error;
+    }
+
+    recorder = new MediaRecorder(stream);
+  }
 
   recorder.ondataavailable = (event: BlobEvent) => {
     if (event.data.size > 0) {
