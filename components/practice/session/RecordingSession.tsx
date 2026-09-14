@@ -24,13 +24,18 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
   const finishAndOpenReview = async () => {
     setIsFinishing(true);
     setFinishError(null);
-    let transcript = "";
     try {
-      transcript = await engine.finishRecording();
-      if (!transcript.trim()) {
+      const completed = await engine.finishRecording();
+      if (!completed.transcript.trim()) {
         throw new Error("No speech was captured. Please check your microphone and try again.");
       }
-      const reviewInput = { transcript, topic, durationSeconds: duration * 60 };
+      const reviewInput = {
+        transcript: completed.transcript,
+        topic,
+        durationSeconds: duration * 60,
+        elapsedDurationSeconds: completed.elapsedDurationSeconds,
+        speakingDurationSeconds: completed.speakingDurationSeconds,
+      };
       sessionStorage.setItem("session-review-input", JSON.stringify(reviewInput));
       router.push("/session/review");
     } catch (error) {
