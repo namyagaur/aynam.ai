@@ -18,7 +18,6 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
   const [showTranscript, setShowTranscript] = useState(false);
   const engine = useRecordingEngine(duration);
   const isFinished = engine.recordingState === "finished";
-  const isRecording = engine.recordingState === "recording";
   const [isFinishing, setIsFinishing] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
 
@@ -133,6 +132,9 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
         <Waveform audioLevel={engine.audioLevel} isSpeaking={engine.isSpeaking} />
 
         <p className="mt-2 text-[11px] text-zinc-500">{statusMessage}</p>
+        {engine.speechRecognitionError ? (
+          <p className="mt-1 max-w-md text-center text-[11px] text-amber-600">{engine.speechRecognitionError}</p>
+        ) : null}
         {finishError ? <p role="alert" className="mt-2 max-w-md text-center text-xs text-red-600">{finishError}</p> : null}
 
         {isFinished && engine.audioUrl ? (
@@ -147,7 +149,8 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
         liveTranscript={engine.liveTranscript}
         showTranscript={showTranscript}
         onToggle={() => setShowTranscript(false)}
-        isListening={isRecording}
+        isListening={engine.isListening}
+        transcriptionError={engine.speechRecognitionError}
       />
     </div>
   );

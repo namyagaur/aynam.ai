@@ -5,6 +5,7 @@ type Props = {
   showTranscript: boolean;
   onToggle: () => void;
   isListening: boolean;
+  transcriptionError?: string | null;
 };
 
 export default function TranscriptPanel({
@@ -12,6 +13,7 @@ export default function TranscriptPanel({
   showTranscript,
   onToggle,
   isListening,
+  transcriptionError,
 }: Props) {
   const transcriptContainerRef = useRef<HTMLDivElement>(null);
 
@@ -56,9 +58,9 @@ export default function TranscriptPanel({
           </button>
         </div>
 
-        <div className="mt-1.5 flex items-center gap-1.5 text-[12px] text-emerald-500">
+        <div className={`mt-1.5 flex items-center gap-1.5 text-[12px] ${transcriptionError ? "text-amber-600" : "text-emerald-500"}`}>
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          {isListening ? "Listening..." : "Stand by"}
+          {transcriptionError ?? (isListening ? "Listening..." : "Stand by")}
         </div>
 
         <div ref={transcriptContainerRef} className="mt-3 flex-1 overflow-y-auto text-[13px] leading-6">
