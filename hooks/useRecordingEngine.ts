@@ -36,6 +36,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const microphoneRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const recordingStartedAtRef = useRef<number | null>(null);
   const {
     transcript: liveTranscript,
     isListening,
@@ -45,6 +46,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
     stop: stopSpeechRecognition,
     reset: resetSpeechRecognition,
     getTranscript: getSpeechTranscript,
+    getSpeakingDurationSeconds,
   } = useSpeechRecognition();
 
   const clearChunkTimer = useCallback(() => {
@@ -170,22 +172,38 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   const startNextChunkRecorder = useCallback(
     (stream: MediaStream) => {
       if (!recordingActiveRef.current) {
-        return;
+        return false;
       }
 
       const segmentChunks: Blob[] = [];
+      const handleRecorderStartError = (error: unknown) => {
+        recordingActiveRef.current = false;
+        cleanupResources();
+        setState((previous) => ({
+          ...previous,
+          recordingState: "idle",
+          isStarting: false,
+          error: error instanceof Error ? error.message : "Unable to start audio recording.",
+        }));
+      };
 
-      const recorder = createMediaRecorder(
-        stream,
-        (chunk) => {
-          if (chunk.size > 0) {
-            segmentChunks.push(chunk);
+      let recorder: MediaRecorder;
+      try {
+        recorder = createMediaRecorder(
+          stream,
+          (chunk) => {
+            if (chunk.size > 0) {
+              segmentChunks.push(chunk);
+            }
+          },
+          (error) => {
+            setState((previous) => ({ ...previous, error: error.message }));
           }
-        },
-        (error) => {
-          setState((previous) => ({ ...previous, error: error.message }));
-        }
-      );
+        );
+      } catch (error) {
+        handleRecorderStartError(error);
+        return false;
+      }
 
       recorder.onstop = () => {
         if (mediaRecorderRef.current === recorder) {
@@ -217,7 +235,13 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
         }
       };
 
-      recorder.start();
+      try {
+        recorder.start();
+      } catch (error) {
+        handleRecorderStartError(error);
+        return false;
+      }
+
       mediaRecorderRef.current = recorder;
 
       clearChunkTimer();
@@ -227,8 +251,10 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
           activeRecorder.stop();
         }
       }, RecordingConfig.chunkDurationMs);
+
+      return true;
     },
-    [clearChunkTimer]
+    [clearChunkTimer, cleanupResources]
   );
 
   const startRecording = useCallback(async () => {
@@ -246,7 +272,10 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
       const stream = await requestMicrophone();
       streamRef.current = stream;
       await createAudioContext();
-      startNextChunkRecorder(stream);
+      recordingStartedAtRef.current = performance.now();
+      if (!startNextChunkRecorder(stream)) {
+        throw new Error("Unable to start audio recording.");
+      }
       resetSpeechRecognition();
       startSpeechRecognition();
 
@@ -312,12 +341,17 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
     recordingActiveRef.current = false;
     clearChunkTimer();
     await stopSpeechRecognition();
+    const elapsedDurationSeconds = recordingStartedAtRef.current === null
+      ? 0
+      : Math.max(0, (performance.now() - recordingStartedAtRef.current) / 1000);
+    const speakingDurationSeconds = getSpeakingDurationSeconds();
+    recordingStartedAtRef.current = null;
 
     const recorder = mediaRecorderRef.current;
     if (!recorder) {
       cleanupResources();
       setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
-      return getSpeechTranscript();
+      return { transcript: getSpeechTranscript(), elapsedDurationSeconds, speakingDurationSeconds };
     }
 
     if (recorder.state === "recording" || recorder.state === "paused") {
@@ -337,12 +371,13 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
 
     cleanupResources(false);
     setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
-    return getSpeechTranscript();
-  }, [cleanupResources, clearChunkTimer, getSpeechTranscript, stopSpeechRecognition]);
+    return { transcript: getSpeechTranscript(), elapsedDurationSeconds, speakingDurationSeconds };
+  }, [cleanupResources, clearChunkTimer, getSpeakingDurationSeconds, getSpeechTranscript, stopSpeechRecognition]);
 
   const reset = useCallback(() => {
     cleanupResources();
     clearAudioUrl();
+    recordingStartedAtRef.current = null;
     resetSpeechRecognition();
     setState({
       recordingState: "idle",
