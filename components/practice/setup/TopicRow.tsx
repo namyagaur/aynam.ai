@@ -38,7 +38,7 @@ export default function TopicRow({
     duration-300
     ${
       selected
-  ? "text-[#7C6CF8] font-semibold"
+  ? "text-[var(--theme-primary)] font-semibold"
   : "text-zinc-400"
     }
   `}
