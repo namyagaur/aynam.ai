@@ -29,15 +29,15 @@ export default function ModeChip({
         ${
           selected
             ? `
-              border-[#DDD5FF]
-              bg-[linear-gradient(180deg,#FFFEFF_0%,#F7F4FF_100%)]
+              border-[var(--theme-border)]
+              bg-[linear-gradient(180deg,var(--theme-surface-elevated)_0%,var(--theme-primary-soft)_100%)]
               shadow-[0_6px_18px_rgba(108,99,255,.06)]
             `
             : `
-              border-[#EFEAE4]
+              border-[var(--theme-border)]
               bg-white
-              hover:bg-[#FCFBFF]
-              hover:border-[#E5DFFF]
+              hover:bg-[var(--theme-surface)]
+              hover:border-[var(--theme-border)]
             `
         }
       `}
@@ -51,8 +51,8 @@ export default function ModeChip({
             transition-colors
             ${
               selected
-                ? "text-[#6C63FF]"
-                : "text-[#8B8893] group-hover:text-[#6C63FF]"
+                ? "text-[var(--theme-primary)]"
+                : "text-[var(--theme-text-muted)] group-hover:text-[var(--theme-primary)]"
             }
           `}
         />
@@ -65,8 +65,8 @@ export default function ModeChip({
 
             ${
               selected
-                ? "text-[#25232D]"
-                : "text-[#4F4B58]"
+                ? "text-[var(--theme-text)]"
+                : "text-[var(--theme-text-muted)]"
             }
           `}
         >
@@ -85,7 +85,7 @@ export default function ModeChip({
             w-1.5
             -translate-x-1/2
             rounded-full
-            bg-[#6C63FF]
+            bg-[var(--theme-primary)]
           "
         />
       )}
