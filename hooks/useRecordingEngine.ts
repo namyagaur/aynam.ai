@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { transcribeAudio } from "@/services/transcriber";
-import { useTranscript } from "@/hooks/useTranscript";
-import { TranscriptionQueue } from "@/services/transcriptionQueue";
+import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import {
   cleanupMediaStream,
   createAudioBlob,
@@ -13,7 +11,6 @@ import {
 } from "@/services/recorder";
 import { RecordingConfig } from "@/config/recording";
 import type { RecordingEngineState } from "@/types/recording";
-import type { TranscriptSegment } from "@/types/transcript";
 
 export function useRecordingEngine(totalDurationMinutes: number) {
   const [state, setState] = useState<RecordingEngineState>({
@@ -31,9 +28,6 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-  const transcriptionControllerRef = useRef<AbortController | null>(null);
-  const transcriptionQueueRef = useRef(new TranscriptionQueue());
-  const chunkIndexRef = useRef(0);
   const recordingActiveRef = useRef(false);
   const chunkTimerRef = useRef<number | null>(null);
   const audioUrlRef = useRef<string | null>(null);
@@ -42,8 +36,16 @@ export function useRecordingEngine(totalDurationMinutes: number) {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const microphoneRef = useRef<MediaStreamAudioSourceNode | null>(null);
-  const startedAtRef = useRef<number | null>(null);
-  const { liveTranscript, appendSegment, replaceSegment, getLiveTranscript, reset: resetTranscript } = useTranscript();
+  const {
+    transcript: liveTranscript,
+    isListening,
+    isSupported: speechRecognitionSupported,
+    error: speechRecognitionError,
+    start: startSpeechRecognition,
+    stop: stopSpeechRecognition,
+    reset: resetSpeechRecognition,
+    getTranscript: getSpeechTranscript,
+  } = useSpeechRecognition();
 
   const clearChunkTimer = useCallback(() => {
     if (chunkTimerRef.current) {
@@ -52,7 +54,7 @@ export function useRecordingEngine(totalDurationMinutes: number) {
     }
   }, []);
 
-  const cleanupResources = useCallback((abortTranscriptions = true) => {
+  const cleanupResources = useCallback((stopSpeech = true) => {
     recordingActiveRef.current = false;
     clearChunkTimer();
 
@@ -86,11 +88,10 @@ export function useRecordingEngine(totalDurationMinutes: number) {
     stopMediaRecorder(mediaRecorderRef.current);
     mediaRecorderRef.current = null;
 
-    if (abortTranscriptions) {
-      transcriptionControllerRef.current?.abort();
-      transcriptionControllerRef.current = null;
+    if (stopSpeech) {
+      void stopSpeechRecognition();
     }
-  }, [clearChunkTimer]);
+  }, [clearChunkTimer, stopSpeechRecognition]);
 
   const clearAudioUrl = useCallback(() => {
     if (audioUrlRef.current) {
@@ -166,79 +167,12 @@ export function useRecordingEngine(totalDurationMinutes: number) {
     }
   }, []);
 
-  const enqueueChunkTranscription = useCallback(
-    (chunk: Blob, start: number, end: number) => {
-      const chunkIndex = chunkIndexRef.current + 1;
-      chunkIndexRef.current = chunkIndex;
-      const pendingSegment: TranscriptSegment = {
-        id: `chunk-${chunkIndex}`,
-        text: "",
-        start,
-        end,
-        chunkIndex,
-        status: "processing",
-        provider: "groq",
-        createdAt: new Date().toISOString(),
-      };
-
-      appendSegment(pendingSegment);
-
-      void transcriptionQueueRef.current.enqueue({
-        chunkIndex,
-        segment: pendingSegment,
-        run: async () => {
-          try {
-            const result = await transcribeAudio(chunk, {
-              start,
-              end,
-              chunkIndex,
-              filename: `chunk-${chunkIndex}.webm`,
-              signal: transcriptionControllerRef.current?.signal,
-            });
-            
-            console.log("[recording] transcription result:", result);
-
-            const [segment] = result.transcript;
-            if (segment?.text.trim()) {
-              console.log("[recording] replacing pending segment", pendingSegment.id);
-              replaceSegment(pendingSegment.id, {
-                ...segment,
-                chunkIndex,
-                status: "completed",
-                provider: "groq",
-                createdAt: pendingSegment.createdAt,
-              });
-            } else {
-              replaceSegment(pendingSegment.id, {
-                ...pendingSegment,
-                status: "failed",
-              });
-            }
-          } catch (error) {
-            const message = error instanceof Error ? error.message : "Unable to transcribe this audio segment.";
-            console.error("[recording] transcription failed", { chunkIndex, error });
-            setState((previous) => ({ ...previous, error: message }));
-            replaceSegment(pendingSegment.id, {
-              ...pendingSegment,
-              status: error instanceof Error && error.name === "AbortError" ? "pending" : "failed",
-            });
-          }
-        },
-      });
-    },
-    [appendSegment, replaceSegment]
-  );
-
   const startNextChunkRecorder = useCallback(
     (stream: MediaStream) => {
       if (!recordingActiveRef.current) {
         return;
       }
 
-      const segmentStartedAt = Math.max(
-        0,
-        Math.round((Date.now() - (startedAtRef.current ?? Date.now())) / 1000)
-      );
       const segmentChunks: Blob[] = [];
 
       const recorder = createMediaRecorder(
@@ -267,12 +201,6 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
   return;
 }
 
-enqueueChunkTranscription(
-  segmentBlob,
-  segmentStartedAt,
-  segmentStartedAt + 2
-);
-
         if (!recordingActiveRef.current) {
           return;
         }
@@ -300,7 +228,7 @@ enqueueChunkTranscription(
         }
       }, RecordingConfig.chunkDurationMs);
     },
-    [clearChunkTimer, enqueueChunkTranscription]
+    [clearChunkTimer]
   );
 
   const startRecording = useCallback(async () => {
@@ -313,16 +241,14 @@ enqueueChunkTranscription(
     try {
       clearAudioUrl();
       chunksRef.current = [];
-      chunkIndexRef.current = 0;
       recordingActiveRef.current = true;
-      transcriptionControllerRef.current?.abort();
-      transcriptionControllerRef.current = new AbortController();
-      startedAtRef.current = Date.now();
 
       const stream = await requestMicrophone();
       streamRef.current = stream;
       await createAudioContext();
       startNextChunkRecorder(stream);
+      resetSpeechRecognition();
+      startSpeechRecognition();
 
       setState((previous) => ({
         ...previous,
@@ -360,7 +286,7 @@ enqueueChunkTranscription(
         error: error instanceof Error ? error.message : "Unable to start recording.",
       }));
     }
-  }, [clearAudioUrl, cleanupResources, createAudioContext, monitorAudioLevel, startNextChunkRecorder, state.isStarting, state.recordingState, totalDurationMinutes]);
+  }, [clearAudioUrl, cleanupResources, createAudioContext, monitorAudioLevel, resetSpeechRecognition, startNextChunkRecorder, startSpeechRecognition, state.isStarting, state.recordingState, totalDurationMinutes]);
 
   const pauseRecording = useCallback(() => {
     const recorder = mediaRecorderRef.current;
@@ -385,12 +311,13 @@ enqueueChunkTranscription(
   const finishRecording = useCallback(async () => {
     recordingActiveRef.current = false;
     clearChunkTimer();
+    await stopSpeechRecognition();
 
     const recorder = mediaRecorderRef.current;
     if (!recorder) {
       cleanupResources();
       setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
-      return getLiveTranscript();
+      return getSpeechTranscript();
     }
 
     if (recorder.state === "recording" || recorder.state === "paused") {
@@ -408,19 +335,15 @@ enqueueChunkTranscription(
       setState((previous) => ({ ...previous, audioUrl: nextUrl }));
     }
 
-    // Let the recorder's final onstop handler enqueue its chunk and allow the
-    // queue to finish it. Aborting here used to discard the last (and often
-    // only) spoken audio when the user pressed Finish.
     cleanupResources(false);
-    await transcriptionQueueRef.current.drain();
     setState((previous) => ({ ...previous, recordingState: "finished", isStarting: false }));
-    return getLiveTranscript();
-  }, [cleanupResources, clearChunkTimer, getLiveTranscript]);
+    return getSpeechTranscript();
+  }, [cleanupResources, clearChunkTimer, getSpeechTranscript, stopSpeechRecognition]);
 
   const reset = useCallback(() => {
     cleanupResources();
     clearAudioUrl();
-    resetTranscript();
+    resetSpeechRecognition();
     setState({
       recordingState: "idle",
       secondsLeft: totalDurationMinutes * 60,
@@ -432,7 +355,7 @@ enqueueChunkTranscription(
       error: null,
       isStarting: false,
     });
-  }, [clearAudioUrl, cleanupResources, resetTranscript, totalDurationMinutes]);
+  }, [clearAudioUrl, cleanupResources, resetSpeechRecognition, totalDurationMinutes]);
 
   useEffect(() => {
     return () => {
@@ -444,10 +367,13 @@ enqueueChunkTranscription(
   return useMemo(() => ({
     ...state,
     liveTranscript,
+    speechRecognitionError,
+    speechRecognitionSupported,
+    isListening,
     startRecording,
     pauseRecording,
     resumeRecording,
     finishRecording,
     reset,
-  }), [state, liveTranscript, startRecording, pauseRecording, resumeRecording, finishRecording, reset]);
+  }), [state, liveTranscript, speechRecognitionError, speechRecognitionSupported, isListening, startRecording, pauseRecording, resumeRecording, finishRecording, reset]);
 }
