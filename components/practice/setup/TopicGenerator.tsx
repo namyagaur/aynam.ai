@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import RollingWheel from "./RollingWheel";
@@ -107,7 +107,7 @@ export default function TopicGenerator({
     className={
       step === "recording"
         ? "mt-2 flex h-full min-h-0 flex-col"
-        : "mt-2 flex flex-col items-center"
+        : "flex h-full min-h-0 flex-col"
     }
   >
 
@@ -121,55 +121,65 @@ export default function TopicGenerator({
 
     {step === "topic" && (
       <>
-      <PracticeHeader />
-      <div className="-mt-2 mb-8">
-  <ModeSelector selected={mode} onChange={handleModeChange} />
-</div>
-        <RollingWheel
-          topics={topics}
-          currentIndex={currentIndex}
-        />
+        {/* Header pinned to top */}
+        <PracticeHeader />
 
-        <div className="mt-4 flex gap-3">
-          <button
-            onClick={handleRoll}
-            disabled={rolling || isGenerating}
-            className="
-              rounded-full
-              border
-              border-zinc-300
-              bg-white
-              px-6
-              py-3
-              text-sm
-              font-medium
-            "
-          >
-            {rolling
-              ? "Rolling..."
-              : isGenerating
-              ? "Creating topic..."
-              : hasRolled
-              ? "🎲 Roll Again"
-              : "🎲 Roll Topic"}
-          </button>
+        {/* Flex-1 area: pills near top, wheel+button centered below */}
+        <div className="flex flex-1 flex-col items-center pt-6">
+          {/* Mode pills — horizontally centered, sitting between header and roller */}
+          <div className="mb-auto pb-2">
+            <ModeSelector selected={mode} onChange={handleModeChange} />
+          </div>
 
-          {hasRolled && !rolling && (
+          {/* Rolling wheel + button — centered in remaining space */}
+          <div className="flex flex-1 flex-col items-center justify-center">
+          <RollingWheel
+            topics={topics}
+            currentIndex={currentIndex}
+          />
+
+          <div className="mt-4 flex gap-3">
             <button
-              onClick={() => setStep("setup")}
+              onClick={handleRoll}
+              disabled={rolling || isGenerating}
               className="
                 rounded-full
-                bg-[#7C6CF8]
+                border
+                border-[var(--theme-border)]
+                bg-[var(--theme-surface-elevated)]
                 px-6
-                py-3
+                py-2.5
                 text-sm
                 font-medium
-                text-white
               "
             >
-              Continue →
+              {rolling
+                ? "Rolling..."
+                : isGenerating
+                ? "Creating topic..."
+                : hasRolled
+                ? "🎲 Roll Again"
+                : "🎲 Roll Topic"}
             </button>
-          )}
+
+            {hasRolled && !rolling && (
+              <button
+                onClick={() => setStep("setup")}
+                className="
+                  rounded-full
+                  bg-[var(--theme-primary)]
+                  px-6
+                  py-2.5
+                  text-sm
+                  font-medium
+                  text-white
+                "
+              >
+                Continue →
+              </button>
+            )}
+          </div>
+          </div>
         </div>
       </>
     )}
@@ -187,3 +197,4 @@ export default function TopicGenerator({
 </section>
 );
 }
+
