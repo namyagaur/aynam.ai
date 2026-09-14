@@ -10,27 +10,29 @@ export default function SignInPage() {
 const [error, setError] = useState("");
 
 async function handleSignIn() {
-  console.log("LOGIN BUTTON CLICKED");
-  console.log("EMAIL:", email);
+  const normalizedEmail = email.trim();
+  if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
+  if (!password) {
+    setError("Please enter your password.");
+    return;
+  }
 
   setLoading(true);
   setError("");
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
+  const { error } = await supabase.auth.signInWithPassword({
+    email: normalizedEmail,
     password,
   });
-
-  console.log("SUPABASE DATA:", data);
-  console.log("SUPABASE ERROR:", error);
 
   if (error) {
     setError(error.message);
     setLoading(false);
     return;
   }
-
-  console.log("LOGIN SUCCESS");
 
   window.location.href = "/dashboard";
 }
