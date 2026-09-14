@@ -76,7 +76,7 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
             onClick={() => setShowTranscript((prev) => !prev)}
             className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[13px] font-medium transition ${
               showTranscript
-                ? "border-[#ECE9FF] bg-[#F7F5FF] text-[#6759E8]"
+                ? "border-[var(--theme-border)] bg-[var(--theme-primary-soft)] text-[var(--theme-primary)]"
                 : "border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50"
             }`}
           >
@@ -95,7 +95,7 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
 
         <p className="mt-2 text-[15px] text-zinc-500">Speak naturally. There is no right or wrong answer.</p>
 
-        <div className="mt-5 rounded-full border border-[#ECE9FF] bg-[#F7F6FF] px-3.5 py-1 text-[12px] font-medium text-[#6B63F6]">
+        <div className="mt-5 rounded-full border border-[var(--theme-border)] bg-[var(--theme-primary-soft)] px-3.5 py-1 text-[12px] font-medium text-[var(--theme-primary)]">
           {duration} min session
         </div>
 
@@ -116,7 +116,7 @@ export default function RecordingSession({ topic, duration, onEnd }: Props) {
             <>
               <button
                 onClick={engine.recordingState === "paused" ? engine.resumeRecording : engine.pauseRecording}
-                className="h-10 w-32 rounded-full border border-zinc-200 bg-white text-[14px] font-medium text-[#6759E8] shadow-sm transition hover:bg-zinc-50"
+                className="h-10 w-32 rounded-full border border-[var(--theme-border)] bg-white text-[14px] font-medium text-[var(--theme-primary)] shadow-sm transition hover:bg-[var(--theme-primary-soft)]"
               >
                 {engine.recordingState === "paused" ? "▶ Resume" : "⏸ Pause"}
               </button>
