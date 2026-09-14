@@ -14,9 +14,9 @@ export default function Surface({
     <div
       className={clsx(
         `
-        bg-[var(--surface)]
+        bg-[var(--theme-surface)]
         border
-        border-[var(--border)]
+        border-[var(--theme-border)]
         rounded-[20px]
         shadow-[var(--shadow)]
         transition-all
