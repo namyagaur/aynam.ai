@@ -36,6 +36,8 @@ type SpeechRecognitionWindow = Window & {
   webkitSpeechRecognition?: SpeechRecognitionConstructor;
 };
 
+const SPEECH_INACTIVITY_THRESHOLD_MS = 1000;
+
 function getSpeechRecognitionConstructor(): SpeechRecognitionConstructor | null {
   if (typeof window === "undefined") {
     return null;
@@ -68,6 +70,9 @@ export function useSpeechRecognition() {
   const isListeningRef = useRef(false);
   const shouldRestartRef = useRef(false);
   const restartTimerRef = useRef<number | null>(null);
+  const speakingIntervalTimerRef = useRef<number | null>(null);
+  const speakingStartedAtRef = useRef<number | null>(null);
+  const speakingDurationMsRef = useRef(0);
 
   const updateTranscript = useCallback((nextTranscript: string) => {
     const normalized = nextTranscript.replace(/\s+/g, " ").trim();
@@ -87,9 +92,46 @@ export function useSpeechRecognition() {
     setIsListening(nextIsListening);
   }, []);
 
+  const closeSpeakingInterval = useCallback((timestamp: number) => {
+    if (speakingStartedAtRef.current === null) {
+      return;
+    }
+
+    speakingDurationMsRef.current += Math.max(0, timestamp - speakingStartedAtRef.current);
+    speakingStartedAtRef.current = null;
+  }, []);
+
+  const scheduleSpeakingIntervalClose = useCallback(() => {
+    if (speakingIntervalTimerRef.current !== null) {
+      window.clearTimeout(speakingIntervalTimerRef.current);
+    }
+
+    speakingIntervalTimerRef.current = window.setTimeout(() => {
+      speakingIntervalTimerRef.current = null;
+      closeSpeakingInterval(performance.now());
+    }, SPEECH_INACTIVITY_THRESHOLD_MS);
+  }, [closeSpeakingInterval]);
+
+  const recordSpeechActivity = useCallback(() => {
+    const now = performance.now();
+    if (speakingStartedAtRef.current === null) {
+      speakingStartedAtRef.current = now;
+    }
+    scheduleSpeakingIntervalClose();
+  }, [scheduleSpeakingIntervalClose]);
+
+  const clearSpeakingIntervalTimer = useCallback(() => {
+    if (speakingIntervalTimerRef.current !== null) {
+      window.clearTimeout(speakingIntervalTimerRef.current);
+      speakingIntervalTimerRef.current = null;
+    }
+  }, []);
+
   const stop = useCallback(() => {
     shouldRestartRef.current = false;
     clearRestartTimer();
+    clearSpeakingIntervalTimer();
+    closeSpeakingInterval(performance.now());
     const recognition = recognitionRef.current;
 
     if (!recognition || !isListeningRef.current) {
@@ -113,11 +155,13 @@ export function useSpeechRecognition() {
         resolve(transcriptRef.current);
       }
     });
-  }, [clearRestartTimer, setListening]);
+  }, [clearRestartTimer, clearSpeakingIntervalTimer, closeSpeakingInterval, setListening]);
 
   const reset = useCallback(() => {
     void stop();
     finalPartsRef.current = [];
+    speakingStartedAtRef.current = null;
+    speakingDurationMsRef.current = 0;
     updateTranscript("");
     setError(null);
   }, [stop, updateTranscript]);
@@ -143,6 +187,8 @@ export function useSpeechRecognition() {
 
       recognition.onresult = (event) => {
         const interimParts: string[] = [];
+        let hasSpeechActivity = false;
+        const activityStartIndex = Math.max(0, event.resultIndex);
         for (let index = 0; index < event.results.length; index += 1) {
           const result = event.results[index];
           const text = result[0]?.transcript ?? "";
@@ -151,9 +197,15 @@ export function useSpeechRecognition() {
           } else if (text.trim()) {
             interimParts.push(text);
           }
+          if (index >= activityStartIndex) {
+            hasSpeechActivity ||= Boolean(text.trim());
+          }
         }
 
         updateTranscript([...finalPartsRef.current, ...interimParts].join(" "));
+        if (hasSpeechActivity) {
+          recordSpeechActivity();
+        }
         setError(null);
       };
 
@@ -194,21 +246,29 @@ export function useSpeechRecognition() {
     } catch {
       setError("Live transcription is temporarily unavailable. Your recording will continue.");
     }
-  }, [clearRestartTimer, setListening, updateTranscript]);
+  }, [clearRestartTimer, recordSpeechActivity, setListening, updateTranscript]);
 
   const getTranscript = useCallback(() => transcriptRef.current, []);
+  const getSpeakingDurationSeconds = useCallback(() => {
+    const activeDuration = speakingStartedAtRef.current === null
+      ? 0
+      : Math.max(0, performance.now() - speakingStartedAtRef.current);
+    return (speakingDurationMsRef.current + activeDuration) / 1000;
+  }, []);
 
   useEffect(() => {
     return () => {
       shouldRestartRef.current = false;
       clearRestartTimer();
+      clearSpeakingIntervalTimer();
+      closeSpeakingInterval(performance.now());
       try {
         recognitionRef.current?.stop();
       } catch {
         // The recognition may already have ended.
       }
     };
-  }, [clearRestartTimer]);
+  }, [clearRestartTimer, clearSpeakingIntervalTimer, closeSpeakingInterval]);
 
-  return { transcript, isListening, isSupported, error, start, stop, reset, getTranscript };
+  return { transcript, isListening, isSupported, error, start, stop, reset, getTranscript, getSpeakingDurationSeconds };
 }
