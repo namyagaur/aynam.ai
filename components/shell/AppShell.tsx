@@ -14,10 +14,10 @@ export default function AppShell({ children }: Props) {
   className="min-h-screen p-3"
   style={{
     background: `
-      radial-gradient(circle at 15% 20%, rgba(255,245,200,.55) 0%, transparent 28%),
-      radial-gradient(circle at 88% 12%, rgba(197,219,232,.35) 0%, transparent 26%),
-      radial-gradient(circle at 70% 80%, rgba(168,148,255,.18) 0%, transparent 32%),
-      linear-gradient(135deg,#ECE7F8 0%,#FFF9ED 55%,#F4EEF9 100%)
+      radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--theme-primary-soft) 52%, transparent) 0%, transparent 28%),
+      radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--theme-accent) 18%, transparent) 0%, transparent 26%),
+      radial-gradient(circle at 70% 80%, color-mix(in srgb, var(--theme-primary) 18%, transparent) 0%, transparent 32%),
+      linear-gradient(135deg, var(--theme-primary-soft) 0%, var(--theme-surface) 55%, var(--theme-background) 100%)
     `,
   }}
 >
@@ -41,7 +41,7 @@ export default function AppShell({ children }: Props) {
 
           <Sidebar />
 
-          <section className="min-h-0 flex-1 overflow-y-auto bg-[#FFFDF7]">
+          <section className="min-h-0 flex-1 overflow-y-auto bg-[var(--theme-surface)]">
             {children}
           </section>
 
