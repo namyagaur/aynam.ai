@@ -40,8 +40,8 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
       mb-5
       rounded-full
       border
-      border-[#ECE9FF]
-      bg-[#F7F5FF]
+      border-[var(--theme-border)]
+      bg-[var(--theme-primary-soft)]
       px-4
       py-2
       shadow-sm
@@ -51,7 +51,7 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
       className="
         text-sm
         font-medium
-        text-[#6759E8]
+        text-[var(--theme-primary)]
       "
     >
       {duration} min selected
