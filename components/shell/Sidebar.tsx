@@ -49,27 +49,27 @@ export default function Sidebar() {
     background: `
       radial-gradient(
         circle at 12% 8%,
-        rgba(255,248,220,.55) 0%,
+        color-mix(in srgb, var(--theme-primary-soft) 48%, transparent) 0%,
         transparent 28%
       ),
 
       radial-gradient(
         circle at 100% 100%,
-        rgba(193,219,232,.18) 0%,
+        color-mix(in srgb, var(--theme-accent) 14%, transparent) 0%,
         transparent 45%
       ),
 
       radial-gradient(
         circle at 60% 75%,
-        rgba(139,115,255,.08) 0%,
+        color-mix(in srgb, var(--theme-primary) 8%, transparent) 0%,
         transparent 40%
       ),
 
       linear-gradient(
         180deg,
-        #FCFBFF 0%,
-        #F8F4FF 45%,
-        #F4EEF9 100%
+        var(--theme-surface-elevated) 0%,
+        var(--theme-surface) 45%,
+        var(--theme-background) 100%
       )
     `,
   }}
@@ -81,13 +81,13 @@ export default function Sidebar() {
 
           <div className="flex items-center gap-2">
 
-            <h1 className="text-[22px] font-bold tracking-[-0.05em] text-[#1C1C24]">
+            <h1 className="text-[22px] font-bold tracking-[-0.05em] text-[var(--theme-text)]">
               Aynam
             </h1>
 
             <Sparkle
               size={17}
-              className="fill-[#8665FF] text-[#8665FF]"
+              className="fill-[var(--theme-accent)] text-[var(--theme-accent)]"
             />
 
           </div>
@@ -131,8 +131,8 @@ px-3.5
                 transition-all
                 ${
                   active
-                    ? "bg-gradient-to-r from-[#EEE7FF] to-[#F8F5FF] shadow-[0_10px_30px_rgba(135,95,255,.10)] text-[#6D58EA]"
-                    : "text-[#57576A] hover:bg-white/60"
+                    ? "bg-gradient-to-r from-[var(--theme-primary-soft)] to-[var(--theme-surface-elevated)] shadow-[0_10px_30px_rgba(135,95,255,.10)] text-[var(--theme-primary)]"
+                    : "text-[var(--theme-text-muted)] hover:bg-white/60"
                 }
                 `}
               >
@@ -169,7 +169,7 @@ px-3.5
             gap-3
             rounded-2xl
             px-3.5
-            text-[#57576A]
+            text-[var(--theme-text-muted)]
             hover:bg-white/60
             "
           >
