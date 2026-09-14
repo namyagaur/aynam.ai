@@ -66,9 +66,11 @@ export function useSpeechRecognition() {
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const finalPartsRef = useRef<string[]>([]);
+  const accumulatedFinalTranscriptRef = useRef("");
   const transcriptRef = useRef("");
   const isListeningRef = useRef(false);
   const shouldRestartRef = useRef(false);
+  const startRef = useRef<() => void>(() => undefined);
   const restartTimerRef = useRef<number | null>(null);
   const speakingIntervalTimerRef = useRef<number | null>(null);
   const speakingStartedAtRef = useRef<number | null>(null);
@@ -79,6 +81,18 @@ export function useSpeechRecognition() {
     transcriptRef.current = normalized;
     setTranscript(normalized);
   }, []);
+
+  const commitFinalTranscript = useCallback(() => {
+    const instanceTranscript = finalPartsRef.current.join(" ").replace(/\s+/g, " ").trim();
+    if (!instanceTranscript) {
+      return;
+    }
+
+    accumulatedFinalTranscriptRef.current = [accumulatedFinalTranscriptRef.current, instanceTranscript]
+      .filter(Boolean)
+      .join(" ");
+    updateTranscript(accumulatedFinalTranscriptRef.current);
+  }, [updateTranscript]);
 
   const clearRestartTimer = useCallback(() => {
     if (restartTimerRef.current !== null) {
@@ -160,6 +174,7 @@ export function useSpeechRecognition() {
   const reset = useCallback(() => {
     void stop();
     finalPartsRef.current = [];
+    accumulatedFinalTranscriptRef.current = "";
     speakingStartedAtRef.current = null;
     speakingDurationMsRef.current = 0;
     updateTranscript("");
@@ -202,7 +217,11 @@ export function useSpeechRecognition() {
           }
         }
 
-        updateTranscript([...finalPartsRef.current, ...interimParts].join(" "));
+        updateTranscript([
+          accumulatedFinalTranscriptRef.current,
+          ...finalPartsRef.current,
+          ...interimParts,
+        ].join(" "));
         if (hasSpeechActivity) {
           recordSpeechActivity();
         }
@@ -218,22 +237,21 @@ export function useSpeechRecognition() {
       };
 
       recognition.onend = () => {
+        commitFinalTranscript();
+        finalPartsRef.current = [];
         setListening(false);
         if (!shouldRestartRef.current) {
           return;
         }
 
+        recognitionRef.current = null;
+
         restartTimerRef.current = window.setTimeout(() => {
-          if (!shouldRestartRef.current || !recognitionRef.current) {
+          if (!shouldRestartRef.current) {
             return;
           }
 
-          try {
-            recognitionRef.current.start();
-            setListening(true);
-          } catch {
-            setError("Live transcription is temporarily unavailable. Your recording will continue.");
-          }
+          startRef.current();
         }, 100);
       };
 
@@ -246,7 +264,11 @@ export function useSpeechRecognition() {
     } catch {
       setError("Live transcription is temporarily unavailable. Your recording will continue.");
     }
-  }, [clearRestartTimer, recordSpeechActivity, setListening, updateTranscript]);
+  }, [clearRestartTimer, commitFinalTranscript, recordSpeechActivity, setListening, updateTranscript]);
+
+  useEffect(() => {
+    startRef.current = start;
+  }, [start]);
 
   const getTranscript = useCallback(() => transcriptRef.current, []);
   const getSpeakingDurationSeconds = useCallback(() => {
