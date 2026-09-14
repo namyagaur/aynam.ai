@@ -66,7 +66,7 @@ export default function Topbar() {
 
         <Search
           size={18}
-          className="text-[#7B7B88]"
+          className="text-[var(--theme-text-muted)]"
         />
 
         <input
@@ -80,7 +80,7 @@ export default function Topbar() {
           "
         />
 
-        <span className="text-[#8B8B97] text-sm">
+        <span className="text-[var(--theme-text-muted)] text-sm">
           ⌘ K
         </span>
 
@@ -92,12 +92,12 @@ export default function Topbar() {
 
         <Bell
           size={20}
-          className="text-[#59596A]"
+          className="text-[var(--theme-text-muted)]"
         />
 
         <div className="flex items-center gap-3">
 
-          <Flower2 size={14} className="text-[#7B68D8]" aria-hidden="true" />
+          <Flower2 size={14} className="text-[var(--theme-accent)]" aria-hidden="true" />
 
           <span className="font-medium">
             {name}
