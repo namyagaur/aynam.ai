@@ -9,9 +9,10 @@ function calculateWPM(
   wordCount: number,
   durationSeconds: number
 ): number {
-  if (durationSeconds <= 0) return 0;
+  if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) return 0;
 
-  return Math.round(wordCount / (durationSeconds / 60));
+  const wordsPerMinute = wordCount / (durationSeconds / 60);
+  return Number.isFinite(wordsPerMinute) ? Math.round(wordsPerMinute) : 0;
 }
 
 /**
