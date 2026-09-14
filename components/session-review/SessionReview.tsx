@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ReviewPageOne } from "./overview";
 import { ReviewPageTwo } from "./insights";
 import { buildSessionReview, mockSessionReview } from "@/lib/data/mockSessionReview";
+import { supabase } from "@/lib/supabase/client";
 
 export function SessionReview() {
   const [page, setPage] = useState<1 | 2>(1);
+  const saveAttemptedRef = useRef(false);
   const [review, setReview] = useState(() => {
     if (typeof window === "undefined") return mockSessionReview;
     const saved = sessionStorage.getItem("session-review-input");
@@ -29,6 +31,37 @@ export function SessionReview() {
         const completed = { ...input, ...feedback };
         sessionStorage.setItem("session-review-input", JSON.stringify(completed));
         setReview(buildSessionReview(completed));
+
+        const persistenceFingerprint = JSON.stringify(completed);
+        if (saveAttemptedRef.current || sessionStorage.getItem("session-review-saved") === persistenceFingerprint) {
+          return;
+        }
+
+        saveAttemptedRef.current = true;
+        sessionStorage.setItem("session-review-saved", persistenceFingerprint);
+        void (async () => {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+
+          if (!user) {
+            console.error("Unable to save completed session: no authenticated user.");
+            return;
+          }
+
+          const { error } = await supabase.from("sessions").insert({
+            user_id: user.id,
+            created_at: new Date().toISOString(),
+            duration_seconds: completed.durationSeconds,
+            transcript: completed.transcript,
+            analysis: completed.analytics,
+            feedback: completed.review,
+          });
+
+          if (error) {
+            console.error("Unable to save completed session:", error);
+          }
+        })();
       })
       .catch((cause) => setError(cause instanceof Error ? cause.message : "Unable to generate your AI review."))
       .finally(() => setIsGenerating(false));
