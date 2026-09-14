@@ -21,7 +21,7 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
         ← Back
       </button>
 
-      <h1 className="max-w-lg text-center text-[28px] font-semibold leading-snug tracking-tight text-[#7C6CF8]">
+      <h1 className="max-w-lg text-center text-[28px] font-semibold leading-snug tracking-tight text-[var(--theme-primary)]">
         {topic}
       </h1>
       <p
