@@ -45,6 +45,12 @@
   --blue: #5b8cff;
   --blue-soft: #edf3ff;
 
+  /* Insights: recommendations */
+  --orange-tint-bg: #FDF1E4;
+  --orange-badge-bg: #FBE4C8;
+  --orange-badge-text: #B5651D;
+  --sticky-note-bg: #FFFBEA;
+
   /* Radius */
 
   --radius: 22px;
