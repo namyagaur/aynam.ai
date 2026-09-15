@@ -16,10 +16,12 @@ type Mode = "public" | "conversation" | "storytelling" | "social" | "custom";
 
 type Props = {
   selectedMode?: Mode;
+  selectedTopic?: string;
 };
 
 export default function TopicGenerator({
   selectedMode = "public",
+  selectedTopic,
 }: Props) {
   const getTopics = (activeMode: Mode) => {
     switch (activeMode) {
@@ -38,7 +40,7 @@ export default function TopicGenerator({
   };
 
   const [mode, setMode] = useState<Mode>(selectedMode);
-  const [topics, setTopics] = useState<string[]>(() => getTopics(selectedMode));
+  const [topics, setTopics] = useState<string[]>(() => selectedTopic ? [selectedTopic, ...getTopics(selectedMode).filter((topic) => topic !== selectedTopic)] : getTopics(selectedMode));
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rolling, setRolling] = useState(false);
