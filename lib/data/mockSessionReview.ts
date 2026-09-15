@@ -97,7 +97,7 @@ export function buildSessionReview(input: unknown): SessionReviewData {
     highlights: {
       strengths: [...strings(clarity.strengths), ...strings(confidence.strengths)].slice(0, 3),
       improvements: [...strings(fluency.improvements), ...strings(clarity.improvements)].slice(0, 3),
-      understood: [typeof object(ai.overallAssessment).summary === "string" ? object(ai.overallAssessment).summary : "", typeof coaching.topPriority === "string" ? coaching.topPriority : ""].filter(Boolean),
+      understood: [typeof object(ai.overallAssessment).summary === "string" ? object(ai.overallAssessment).summary : "", typeof coaching.topPriority === "string" ? coaching.topPriority : ""].filter((item): item is string => Boolean(item)),
     },
     insights: {
       ...mockSessionReview.insights,
