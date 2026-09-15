@@ -269,6 +269,11 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
       chunksRef.current = [];
       recordingActiveRef.current = true;
 
+      // SpeechRecognition must begin in the Start button's direct interaction
+      // flow. Awaiting microphone permission first can lose that gesture on mobile.
+      resetSpeechRecognition();
+      startSpeechRecognition();
+
       const stream = await requestMicrophone();
       streamRef.current = stream;
       await createAudioContext();
@@ -276,9 +281,6 @@ if (segmentBlob.size < RecordingConfig.minChunkSize) {
       if (!startNextChunkRecorder(stream)) {
         throw new Error("Unable to start audio recording.");
       }
-      resetSpeechRecognition();
-      startSpeechRecognition();
-
       setState((previous) => ({
         ...previous,
         recordingState: "recording",

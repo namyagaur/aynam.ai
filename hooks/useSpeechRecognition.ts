@@ -23,6 +23,7 @@ type SpeechRecognitionLike = {
   interimResults: boolean;
   lang: string;
   onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onstart: (() => void) | null;
   onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
   onend: (() => void) | null;
   start: () => void;
@@ -54,6 +55,14 @@ function getErrorMessage(error: string): string {
 
   if (error === "audio-capture") {
     return "Live transcription could not access the microphone.";
+  }
+
+  if (error === "no-speech") {
+    return "No speech detected yet. Keep speaking when you are ready.";
+  }
+
+  if (error === "network") {
+    return "Live transcription needs a network connection.";
   }
 
   return "Live transcription is temporarily unavailable. Your recording will continue.";
@@ -201,11 +210,19 @@ export function useSpeechRecognition() {
     shouldRestartRef.current = true;
     clearRestartTimer();
 
+    if (isListeningRef.current) {
+      return;
+    }
+
     if (!recognitionRef.current) {
       const recognition = new Recognition();
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = "en-US";
+      recognition.onstart = () => {
+        setListening(true);
+        setError(null);
+      };
 
       recognition.onresult = (event) => {
         const interimParts: string[] = [];
@@ -236,8 +253,11 @@ export function useSpeechRecognition() {
       };
 
       recognition.onerror = (event) => {
-        const isPermissionError = event.error === "not-allowed" || event.error === "service-not-allowed";
-        if (isPermissionError) {
+        if (process.env.NODE_ENV !== "production") {
+          console.warn("[speech-recognition]", event.error);
+        }
+        const isFatalError = ["not-allowed", "service-not-allowed", "audio-capture", "network"].includes(event.error);
+        if (isFatalError) {
           shouldRestartRef.current = false;
         }
         setError(getErrorMessage(event.error));
@@ -250,8 +270,6 @@ export function useSpeechRecognition() {
         if (!shouldRestartRef.current) {
           return;
         }
-
-        recognitionRef.current = null;
 
         restartTimerRef.current = window.setTimeout(() => {
           if (!shouldRestartRef.current) {
@@ -267,9 +285,14 @@ export function useSpeechRecognition() {
 
     try {
       recognitionRef.current.start();
-      setListening(true);
-    } catch {
-      setError("Live transcription is temporarily unavailable. Your recording will continue.");
+    } catch (cause) {
+      const name = cause instanceof DOMException ? cause.name : "UnknownError";
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[speech-recognition] start failed", name);
+      }
+      if (name !== "InvalidStateError") {
+        setError("Live transcription is temporarily unavailable. Your recording will continue.");
+      }
     }
   }, [clearRestartTimer, commitFinalTranscript, recordSpeechActivity, setListening, updateTranscript]);
 
