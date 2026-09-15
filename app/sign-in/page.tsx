@@ -220,10 +220,11 @@ export default function SignInPage() {
               <>
                 <button
                   type="button"
+                  disabled
                   className="
-                    flex h-[44px] w-full items-center rounded-[12px]
+                    flex h-[44px] w-full cursor-not-allowed items-center rounded-[12px]
                     border border-[#E7E5E8] bg-white px-4 text-[13px] font-medium
-                    text-[#26262A] shadow-[0_2px_7px_rgba(0,0,0,.025)] transition hover:bg-[#FAFAFA]
+                    text-[#26262A] opacity-60 shadow-[0_2px_7px_rgba(0,0,0,.025)]
                   "
                 >
                   <span className="w-7 text-left text-[16px] font-semibold">
@@ -231,19 +232,20 @@ export default function SignInPage() {
                       G
                     </span>
                   </span>
-                  <span className="flex-1 pr-7 text-center">Continue with Google</span>
+                  <span className="flex-1 pr-7 text-center">Google <span className="text-[#858594]">· Coming soon</span></span>
                 </button>
 
                 <button
                   type="button"
+                  disabled
                   className="
-                    mt-2 flex h-[44px] w-full items-center rounded-[12px]
+                    mt-2 flex h-[44px] w-full cursor-not-allowed items-center rounded-[12px]
                     border border-[#E7E5E8] bg-white px-4 text-[13px] font-medium
-                    text-[#26262A] shadow-[0_2px_7px_rgba(0,0,0,.025)] transition hover:bg-[#FAFAFA]
+                    text-[#26262A] opacity-60 shadow-[0_2px_7px_rgba(0,0,0,.025)]
                   "
                 >
                   <span className="w-7 text-left text-[12px] font-semibold text-[#222]">GH</span>
-                  <span className="flex-1 pr-7 text-center">Continue with GitHub</span>
+                  <span className="flex-1 pr-7 text-center">GitHub <span className="text-[#858594]">· Coming soon</span></span>
                 </button>
 
                 <div className="my-4 flex items-center gap-4">
