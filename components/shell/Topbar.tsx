@@ -8,10 +8,12 @@ import {
   Search,
   ChevronDown,
   Flower2,
+  LogOut,
 } from "lucide-react";
 
 export default function Topbar() {
   const [name, setName] = useState("Learner");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const loadName = async () => {
@@ -24,9 +26,16 @@ export default function Topbar() {
     void Promise.resolve().then(loadName);
   }, []);
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/sign-in";
+  };
+
   return (
     <header
       className="
+        relative
+        z-50
         flex
         h-[72px]
         items-center
@@ -95,16 +104,26 @@ export default function Topbar() {
           className="text-[var(--theme-text-muted)]"
         />
 
-        <div className="flex items-center gap-3">
-
-          <Flower2 size={14} className="text-[var(--theme-accent)]" aria-hidden="true" />
-
-          <span className="font-medium">
-            {name}
-          </span>
-
-          <ChevronDown size={16} />
-
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((open) => !open)}
+            aria-expanded={isMenuOpen}
+            aria-haspopup="menu"
+            className="flex items-center gap-3 rounded-lg font-medium text-[var(--theme-text)]"
+          >
+            <Flower2 size={14} className="text-[var(--theme-accent)]" aria-hidden="true" />
+            <span>{name}</span>
+            <ChevronDown size={16} aria-hidden="true" />
+          </button>
+          {isMenuOpen ? (
+            <div role="menu" className="absolute right-0 top-full z-50 mt-2 w-36 rounded-xl border border-[var(--theme-border)] bg-[var(--theme-surface-elevated)] p-1.5 shadow-[0_10px_30px_rgba(59,23,34,.12)]">
+              <button type="button" role="menuitem" onClick={() => void handleSignOut()} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-[12px] font-medium text-[var(--theme-primary)] transition hover:bg-[var(--theme-accent-soft)]">
+                <LogOut size={14} />
+                Sign out
+              </button>
+            </div>
+          ) : null}
         </div>
 
       </div>
