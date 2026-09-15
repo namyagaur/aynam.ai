@@ -8,11 +8,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[var(--theme-primary)] text-white hover:bg-[var(--theme-accent)]",
+        default: "bg-[var(--theme-primary)] text-white hover:brightness-110",
         outline:
           "border-[var(--theme-border)] bg-[var(--theme-surface-elevated)] text-[var(--theme-text)] hover:bg-[var(--theme-primary-soft)] aria-expanded:bg-[var(--theme-primary-soft)]",
         secondary:
-          "bg-[var(--theme-primary-soft)] text-[var(--theme-primary)] hover:bg-[var(--theme-primary-soft)] aria-expanded:bg-[var(--theme-primary-soft)]",
+          "bg-[var(--theme-accent-soft)] text-[var(--theme-primary)] hover:bg-[var(--theme-accent-soft)] aria-expanded:bg-[var(--theme-accent-soft)]",
         ghost:
           "text-[var(--theme-text)] hover:bg-[var(--theme-primary-soft)] aria-expanded:bg-[var(--theme-primary-soft)]",
         destructive:
