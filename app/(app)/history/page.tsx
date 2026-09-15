@@ -123,7 +123,7 @@ function ScoreRing({ score }: { score: number | null }) {
     <div
       className="flex h-[64px] w-[64px] items-center justify-center rounded-full"
       style={{
-        background: `conic-gradient(#9a87e8 ${progress}%, #eeeaf5 ${progress}% 100%)`,
+        background: `conic-gradient(var(--theme-primary) ${progress}%, var(--theme-primary-soft) ${progress}% 100%)`,
       }}
     >
       <div className="flex h-[54px] w-[54px] flex-col items-center justify-center rounded-full bg-white">
@@ -339,19 +339,19 @@ export default function HistoryPage() {
   };
 
   return (
-    <main className="min-h-full bg-[#FCFAFD] px-5 py-7 text-[#25232a] sm:px-8 sm:py-9 lg:px-10 lg:py-10">
+    <main className="min-h-full bg-[var(--theme-surface)] px-5 py-7 text-[var(--theme-text)] sm:px-8 sm:py-9 lg:px-10 lg:py-10">
           <div className="mx-auto max-w-[1180px]">
             <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h1 className="text-[34px] font-semibold tracking-[-0.05em] text-[#292633] sm:text-[40px]">Practice History</h1>
-                <p className="mt-2 max-w-md text-[14px] leading-6 text-[#898294]">Your conversations today build the confident you tomorrow.</p>
-                <div className="mt-4 h-1 w-10 rounded-full bg-[#c8b8fa]" />
+                <h1 className="text-[34px] font-semibold tracking-[-0.05em] text-[var(--theme-text)] sm:text-[40px]">Practice History</h1>
+                <p className="mt-2 max-w-md text-[14px] leading-6 text-[var(--theme-text-muted)]">Your conversations today build the confident you tomorrow.</p>
+                <div className="mt-4 h-1 w-10 rounded-full bg-[var(--theme-accent)]" />
               </div>
 
               <button
                 type="button"
                 onClick={() => router.push("/practice")}
-                className="inline-flex h-10 items-center justify-center gap-2 self-start rounded-xl bg-[#6758d8] px-5 text-[13px] font-medium text-white shadow-[0_8px_20px_rgba(103,88,216,.16)] transition hover:bg-[#594ac8] sm:self-auto"
+                className="inline-flex h-10 items-center justify-center gap-2 self-start rounded-xl bg-[var(--theme-primary)] px-5 text-[13px] font-medium text-white shadow-[0_8px_20px_rgba(103,88,216,.16)] transition hover:bg-[var(--theme-accent)] sm:self-auto"
               >
                 <Play className="h-3.5 w-3.5 fill-current" />
                 Start New Practice
@@ -377,7 +377,7 @@ export default function HistoryPage() {
                 </div>
               ) : sessions.length === 0 ? (
                 <div className="rounded-[24px] border border-[#ebe5de] bg-white px-6 py-16 text-center shadow-[0_8px_30px_rgba(70,55,35,.035)]">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#f3eff9] text-[#806fc1]">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--theme-primary-soft)] text-[var(--theme-primary)]">
                     <Sparkles className="h-5 w-5" />
                   </div>
                   <h2 className="mt-5 text-lg font-semibold tracking-[-0.02em] text-[#2e2a34]">No practice sessions yet</h2>
@@ -397,7 +397,7 @@ export default function HistoryPage() {
                   {sessions.map((session) => (
                     <article
                       key={session.id}
-                      className="group rounded-[22px] border border-[#ebe6e0] bg-white p-5 shadow-[0_8px_30px_rgba(70,55,35,.035)] transition duration-200 hover:-translate-y-0.5 hover:border-[#ddd5e8] hover:shadow-[0_12px_34px_rgba(70,55,35,.08)] sm:p-6"
+                      className="group rounded-[22px] border border-[var(--theme-border)] bg-white p-5 shadow-[0_8px_30px_rgba(70,55,35,.035)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--theme-border)] hover:shadow-[0_12px_34px_rgba(70,55,35,.08)] sm:p-6"
                     >
                       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[64px_minmax(0,1fr)_230px_170px] lg:items-center lg:gap-6">
                         <div className="flex items-center gap-3 lg:block">
@@ -436,13 +436,10 @@ export default function HistoryPage() {
                           <button
                             type="button"
                             onClick={() => openFeedback(session)}
-                            className="inline-flex h-8 items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-[#e9e1f5] bg-[#f8f5ff] px-2.5 text-[11px] font-medium text-[#66549b] transition hover:border-[#dcd0f2] hover:bg-[#f1ebff]"
+                            className="inline-flex h-8 items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-[var(--theme-border)] bg-[var(--theme-primary-soft)] px-2.5 text-[11px] font-medium text-[var(--theme-primary)] transition hover:border-[var(--theme-border)] hover:bg-[var(--theme-surface)]"
                           >
                             View
                             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                          </button>
-                          <button type="button" aria-label="More session actions" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#b3acb8] transition hover:bg-[#f6f2fb] hover:text-[#66549b]">
-                            <MoreHorizontal className="h-4 w-4" />
                           </button>
                           <div className="relative" data-session-menu>
                             <button
