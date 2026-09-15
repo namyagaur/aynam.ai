@@ -18,15 +18,15 @@ export default function Timer({ secondsLeft, durationMinutes, recordingState }: 
     <div
       className="relative mt-7 aspect-square w-[170px] shrink-0 rounded-full"
       style={{
-        background: `conic-gradient(#7C6CF8 ${progressDeg}deg, #E5E7EB ${progressDeg}deg)`,
+        background: `conic-gradient(var(--theme-primary) ${progressDeg}deg, var(--theme-accent-soft) ${progressDeg}deg)`,
       }}
     >
-      <div className="absolute inset-[3px] flex flex-col items-center justify-center rounded-full border border-dashed border-zinc-200 bg-white shadow-[0_12px_30px_rgba(0,0,0,.04)]">
+      <div className="absolute inset-[3px] flex flex-col items-center justify-center rounded-full border border-dashed border-[var(--theme-border)] bg-[var(--theme-surface-elevated)] shadow-[0_12px_30px_rgba(0,0,0,.04)]">
         <div className="text-center">
-          <div className="text-[30px] font-semibold text-zinc-900">{formattedTime}</div>
-          <div className="mt-0.5 text-[11px] text-zinc-400">of {String(durationMinutes).padStart(2, "0")}:00</div>
-          <div className="mt-1.5 flex items-center justify-center gap-1.5 text-[11px] text-red-500">
-            <span className={`h-1.5 w-1.5 rounded-full bg-red-500 ${recordingState === "recording" ? "" : "opacity-40"}`} />
+          <div className="text-[30px] font-semibold text-[var(--theme-text)]">{formattedTime}</div>
+          <div className="mt-0.5 text-[11px] text-[var(--theme-text-muted)]">of {String(durationMinutes).padStart(2, "0")}:00</div>
+          <div className="mt-1.5 flex items-center justify-center gap-1.5 text-[11px] text-[var(--theme-accent)]">
+            <span className={`h-1.5 w-1.5 rounded-full bg-[var(--theme-accent)] ${recordingState === "recording" ? "" : "opacity-40"}`} />
             {status}
           </div>
         </div>
