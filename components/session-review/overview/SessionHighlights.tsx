@@ -28,8 +28,8 @@ export function SessionHighlights({ highlights = mockSessionReview.highlights }:
         />
         <HighlightCard
           icon={MessageCircle}
-          iconBg="bg-violet-50"
-          iconColor="text-violet-500"
+          iconBg="bg-[var(--theme-accent-soft)]"
+          iconColor="text-[var(--theme-accent)]"
           title="What I understood"
           items={highlights.understood}
         />
@@ -56,17 +56,17 @@ function HighlightCard({
   BulletIcon?: React.ElementType;
 }) {
   return (
-    <div className="rounded-2xl border border-gray-100 p-4">
+    <div className="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-surface-elevated)] p-4">
       <div className="flex items-center gap-2">
         <span className={`flex h-6 w-6 items-center justify-center rounded-full ${iconBg}`}>
           <Icon className={`h-3 w-3 ${iconColor}`} />
         </span>
-        <p className="text-sm font-semibold text-gray-900">{title}</p>
+        <p className="text-sm font-semibold text-[var(--theme-text)]">{title}</p>
       </div>
 
       <ul className="mt-2 space-y-2">
         {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-1.5 text-[13px] leading-snug text-gray-500">
+          <li key={i} className="flex items-start gap-1.5 text-[13px] leading-snug text-[var(--theme-text-muted)]">
             {BulletIcon && bulletColor ? (
               <BulletIcon className={`mt-0.5 h-3 w-3 flex-shrink-0 ${bulletColor}`} />
             ) : null}
