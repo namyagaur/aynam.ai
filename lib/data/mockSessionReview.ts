@@ -84,25 +84,26 @@ export function buildSessionReview(input: unknown): SessionReviewData {
   const fillerWords = Array.isArray(fillers.words) ? fillers.words.map(object).map((item) => ({ label: typeof item.word === "string" ? item.word : "filler", count: typeof item.count === "number" ? item.count : 0 })).filter((item) => item.count > 0).slice(0, 5) : [];
 
   return {
-    ...mockSessionReview,
-    session: { ...mockSessionReview.session, durationLabel: `${Math.max(1, Math.round(durationSeconds / 60))} min selected` },
+    session: { durationLabel: `${Math.max(1, Math.round(durationSeconds / 60))} min selected`, userName: "", subtitle: "Here is your communication breakdown." },
     communicationProfile: {
-      clarity: score(clarity.score, mockSessionReview.communicationProfile.clarity),
-      fluency: score(fluency.score, mockSessionReview.communicationProfile.fluency),
-      confidence: score(confidence.score, mockSessionReview.communicationProfile.confidence),
-      vocabulary: score(aiVocabulary.score, mockSessionReview.communicationProfile.vocabulary),
-      structure: score(structure.score, mockSessionReview.communicationProfile.structure),
-      presence: score(confidence.score, mockSessionReview.communicationProfile.presence),
+      clarity: score(clarity.score, 0),
+      fluency: score(fluency.score, 0),
+      confidence: score(confidence.score, 0),
+      vocabulary: score(aiVocabulary.score, 0),
+      structure: score(structure.score, 0),
+      presence: score(confidence.score, 0),
     },
     highlights: {
       strengths: [...strings(clarity.strengths), ...strings(confidence.strengths)].slice(0, 3),
       improvements: [...strings(fluency.improvements), ...strings(clarity.improvements)].slice(0, 3),
       understood: [typeof object(ai.overallAssessment).summary === "string" ? object(ai.overallAssessment).summary : "", typeof coaching.topPriority === "string" ? coaching.topPriority : ""].filter((item): item is string => Boolean(item)),
     },
+    pagination: { totalPages: 2 },
     insights: {
-      ...mockSessionReview.insights,
-      rewrite: { original: original.slice(0, 260) || mockSessionReview.insights.rewrite.original, suggested: typeof coaching.example === "string" && coaching.example ? coaching.example : mockSessionReview.insights.rewrite.suggested, reason: typeof coaching.topPriority === "string" && coaching.topPriority ? coaching.topPriority : mockSessionReview.insights.rewrite.reason },
-      fillers: fillerWords.length ? fillerWords : mockSessionReview.insights.fillers,
+      title: "Let’s make your next session even better.",
+      subtitle: "Here are some specific ways to improve, based on this session.",
+      rewrite: { original: original.slice(0, 260), suggested: typeof coaching.example === "string" ? coaching.example : "", reason: typeof coaching.topPriority === "string" ? coaching.topPriority : "" },
+      fillers: fillerWords,
       quickStats: [
         { label: "Total Words", value: String(object(analytics.basic).wordCount ?? 0) },
         { label: "Speaking Time", value: `${String(Math.floor(durationSeconds / 60)).padStart(2, "0")}:${String(durationSeconds % 60).padStart(2, "0")}` },
@@ -110,7 +111,7 @@ export function buildSessionReview(input: unknown): SessionReviewData {
         { label: "Sentences", value: String(sentences.sentenceCount ?? 0) },
         { label: "Longest Sentence", value: `${sentences.longestSentence ?? 0} words` },
       ],
-      challenge: typeof coaching.dailyExercise === "string" && coaching.dailyExercise ? coaching.dailyExercise : mockSessionReview.insights.challenge,
+      challenge: typeof coaching.dailyExercise === "string" && coaching.dailyExercise ? coaching.dailyExercise : "Choose a topic for your next practice session.",
     },
   };
 }
