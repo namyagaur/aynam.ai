@@ -29,9 +29,9 @@ export default function ModeChip({
         ${
           selected
             ? `
-              border-[var(--theme-border)]
-              bg-[linear-gradient(180deg,var(--theme-surface-elevated)_0%,var(--theme-primary-soft)_100%)]
-              shadow-[0_6px_18px_rgba(108,99,255,.06)]
+              border-[var(--theme-primary)]
+              bg-[var(--theme-accent-soft)]
+              shadow-[0_6px_18px_rgba(103,6,38,.08)]
             `
             : `
               border-[var(--theme-border)]
