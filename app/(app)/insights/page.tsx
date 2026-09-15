@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -144,6 +144,14 @@ function getFocusDimension(profile: DimensionScore[], sessionCount: number) {
 }
 
 export default function InsightsPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <InsightsContent />
+    </Suspense>
+  );
+}
+
+function InsightsContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
