@@ -155,18 +155,25 @@ export function useSpeechRecognition() {
 
     return new Promise<string>((resolve) => {
       const previousOnEnd = recognition.onend;
-      recognition.onend = () => {
-        previousOnEnd?.();
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(stopTimeout);
         recognition.onend = previousOnEnd;
         setListening(false);
         resolve(transcriptRef.current);
+      };
+      const stopTimeout = window.setTimeout(finish, 1500);
+      recognition.onend = () => {
+        previousOnEnd?.();
+        finish();
       };
 
       try {
         recognition.stop();
       } catch {
-        setListening(false);
-        resolve(transcriptRef.current);
+        finish();
       }
     });
   }, [clearRestartTimer, clearSpeakingIntervalTimer, closeSpeakingInterval, setListening]);
