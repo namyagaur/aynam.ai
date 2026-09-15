@@ -14,6 +14,7 @@ export function getThemeCssVariables(themeId: ThemeId): Record<string, string> {
     "--theme-primary": tokens.primary,
     "--theme-primary-soft": tokens.primarySoft,
     "--theme-accent": tokens.accent,
+    "--theme-accent-soft": tokens.accentSoft,
     "--theme-text": tokens.text,
     "--theme-text-muted": tokens.textMuted,
     "--theme-border": tokens.border,
