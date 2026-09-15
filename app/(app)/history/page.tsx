@@ -123,7 +123,7 @@ function ScoreRing({ score }: { score: number | null }) {
     <div
       className="flex h-[64px] w-[64px] items-center justify-center rounded-full"
       style={{
-        background: `conic-gradient(var(--theme-primary) ${progress}%, var(--theme-primary-soft) ${progress}% 100%)`,
+        background: `conic-gradient(var(--theme-accent) ${progress}%, var(--theme-accent-soft) ${progress}% 100%)`,
       }}
     >
       <div className="flex h-[54px] w-[54px] flex-col items-center justify-center rounded-full bg-white">
@@ -351,7 +351,7 @@ export default function HistoryPage() {
               <button
                 type="button"
                 onClick={() => router.push("/practice")}
-                className="inline-flex h-10 items-center justify-center gap-2 self-start rounded-xl bg-[var(--theme-primary)] px-5 text-[13px] font-medium text-white shadow-[0_8px_20px_rgba(103,88,216,.16)] transition hover:bg-[var(--theme-accent)] sm:self-auto"
+                className="inline-flex h-10 items-center justify-center gap-2 self-start rounded-xl bg-[var(--theme-primary)] px-5 text-[13px] font-medium text-white shadow-[0_8px_20px_rgba(103,88,216,.16)] transition hover:brightness-110 sm:self-auto"
               >
                 <Play className="h-3.5 w-3.5 fill-current" />
                 Start New Practice
@@ -377,7 +377,7 @@ export default function HistoryPage() {
                 </div>
               ) : sessions.length === 0 ? (
                 <div className="rounded-[24px] border border-[#ebe5de] bg-white px-6 py-16 text-center shadow-[0_8px_30px_rgba(70,55,35,.035)]">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--theme-primary-soft)] text-[var(--theme-primary)]">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--theme-accent-soft)] text-[var(--theme-primary)]">
                     <Sparkles className="h-5 w-5" />
                   </div>
                   <h2 className="mt-5 text-lg font-semibold tracking-[-0.02em] text-[#2e2a34]">No practice sessions yet</h2>
@@ -436,7 +436,7 @@ export default function HistoryPage() {
                           <button
                             type="button"
                             onClick={() => openFeedback(session)}
-                            className="inline-flex h-8 items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-[var(--theme-border)] bg-[var(--theme-primary-soft)] px-2.5 text-[11px] font-medium text-[var(--theme-primary)] transition hover:border-[var(--theme-border)] hover:bg-[var(--theme-surface)]"
+                            className="inline-flex h-8 items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-[var(--theme-border)] bg-[var(--theme-accent-soft)] px-2.5 text-[11px] font-medium text-[var(--theme-primary)] transition hover:border-[var(--theme-border)] hover:bg-[var(--theme-surface)]"
                           >
                             View
                             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -450,7 +450,7 @@ export default function HistoryPage() {
                                   prev === session.id ? null : session.id
                                 )
                               }
-                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#b3acb8] transition hover:bg-[#f6f2fb] hover:text-[#66549b]"
+                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#b3acb8] transition hover:bg-[var(--theme-accent-soft)] hover:text-[var(--theme-primary)]"
                             >
                               <MoreHorizontal className="h-4 w-4" />
                             </button>
@@ -462,7 +462,7 @@ export default function HistoryPage() {
                                     setActiveMenuSessionId(null);
                                     openFeedback(session);
                                   }}
-                                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[12px] font-medium text-[#3b3641] transition hover:bg-[#f6f2fb] hover:text-[#6758d8]"
+                                  className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[12px] font-medium text-[#3b3641] transition hover:bg-[var(--theme-accent-soft)] hover:text-[var(--theme-primary)]"
                                 >
                                   <Eye className="h-3.5 w-3.5 text-[#8f8894]" />
                                   <span>View feedback</span>
