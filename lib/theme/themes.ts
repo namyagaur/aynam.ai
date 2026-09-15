@@ -1,18 +1,22 @@
 export type ThemeId =
-  | "merlot"
-  | "espresso"
-  | "citron"
-  | "lotus"
-  | "raspberry-ice"
+  | "cherry-matcha"
+  | "lagoon"
+  | "butter-plum"
+  | "forest"
+  | "arctic"
   | "lavender";
 
 export interface ThemeTokens {
   background: string;
   surface: string;
   surfaceElevated: string;
+
   primary: string;
   primarySoft: string;
+
   accent: string;
+  accentSoft: string;
+
   text: string;
   textMuted: string;
   border: string;
@@ -26,97 +30,156 @@ export interface ThemeDefinition {
 }
 
 export const themes: Record<ThemeId, ThemeDefinition> = {
-  merlot: {
-    id: "merlot",
-    name: "Merlot",
-    description: "Deep merlot, butter yellow, and dusty pink",
+  /* =========================================================
+     01 — CHERRY MATCHA
+     Rich cherry environment + restrained matcha accents
+     ========================================================= */
+
+  "cherry-matcha": {
+    id: "cherry-matcha",
+    name: "Cherry Matcha",
+    description: "Rich cherry, warm ivory, and fresh matcha",
     tokens: {
-      background: "#F4E7C1",
-      surface: "#FFF8E8",
+      background: "#F1E2E5",
+      surface: "#FFF8F5",
       surfaceElevated: "#FFFFFF",
-      primary: "#63262D",
-      primarySoft: "#E8C7A8",
-      accent: "#D5A85A",
-      text: "#32191C",
-      textMuted: "#806B6D",
-      border: "#E3D2C0",
+
+      primary: "#670626",
+      primarySoft: "#E7C4CE",
+
+      accent: "#9FBF78",
+      accentSoft: "#DDEBCB",
+
+      text: "#3B1722",
+      textMuted: "#765F67",
+      border: "#DECBD0",
     },
   },
-  espresso: {
-    id: "espresso",
-    name: "Espresso",
-    description: "Espresso brown and soft peony pink",
+
+  /* =========================================================
+     02 — LAGOON
+     Deep ocean teal + airy aqua + warm coral
+     ========================================================= */
+
+  lagoon: {
+    id: "lagoon",
+    name: "Lagoon",
+    description: "Deep ocean teal, seafoam, and warm coral",
     tokens: {
-      background: "#F7E8ED",
-      surface: "#FFF7F8",
+      background: "#E7F2F0",
+      surface: "#F8FCFB",
       surfaceElevated: "#FFFFFF",
-      primary: "#3E2723",
-      primarySoft: "#F4C9D6",
-      accent: "#C98FA2",
-      text: "#2C1B1A",
-      textMuted: "#786868",
-      border: "#E5D4D7",
+
+      primary: "#075E63",
+      primarySoft: "#C8E4E1",
+
+      accent: "#E58F7C",
+      accentSoft: "#F5D7CF",
+
+      text: "#123D40",
+      textMuted: "#667A7C",
+      border: "#D3E4E1",
     },
   },
-  citron: {
-    id: "citron",
-    name: "Citron",
-    description: "Soft citron/chartreuse and rich Tyrian purple",
+
+  /* =========================================================
+     03 — BUTTER PLUM
+     Warm butter + sophisticated plum
+     ========================================================= */
+
+  "butter-plum": {
+    id: "butter-plum",
+    name: "Butter Plum",
+    description: "Soft butter, rich plum, and dusty lilac",
     tokens: {
-      background: "#CAD183",
-      surface: "#F3F1D5",
-      surfaceElevated: "#FFFDF2",
-      primary: "#66023C",
-      primarySoft: "#E4E6B4",
-      accent: "#8A315F",
-      text: "#32142A",
-      textMuted: "#70655F",
-      border: "#D8D9B2",
-    },
-  },
-  lotus: {
-    id: "lotus",
-    name: "Lotus",
-    description: "Dark green, moss green, beige, and rosy brown",
-    tokens: {
-      background: "#F7F4D5",
-      surface: "#FFFDF2",
+      background: "#F8F1D8",
+      surface: "#FFFBEF",
       surfaceElevated: "#FFFFFF",
-      primary: "#0A3323",
-      primarySoft: "#839958",
-      accent: "#D3968C",
-      text: "#17352B",
-      textMuted: "#687268",
-      border: "#D9D8C1",
+
+      primary: "#542650",
+      primarySoft: "#E6D4E4",
+
+      accent: "#D6A94A",
+      accentSoft: "#F1E3B8",
+
+      text: "#332033",
+      textMuted: "#766A75",
+      border: "#E5DCC7",
     },
   },
-  "raspberry-ice": {
-    id: "raspberry-ice",
-    name: "Raspberry Ice",
-    description: "Raspberry wine, icy blue, and soft grey/pink",
+
+  /* =========================================================
+     04 — FOREST
+     Pine green + moss + peach
+     ========================================================= */
+
+  forest: {
+    id: "forest",
+    name: "Forest",
+    description: "Deep pine, moss, and soft peach",
     tokens: {
-      background: "#E8EEF0",
-      surface: "#F7F5F4",
+      background: "#E8EEE4",
+      surface: "#F8FAF5",
       surfaceElevated: "#FFFFFF",
-      primary: "#7B3F4A",
-      primarySoft: "#C7D9DC",
-      accent: "#B96C82",
-      text: "#30272A",
-      textMuted: "#6F696B",
-      border: "#D7DADC",
+
+      primary: "#164A38",
+      primarySoft: "#C9DCCF",
+
+      accent: "#D89A82",
+      accentSoft: "#F0D8CF",
+
+      text: "#18362B",
+      textMuted: "#68776F",
+      border: "#D6DFD2",
     },
   },
+
+  /* =========================================================
+     05 — ARCTIC
+     Icy blue-grey + cobalt + cool lavender
+     ========================================================= */
+
+  arctic: {
+    id: "arctic",
+    name: "Arctic",
+    description: "Icy blue, cool grey, and deep cobalt",
+    tokens: {
+      background: "#EAF1F6",
+      surface: "#F8FBFD",
+      surfaceElevated: "#FFFFFF",
+
+      primary: "#2454A6",
+      primarySoft: "#D2DFF3",
+
+      accent: "#79AFC7",
+      accentSoft: "#D8EAF1",
+
+      text: "#172A45",
+      textMuted: "#687587",
+      border: "#D7E1EA",
+    },
+  },
+
+  /* =========================================================
+     06 — LAVENDER
+     Original Aynam atmosphere
+     ========================================================= */
+
   lavender: {
     id: "lavender",
     name: "Lavender",
-    description: "Existing Aynam theme with soft lavender, lilac, and purple accents",
+    description: "Soft lavender, lilac, and violet",
     tokens: {
       background: "#F6F4FB",
       surface: "#FFFDF7",
       surfaceElevated: "#FFFFFF",
+
       primary: "#7C5CFC",
       primarySoft: "#EFE9FF",
+
       accent: "#8665FF",
+      accentSoft: "#F3EFFF",
+
       text: "#19191F",
       textMuted: "#6F7280",
       border: "rgba(124, 92, 252, 0.08)",
@@ -124,11 +187,12 @@ export const themes: Record<ThemeId, ThemeDefinition> = {
   },
 };
 
-/**
- * Default theme during development as requested.
- * Production / final default can be switched to 'merlot'.
+/*
+ * Cherry Matcha is now the final default Aynam theme.
+ *
+ * If an existing localStorage value exists,
+ * the ThemeProvider should continue respecting it.
  */
-export const DEFAULT_THEME_ID: ThemeId = "lavender";
+export const DEFAULT_THEME_ID: ThemeId = "cherry-matcha";
 
 export const THEME_STORAGE_KEY = "aynam-theme";
-
