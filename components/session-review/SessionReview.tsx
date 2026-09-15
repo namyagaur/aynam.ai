@@ -72,8 +72,8 @@ export function SessionReview() {
   }, []);
 
   return (
-    <main className="min-h-full bg-[#FCFCFD]">
-      {isGenerating ? <div className="flex min-h-[420px] flex-col items-center justify-center gap-3 text-center"><span className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600" /><h1 className="text-xl font-semibold text-indigo-600">Creating your AI review…</h1><p className="text-sm text-gray-500">Analyzing your transcript, pace, fillers, and communication style.</p></div> : error ? <div className="p-10 text-center text-red-600">{error}</div> : page === 1 ? <ReviewPageOne review={review} onNext={() => setPage(2)} /> : <ReviewPageTwo review={review} onPrevious={() => setPage(1)} />}
+    <main className="min-h-full bg-[var(--theme-surface)] text-[var(--theme-text)]">
+      {isGenerating ? <div className="flex min-h-[420px] flex-col items-center justify-center gap-3 text-center"><span className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--theme-accent-soft)] border-t-[var(--theme-primary)]" /><h1 className="text-xl font-semibold text-[var(--theme-primary)]">Creating your AI review…</h1><p className="text-sm text-[var(--theme-text-muted)]">Analyzing your transcript, pace, fillers, and communication style.</p></div> : error ? <div className="p-10 text-center text-[var(--theme-primary)]">{error}</div> : page === 1 ? <ReviewPageOne review={review} onNext={() => setPage(2)} /> : <ReviewPageTwo review={review} onPrevious={() => setPage(1)} />}
     </main>
   );
 }
