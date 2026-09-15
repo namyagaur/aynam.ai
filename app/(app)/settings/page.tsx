@@ -188,7 +188,7 @@ export default function SettingsPage() {
                 font-medium
                 text-white
                 transition
-                hover:bg-[var(--theme-accent)]
+                hover:brightness-110
                 disabled:opacity-60
               "
             >
