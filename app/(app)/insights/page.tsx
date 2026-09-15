@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -307,10 +307,10 @@ export default function InsightsPage() {
                   key={tab.id}
                   type="button"
                   onClick={() => navigateToTab(tab.id)}
-                  className={`relative pb-2 text-left transition-colors ${isActive ? "text-[#1f1e26]" : "hover:text-[#1f1e26]"}`}
+                  className={`relative pb-2 text-left transition-colors ${isActive ? "text-[var(--theme-primary)]" : "text-[var(--theme-text)] hover:text-[var(--theme-primary)]"}`}
                 >
                   {tab.label}
-                  {isActive ? <span className="absolute inset-x-0 -bottom-[9px] h-[2px] rounded-full bg-[#7d63cf]" /> : null}
+                  {isActive ? <span className="absolute inset-x-0 -bottom-[9px] h-[2px] rounded-full bg-[var(--theme-accent)]" /> : null}
                 </button>
               );
             })}
