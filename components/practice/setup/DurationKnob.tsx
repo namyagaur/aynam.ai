@@ -183,7 +183,7 @@ export default function DurationKnob({ value, onChange }: Props) {
           </filter>
 
           <filter id="thumb-glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#6759E8" floodOpacity="0.35" />
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="var(--theme-accent)" floodOpacity="0.35" />
           </filter>
 
           {/* Soft radial gradient — reads as milk glass, not gloss */}
@@ -200,8 +200,8 @@ export default function DurationKnob({ value, onChange }: Props) {
           </linearGradient>
 
           <linearGradient id="progress" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#B8A9FF" />
-            <stop offset="100%" stopColor="#6759E8" />
+            <stop offset="0%" stopColor="var(--theme-primary)" />
+            <stop offset="100%" stopColor="var(--theme-accent)" />
           </linearGradient>
         </defs>
 
@@ -234,7 +234,7 @@ export default function DurationKnob({ value, onChange }: Props) {
           x={CENTER}
           y={CENTER + 2}
           textAnchor="middle"
-          fill="#5E54E8"
+          fill="var(--theme-primary)"
           style={{
             fontSize: 34,
             fontWeight: 600,
@@ -262,7 +262,7 @@ export default function DurationKnob({ value, onChange }: Props) {
         >
           <circle r={THUMB_RADIUS} fill="#FFFFFF" />
           <circle r={THUMB_RADIUS} fill="none" stroke="#EDEBF7" strokeWidth={1} />
-          <circle r={THUMB_CORE_RADIUS} fill="#6759E8" />
+          <circle r={THUMB_CORE_RADIUS} fill="var(--theme-accent)" />
         </g>
 
         {/* labels */}
