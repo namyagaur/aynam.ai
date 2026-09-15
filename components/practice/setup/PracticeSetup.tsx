@@ -13,10 +13,10 @@ type Props = {
 
 export default function PracticeSetup({ topic, duration, setDuration, onBack,onContinue, }: Props) {
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col items-center pt-2">
+    <div className="mx-auto flex w-full max-w-3xl flex-col items-center pt-1">
       <button
         onClick={onBack}
-        className="mb-6 self-start text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+        className="mb-4 self-start text-sm text-[var(--theme-text-muted)] transition-colors hover:text-[var(--theme-text)]"
       >
         ← Back
       </button>
@@ -26,9 +26,9 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
       </h1>
       <p
   className="
-    mt-2
+    mt-1
     text-lg
-    text-zinc-500
+    text-[var(--theme-text-muted)]
   "
 >
   Take your time. You&apos;ve got this.
@@ -37,11 +37,11 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
 <div className="mt-4 flex flex-col items-center">
   <div
     className="
-      mb-5
+      mb-3
       rounded-full
       border
       border-[var(--theme-border)]
-      bg-[var(--theme-primary-soft)]
+      bg-[var(--theme-accent-soft)]
       px-4
       py-2
       shadow-sm
@@ -51,7 +51,7 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
       className="
         text-sm
         font-medium
-        text-[var(--theme-primary)]
+        text-[var(--theme-accent)]
       "
     >
       {duration} min selected
@@ -66,21 +66,19 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
 </div>
 <button
   className="
-    mt-6
+    mt-4
     h-12
     w-[260px]
     rounded-full
-    bg-gradient-to-r
-    from-[#7569F7]
-    to-[#6557EA]
+    bg-[var(--theme-primary)]
     text-white
     text-lg
     font-medium
-    shadow-[0_12px_30px_rgba(103,89,232,.28)]
+    shadow-[0_12px_30px_color-mix(in_srgb,var(--theme-primary)_28%,transparent)]
     transition-all
     duration-300
     hover:-translate-y-0.5
-    hover:shadow-[0_18px_40px_rgba(103,89,232,.34)]
+    hover:shadow-[0_18px_40px_color-mix(in_srgb,var(--theme-primary)_34%,transparent)]
     active:translate-y-0
     
   "
@@ -95,7 +93,7 @@ export default function PracticeSetup({ topic, duration, setDuration, onBack,onC
     items-center
     gap-2
     text-sm
-    text-zinc-400
+    text-[var(--theme-text-muted)]
   "
 >
   <svg
